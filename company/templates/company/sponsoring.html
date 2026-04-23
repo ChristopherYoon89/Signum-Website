@@ -1,0 +1,66 @@
+{% extends 'main_app/base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="layout-medium">
+
+		<div class="sig-content">
+		<h1 class="page-header col-blue header-underline">Sponsoring</h1>
+		
+		<div class="section">
+
+		<p>
+		Signum News offers businesses the opportunity to sponsor selected areas 
+		of the platform. Sponsoring allows companies to present their brand, 
+		logo or specific products in a dedicated section on the start page. These 
+		placements are designed to be clearly visible while remaining separate 
+		from editorial content.
+		</p>
+		
+		<p>
+		Sponsored placements are limited to clearly defined areas of the website 
+		and are intended to provide relevant visibility for organizations whose 
+		products or services align with the interests of our users. Sponsoring 
+		does not influence article selection, categorization, rankings or any 
+		other editorial or algorithmic processes on the platform.
+		</p>
+
+		<p>
+		Companies interested in sponsoring opportunities can contact us directly 
+		via the <a href="{% url 'contact-page' %}"><span class="url-underline">contact form</span></a>. Please include basic information about your 
+		company, the type of placement you are interested in and any relevant 
+		details about your brand or product. We will review your request and 
+		provide further information about availability, formats and conditions.
+		</p>
+
+		<p>
+		All sponsoring arrangements are subject to review to ensure they are 
+		appropriate for the platform and its audience.
+		</p>
+
+		</div>
+
+
+		<div class="form-group" style="margin-top:85px; display:flex; justify-content:center;">
+			<a href="{% url 'contact-page' %}">
+			<button class="btn btn-outline-info" style="width:85px;">Contact</button>
+			</a>
+		</div>
+
+
+		
+		<div class="section-read-more">
+		<h3 class="underline-spacing mb-4">Read more</h3>
+
+		<ul>
+		<li><a href="{% url 'faq-page' %}"><span class="url">FAQ</span></a></li>
+		<li><a href="{% url 'public-api-docs-page' %}"><span class="url">API Documentation</span></a></li>
+		<li><a href="{% url 'tou-page' %}"><span class="url">Terms of Use</span></a></li>	
+		<li><a href="{% url 'privacy-page' %}"><span class="url">Privacy</span></a></li>	
+		</ul>
+
+		</div>
+
+	</div>
+</div>
+{% endblock content %}

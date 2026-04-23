@@ -1,0 +1,77 @@
+{% extends 'main_app/base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="layout-medium">
+		<div class="sig-content">
+		
+		<h1 class="page-header col-blue header-underline">Imprint</h1>
+		
+		<div class="section">
+		<h4>
+		Company Name
+		</h4>
+
+		<p>
+		My Company Name
+		</p>
+
+		</div>
+		
+
+		<div class="section">
+		<h4>Address</h4>
+
+		<p>
+		Street name 123<br>
+		Postal Code City<br>
+		Country
+		</p>
+
+		</div>
+
+
+		<div class="section">
+		<h3>Contact</h3>
+
+		<p>
+		<a href="{% url 'contact-page' %}">
+		<span class="url-underline">
+		Contact form
+		</span>
+		</a>
+		</p>
+		</div>
+
+
+		<div class="section">
+		<p>
+		<h3>
+		Represented by
+		</h3>
+		</p>
+
+		<p>
+		Christopher Yoon, MSc.<br>
+		CEO/Software Developer
+		</p>
+
+		</div>
+
+
+		<div class="section">
+		<h3>Copyright</h3>
+
+		<p>
+		The content and works created by the site operators on these pages are 
+		subject to copyright law.<br>
+		Duplication, processing, distribution or any 
+		form of commercialization of such material beyond the scope of 
+		copyright law shall require the prior written consent of its respective 
+		author or creator.
+		</p>
+		</div>
+
+	</div>
+</div>
+{% endblock content %}

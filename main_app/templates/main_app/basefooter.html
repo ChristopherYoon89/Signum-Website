@@ -1,0 +1,61 @@
+{% load static %}
+
+<div class="footer">
+	<div class="contain">
+		<div class="col">
+			<h1>Product</h1>
+			<ul>
+				<li><a class="footer link-footer" href="{% url 'product-page' %}">Product page</a></li>
+				<li><a class="footer link-footer" href="{% url 'release-notes-page' %}">Release notes</a></li>
+				<li><a class="footer link-footer" href="{% url 'faq-page' %}">FAQ</a></li>
+				<li><a class="footer link-footer" href="{% url 'guidelines-page' %}">Guidelines</a></li>
+				<li><a class="footer link-footer" href="{% url 'public-api-docs-page' %}">Documentation</a></li>
+				
+			</ul>
+		</div>
+
+
+		<div class="col"> 
+			<h1>Organization</h1>
+			<ul>
+				<li><a class="footer link-footer" href="{% url 'about-page' %}">About</a></li>
+				<li><a class="footer link-footer" href="{% url 'sponsoring-page' %}">Sponsoring</a></li>				
+			</ul>
+		</div>
+
+
+		<div class="col"> 
+			<h1>Legal</h1>
+			<ul>
+				<li><a class="footer link-footer" href="{% url 'tou-page' %}">Terms of use</a></li>
+				<li><a class="footer link-footer" href="{% url 'privacy-page' %}">Privacy</a></li>
+				<li><a class="footer link-footer" href="{% url 'imprint-page' %}">Imprint</a></li>
+			</ul>
+		</div>
+
+		<div class="col">
+			<h1>Social</h1>
+			<ul>
+				<li><a class="footer link-footer" href="{% url 'contact-page' %}">Contact</a></li>
+			</ul>
+		</div>
+
+		<div class="col">
+			<h1>User</h1>
+			<ul>
+				{% if user.is_authenticated %}
+				<li><a class="footer link-footer" href="/dashboard/profile">Profile</a></li>
+				<li><a class="footer link-footer" href="/dashboard/briefing">Dashboard</a></li>
+				{% else %}
+				<li><a class="footer link-footer" href="{% url 'login-page' %}">Login</a></li>
+				<li><a class="footer link-footer" href="{% url 'register-page' %}">Register</a></li>
+				{% endif %}
+			</ul>
+		</div>
+
+	</div>
+	<div class="footer-bottom text-muted">
+	© Copyright - All rights reserved - News Krake LLC - Chris Yoon
+</div>
+
+</div>

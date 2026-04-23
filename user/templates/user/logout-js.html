@@ -1,0 +1,15 @@
+{% extends 'main_app/base.html' %}
+{% block content %}
+
+<div class="layout-narrow">
+    <div class="sig-content" style="min-height: 1000px;">
+    <h3 class="page-header header-underline">You are logged out!</h3>
+        <div class="section">
+            <small class="text-muted">
+                <a class="url-hover" href="{% url 'login-page' %}">Login</a>
+            </small>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

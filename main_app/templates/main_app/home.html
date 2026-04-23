@@ -1,0 +1,26 @@
+{% extends "main_app/base.html" %}
+{% block content %}
+{% load static %}
+
+<div class="layout-full">
+	<div class="container-javascript">
+		<div id="home-container">
+			<script>
+				window.DJANGO_URLS = {
+					startpage: "{% url 'home-page' %}",
+					login: "{% url 'login-page' %}",
+					logout: "{% url 'logout-page' %}",
+					logoutjs: "{% url 'logout-js-page' %}",
+					register: "{% url 'register-page' %}",
+					product: "{% url 'product-page' %}",
+					donate: "{% url 'donate-page' %}",
+					contact: "{% url 'contact-page' %}",
+					apipage: "{% url 'public-api-page' %}",
+				};
+			</script>
+			<script src="{% static 'index-bundle.js' %}" ></script>
+		</div>
+	</div>
+</div>
+	
+{% endblock %}

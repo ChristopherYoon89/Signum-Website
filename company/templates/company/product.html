@@ -1,0 +1,219 @@
+{% extends "main_app/base.html" %}
+{% block content %}
+{% load static %}
+
+<div class="layout-medium">
+
+	<div class="sig-content">
+
+	<h1 class="product-title col-blue bold">What you get with Signum News</h1>
+	<p class="product-subtitle">
+		A platform that allows users to filter the signal from the noise.
+	</p>
+
+	<div class="product-features-grid">
+
+		<!-- LEFT COLUMN -->
+		<div class="product-column">
+
+			<div class="product-feature-box">
+				<div class="feature-icon">
+					<img class="product-icon" src="{% static 'main_app/media/product-page-newsaggregated.png' %}">
+				</div>
+				<div class="feature-content">
+					<h3>Global News Aggregation</h3>
+					<p>
+						News and analysis from thousands of sources worldwide.
+					</p>
+				</div>
+			</div>
+
+
+			<div class="product-feature-box">
+				<div class="feature-icon">
+					<img class="product-icon" src="{% static 'main_app/media/product-page-customalgo.png' %}">
+				</div>
+				<div class="feature-content">
+					<h3>Custom Feeds & Algorithms</h3>
+					<p>
+						Create your own feeds and customize your personal algorithm.
+					</p>
+				</div>
+			</div>
+			
+
+			<div class="product-feature-box">
+				<div class="feature-icon">
+					<img class="product-icon" src="{% static 'main_app/media/product-page-searcharchive.png' %}">
+				</div>
+				<div class="feature-content">
+					<h3>Search Articles in Archive</h3>
+					<p>
+						Search articles across our continuously growing news archive.
+					</p>
+				</div>
+			</div>
+
+
+			<div class="product-feature-box">
+				<div class="feature-icon">
+					<img class="product-icon" src="{% static 'main_app/media/product-page-datadownload.png' %}">
+				</div>
+				<div class="feature-content">
+					<h3>Data Export</h3>
+					<p>
+						Export news data for research, analysis or personal workflows.
+					</p>
+				</div>
+			</div>
+
+		</div>
+
+		<!-- RIGHT COLUMN -->
+		<div class="product-column">
+
+			<div class="product-feature-box">
+				<div class="feature-icon">
+					<img class="product-icon" src="{% static 'main_app/media/product-page-categoryfilter.png' %}">
+				</div>
+				<div class="feature-content">
+					<h3>Category-Based Filtering</h3>
+					<p>
+					Use 15+ categories to filter articles including politics, economics, tech
+					or culture.
+					</p>
+				</div>
+			</div>
+
+
+			<div class="product-feature-box">
+				<div class="feature-icon">
+					<img class="product-icon" src="{% static 'main_app/media/product-page-bookmark.png' %}">
+				</div>
+				<div class="feature-content">
+					<h3>Bookmark Feed</h3>
+					<p>
+					Create your individual bookmark feeds for special research topics 
+					and save articles for later.
+					</p>
+				</div>
+			</div>
+
+
+			<div class="product-feature-box">
+				<div class="feature-icon">
+					<img class="product-icon" src="{% static 'main_app/media/product-page-stats.png' %}">
+				</div>
+				<div class="feature-content">
+					<h3>Article & Source Statistics</h3>
+					<p>
+						Access detailed statistics on articles, sources and aggregated user signals.
+					</p>
+				</div>
+			</div>
+
+
+			<div class="product-feature-box">
+				<div class="feature-icon">
+					<img class="product-icon" src="{% static 'main_app/media/product-page-apiplug.png' %}">
+				</div>
+				<div class="feature-content">
+					<h3>Public API Access</h3>
+					<p>
+						Integrate news data directly into your own software using our API.
+					</p>
+				</div>
+			</div>
+
+		</div>
+
+	</div>
+
+	<div class="product-button-container">
+    
+    <a href="{% url 'register-page' %}">
+        <button class="btn btn-outline-info" type="button">
+            Sign up
+        </button>
+    </a>
+	</div>
+
+	<div class="product-footer-note">
+		
+		<p>
+		One of the central themes of Signum is to filter the signal from the noise, 
+		helping users focus on relevant, high-quality information. Signum News provides 
+		two core functionalities:
+		</p>
+
+		<p>
+		<ul>
+		<li>
+		First, it aggregates and curates news and other content from thousands of 
+		sources around the world.
+		</li>
+		<li>
+		Second, the platform allows users to create their own feeds and customize 
+		their personal algorithm using categories, keywords, sources or quality 
+		indicators.
+		</li>
+		</ul>
+		</p>
+
+		<p>
+		In addition to aggregated news and customized feeds, Signum News offers a 
+		wide range of tools to explore and interact with information. Users can
+		</p>
+
+		<p>
+		<ul>
+			<li>
+			filter news across more than 15 categories including politics in 
+			different geographic regions, economic topics, tech or culture.
+			</li>
+			<li>
+			customize their own briefing and feeds based on categories, keywords, 
+			sources or quantitative metrics.
+			</li>
+			<li>
+			bookmark articles and organize their bookmarks through
+			bookmark feeds for specific research topics.
+			</li>
+			<li>
+			retrieve detailed statistics on articles, sources and user signals, 
+			including user ratings, source ratings, algorithm rating or clicks 
+			count.
+			</li>
+			<li>
+			search for articles in our archive based on keywords and other search 
+			parameters.
+			</li>
+			<li>
+			export their data as csv or JSON files.
+			</li>
+			<li>
+			access our API for a deeper integration of news data and their own 
+			software and use our endpoints, filter fields or ordering fields.
+			</li>
+		</ul>
+		</p>
+
+	</div>
+
+	<div class="section-read-more">
+		<h3 class="underline-spacing mb-4">Read more</h3>
+
+		<ul>
+		<li><a href="{% url 'guidelines-page' %}"><span class="url">User Guidelines</span></a></li>
+		<li><a href="{% url 'about-page' %}"><span class="url">About Signum</span></a></li>
+		<li><a href="{% url 'faq-page' %}"><span class="url">FAQ</span></a></li>
+		<li><a href="{% url 'public-api-docs-page' %}"><span class="url">API Documentation</span></a></li>
+		<li><a href="{% url 'tou-page' %}"><span class="url">Terms of Use</span></a></li>	
+		<li><a href="{% url 'privacy-page' %}"><span class="url">Privacy</span></a></li>	
+		</ul>
+
+		</div>
+</div>
+</div>
+	
+{% endblock %}

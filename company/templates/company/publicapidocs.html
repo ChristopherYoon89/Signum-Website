@@ -1,0 +1,665 @@
+{% extends 'main_app/base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="layout-medium">
+
+		<div class="sig-content">
+
+		<h1 class="page-header col-blue header-underline">Documentation</h1>
+
+		<p>
+		The Signum News API provides structured access to aggregated news articles,
+		sources, and categories. Results can be filtered, ordered and paginated
+		using URL parameters.
+		</p>
+
+		<p>
+		Users of the API receive access to the Signum dashboard, where they can manage 
+		their account details and generate API keys. Keys are hashed before being stored 
+		in the database, and the full key is shown only once at the time of creation. 
+		Users are therefore responsible for storing their keys securely. If a key is 
+		lost, a new one can be generated at any time. Multiple API keys can be created 
+		to support different applications or environments.
+		</p>
+
+
+		<div class="section">
+		<h2 class="header-underline">Endpoint News Article</h2>
+
+		<p>
+		News article data can be retrieved from the following endpoint, which
+		returns all articles, ordered by publication date by default. 
+		In practice, this provides a balanced mix of content across different categories.
+		</p>
+
+		<div class="endpoint">
+		<span class="method">GET</span>
+		<code>/api/public/news-articles/</code>
+		</div>
+
+		</div>
+
+		<div class="section">
+		<h3>News Article Fields</h3>
+
+		<p>
+		In the JSON file below there is an overview of the fields of the News 
+		Article data model, which users can access.
+		</p>
+
+<p>
+<pre>
+{
+  "id": 4829,
+  "title": "EU Considers New AI Regulation Framework for 2026",
+  "source_name": "Wired",
+  "source_url": "https://www.wired.com/eu-ai-regulation-2026",
+  "category_primary_name": "Technology",
+  "category_secondary_name": "Europe",
+  "tag1": "AI",
+  "tag2": "EU",
+  "tag3": "Regulation",
+  "date_posted": "2026-03-25T14:32:18Z",
+  "algo_rating": 3.47,
+  "rating_count": 126,
+  "average_rating": 2.9,
+  "clicks_count": 521,
+  "source_rating": 3.3,
+  "source_article_count": 42
+}
+</pre>
+</p>
+
+		</div>
+
+		<div class="section">
+
+		<h3>Filter Fields</h3>
+
+		<p>
+		The articles endpoint provides a wide range of filters that allows the user 
+		to narrow down the preferred articles. Here is a list of the filters of
+		the articles endpoint: 
+		</p>
+
+<p>
+<pre>
+search_title
+category_primary_name 
+category_secondary_name  
+tag
+source_name
+source_id 
+date_from 
+date_to 
+min_algo_rating 
+max_algo_rating 
+min_user_rating 
+max_user_rating 
+min_clicks_count 
+max_clicks_count 
+min_source_user_rating 
+max_source_user_rating 
+min_source_article_count 
+max_source_article_count 
+min_source_algo_rating 
+max_source_algo_rating
+</pre>
+</p>
+
+		</div>
+
+
+		<div class="section">
+		
+		<p>
+		The following section provides a short description of the filters:
+		</p>
+
+		<ul>
+			<p>
+			<li>
+			<code>search_title</code>: This field allows users to filter articles based on specific keywords and their 
+			occurrence in the article titles.
+			</li>
+			</p>
+
+			<p>
+			<li>
+			<code>category_primary_name</code>/<code>category_secondary_name</code>:
+			Categories allow users to filter articles based on our content taxonomy. In 
+			general, categories are assigned by an artificial neural network as part of our 
+			data pipeline. In most cases, the algorithm identifies the two most likely 
+			categories, which are then set as the primary and secondary category.
+			</li>
+			</p>
+			
+			<p>
+			<li>
+			<code>tag</code>: In addition to the primary and secondary categories, our data pipeline extracts 
+			key terms from both the title and the full text of each article. A separate 
+			tagging system then processes these keywords and converts them into standardized 
+			tags. The tag filter allows users to narrow down their search based on the 
+			top keywords of an article.
+			</li>
+			</p>
+
+			<p>
+			<li>
+			<code>source_name</code>: Filter articles by the name of the news source. You can use keywords to narrow 
+			results, or retrieve a detailed list of all available sources via the sources 
+			endpoint.
+			</li>
+			</p>
+
+			<p>
+			<li>
+			<code>source_id</code>: Field allows you to use a unique identifier to filter articles based on 
+			their source. The ID of the source could be used for dropdown menus or 
+			other application features.
+			</li>
+			</p>
+
+			<p>
+			<li>
+			<code>date_from</code>/<code>date_to</code>: The two date filters allows user 
+			to filter articles based on their publication date or upload date.  
+			</li>
+			</p>
+
+			<p>
+			<li>
+			<code>min_user_rating</code>/<code>max_user_rating</code>:
+			The user rating represents the average user rating between 1 (lowest rating) and
+			5 (highest rating). All articles with a rating of 0 were not rated by any user.
+			The two fields allow you define a minimum or maximum user rating. The average
+			user rating is a float field. 
+			</li>
+			</p>
+
+			<p>
+			<li>
+			<code>min_clicks_count</code>/<code>max_clicks_count</code>:
+			Another field, which allows users to filter articles based on their engagement 
+			level, is the number of recorded clicks. You can specify minimum and/or 
+			maximum click counts to narrow results to either highly viewed articles or 
+			less prominent content. This filter is an integer field.
+			</li>
+			</p>
+
+			<p>
+			<li>
+			<code>min_algo_rating</code>/<code>max_algo_rating</code>:
+			To help distinguish signal from noise, our data pipeline includes an algorithmic 
+			rating system that ranks articles based on their quality and relevance. The 
+			ranking score ranges from 0 (lowest score) to 5 (highest score) and represents a 
+			float field.
+			</li>
+			</p>
+
+			<p>
+			<li>
+			<code>min_source_user_rating</code>/<code>max_source_user_rating</code>:
+			These fields allow users to filter articles based on the overall quality of 
+			their source. The values reflect the average user rating across all articles 
+			published by a particular source, making it possible to include only highly 
+			rated publishers or exclude lower-rated ones.
+			</li>
+			</p>
+
+			<p>
+			<li>
+			<code>min_source_article_count</code>/<code>max_source_article_count</code>:
+			These fields allow users to filter articles based on the publishing volume of 
+			their source. The values represent the total number of articles available from 
+			a particular source, making it possible to focus on high-volume publishers or 
+			limit results to more selective outlets.
+			</li>
+			</p>
+
+			<p>
+			<li>
+			<code>min_source_algo_rating</code>/<code>max_source_algo_rating</code>:
+			These fields allow users to filter articles based on the overall algorithmic 
+			performance of their source. The values represent the average algorithmic rating 
+			across all articles published by a particular source, enabling users to focus on 
+			sources that consistently score higher according to the ranking system.
+			</li>
+			</p>
+		</ul>
+
+		</div>
+
+
+		<div class="section">
+
+		<h3>Ordering Fields</h3>
+
+		<p>
+		The ordering fields displayed below allow users to control how results are sorted. 
+		By default, the articles are ordered by <code>-date_posted</code> and ascending for all the other
+		ordering fields, but the direction can be reversed by prefixing the field with 
+		a minus symbol (-).
+		</p>
+
+<pre>
+date_posted
+algo_rating
+rating_count
+average_rating
+clicks_count
+source__average_rating
+source__article_count
+source__average_algo_rating
+</pre>
+
+</div>
+
+
+		<div class="section">
+
+		<h3>Single Article</h3>
+
+		<p>
+		In some cases, users may want to access individual articles. This can be done 
+		through the article endpoint by appending the article ID to the API URL.
+		</p>
+
+
+<pre>
+GET /api/public/news-articles/175/
+</pre>
+
+		</div>
+
+
+		<div class="section">
+		<h2 class="header-underline">Endpoint News Sources</h2>
+
+		<p>
+		The News Source model represents the publishers and platforms from which articles 
+		are collected. This makes 
+		it possible to identify high-performing sources, analyze coverage or build curated 
+		source lists.
+		</p>
+
+		<p>
+		We also advice our clients to use the News Source endpoint, if they want to filter 
+		articles based on the source name. 
+		</p>
+
+
+		<div class="endpoint">
+		<span class="method">GET</span>
+		<code>/api/public/news-sources/</code>
+		</div>
+
+		</div>
+
+
+		<div class="section">
+
+		<h3>News Source Fields</h3>
+
+		<p>
+		It provides aggregated metrics that describe each source, including 
+		user ratings, publishing volume and average algorithmic performance. The News 
+		Sources endpoint allows users to retrieve and explore available publishers, filter 
+		them by name or rating, and sort results based on quality or activity. 
+		</p>
+
+<pre>
+{
+  "id": 42,
+  "name": "Wired",
+  "viaplatform": "website",
+  "average_rating": 3.3,
+  "article_count": 43,
+  "average_algo_rating": 2.7,
+}
+</pre>
+
+		</div>
+
+		
+		<div class="section">
+
+		<h3>Filter Fields</h3>
+
+		<p>
+		These filtering fields allow users to narrow down news sources based on the name
+		of the source, platform, quality and publishing activity. Sources can be filtered by name or 
+		platform, as well as by minimum and maximum average user rating. Additional 
+		filters make it possible to restrict results based on the average algorithmic 
+		rating of a source and the total number of articles it has published, enabling 
+		users to focus on high-quality or high-volume publishers.
+		</p>
+
+<pre>
+source_name
+platform
+min_user_rating
+max_user_rating
+min_source_algo_rating
+max_source_algo_rating
+min_article_count
+max_article_count
+</pre>
+
+		</div>
+
+		<div class="section">
+
+		<ul>
+			<p>
+			<li>
+			<code>source_name</code>: This filter allows users to search articles by the 
+			name of the news source. You can use keywords for the search or the exact 
+			name of the source. 
+			</li>
+			</p>
+
+			<p>
+			<li>
+			<code>platform</code>: The platform filter searches the viaplatform data field 
+			and allows users to distinguish between different 
+			publishing platforms. In most cases the viaplatform field of the 
+			News Source model includes the category Website, other examples are
+			Twitter or Substack.
+			</li>
+			</p>
+
+			<p>
+			<li>
+			<code>min_user_rating</code>/<code>max_user_rating</code>:
+			The filters search articles based on the user_rating field and allow users 
+			to filter sources based on the average user rating across all articles 
+			published by a particular source.
+			</li>
+			</p>
+
+			<p>
+			<li>
+			<code>min_source_algo_rating</code>/<code>max_source_algo_rating</code>:
+			The min_source_algo_rating and max_source_algo_rating fields 
+			allow users to filter sources based on the average algorithmic rating of all articles 
+			published by a particular source, helping to focus on consistently high- or 
+			low-scoring publishers. The algorithmic rating represents a ranking score that consists 
+			of the quality of the article and the relevance of the topic.
+			</li>
+			</p>
+
+		</ul>
+
+		</div>
+		
+
+		<div class="section">
+
+		<h3>Ordering Fields</h3>
+
+		<p>
+		These ordering fields allow users to control how news sources are sorted in the 
+		response. Sources can be ordered alphabetically by name, by platform, by average 
+		user rating, by average algorithmic rating, or by total article count. By default, 
+		results are returned in ascending order, but the direction can be reversed by 
+		prefixing a field with a minus symbol (-), for example <code>-average_rating</code> or 
+		<code>-article_count</code>. The default ordering is the <code>name</code> field,
+		which orders the query alphabetically.
+
+		</p>
+
+<p>
+<pre>
+name
+viaplatform
+average_rating
+average_algo_rating
+article_count
+</pre>
+</p>
+
+		</div>
+
+
+		<div class="section">
+
+		<h2 class="header-underline">Endpoint News Categories</h2>
+
+		<p>
+		The third endpoint of our public API provides access to News Categories, 
+		which are referenced by the <code>category_primary_name</code> and 
+		<code>category_secondary_name</code> fields in the News Article model.
+		</p>
+
+		<p>
+		This endpoint is intended to help users build dynamic category filters, 
+		such as dropdown menus or similar UI components, without hardcoding the 
+		available categories.
+		</p>
+
+
+			<div class="endpoint">
+			<span class="method">GET</span>
+			<code>/api/public/news-categories/</code>
+			</div>
+
+		</div>
+
+
+		<div class="section">
+		<h3>News Source Fields</h3>
+
+		<p>
+		The Category data models consists of only two fields: <code>id</code> 
+		and <code>name</code>. Whereas the <code>id</code> represents a unique
+		identifier of a category used for filtering and ordering. The <code>name</code>
+		field is the human-readable name of the category used for filtering and 
+		displaying. 
+		</p>
+
+<p>
+<pre>
+{
+  "id": 1,
+  "name": "Worldwide",
+}
+</pre>
+</p>
+
+		</div>
+
+		<div class="section">
+
+		<p>
+		Currently, 15 categories are available through the Category endpoint. These 
+		categories can be used with the <code>category_primary</code> and 
+		<code>category_secondary</code> fields of the News Article model.
+		</p>
+
+<p>
+<pre>
+Worldwide
+USA
+Europe
+Middle East
+Asia
+Africa
+Latin America
+Money & Finance
+Companies
+Commodities
+Bitcoin
+Tech
+Science
+Culture
+Panorama
+</pre>
+</p>
+
+		</div>
+
+		<div class="section">
+
+		<h3>Filter Fields</h3>
+
+		<p>
+		The Categories endpoint allows one filter which is the <code>name</code> field.
+		</p>
+
+<p>
+<pre>
+name
+</pre>
+</p>
+
+		</div>
+
+		<div class="section">
+
+		<h3>Ordering Fields</h3>
+
+		<p>
+		The Category endpoint supports ordering by either the category <code>id</code> or the category 
+		<code>name</code>. This allows users to retrieve categories in their default numerical order 
+		or sort them alphabetically by name. As with other endpoints, the ordering 
+		direction can be reversed by prefixing the field with a minus symbol (-).
+		The default ordering is the <code>id</code>. 
+		</p>
+
+<p>
+<pre>
+id
+name
+</pre>
+</p>		
+		</div>
+
+
+		<div class="section">
+		<h2 class="header-underline">Pagination</h2>
+
+		<p>
+		Our public API allows users to define and overwrite a couple of parameters to paginate the 
+		data. In general, there are two pagination parameters that can be overwritten: 
+		<code>page</code> and <code>page_size</code>. Signum defined a standard page size of 
+		30 tokens (1 token per news article) and a maximum number of 100 tokens. 
+		</p>
+
+<p>
+<pre>
+page
+page_size
+</pre>
+</p>
+
+		</div>
+
+
+		<div class="section">
+		<h2 class="header-underline">Examples</h2>
+
+		<p>
+		The following example URLs demonstrate how to use the available filtering, 
+		ordering, and pagination parameters. These examples illustrate common 
+		query patterns, such as retrieving articles from a specific source, 
+		filtering by tags or date ranges, applying rating thresholds, and sorting 
+		results. Parameters can be freely combined to construct more precise 
+		queries tailored to specific use cases.
+		</p>
+
+		</div>
+
+		<div class="section">
+		<h3>Retrieving and filtering data</h3>
+
+<pre>
+GET /api/public/news-articles/
+</pre>
+
+<pre>
+GET /api/public/news-articles/?source_name=wired
+</pre>
+
+<pre>
+GET /api/public/news-articles/?tag=ai
+</pre>
+
+<pre>
+GET /api/public/news-articles/?date_from=2025-01-01&date_to=2025-02-01
+</pre>
+
+<pre>
+GET /api/public/news-articles/?min_algo_rating=0.8
+</pre>
+
+<pre>
+GET /api/public/news-articles/?search_title=taliban
+</pre>
+
+<pre>
+GET /api/public/news-articles/?source_name=bbc&tag=ai&min_algo_rating=0.5
+</pre>
+
+		</div>
+
+
+		<div class="section">
+		<h3>Ordering</h3>
+
+
+<pre>
+GET /api/public/news-articles/?ordering=-date_posted
+</pre>
+
+<pre>
+GET /api/public/news-articles/?ordering=date_posted
+</pre>
+
+<pre>
+GET /api/public/news-articles/?ordering=-algo_rating
+</pre>
+
+<pre>
+GET /api/public/news-articles/?ordering=-algo_rating,date_posted
+</pre>
+
+		<div class="section">
+		<h3>Pagination</h3>
+
+<pre>
+GET /api/public/news-articles/?page=3
+</pre>
+
+<pre>
+GET /api/public/news-articles/?page=2&page_size=50
+</pre>
+
+<pre>
+GET /api/public/news-articles/?category_primary_name=Technology
+&min_user_rating=4
+&page=1
+&page_size=10
+&ordering=-clicks_count
+</pre>
+
+		</div>
+
+
+		<div class="section-read-more">
+		<h3 class="underline-spacing mb-4">Read more</h3>
+
+		<ul>
+		<li><a href="{% url 'faq-page' %}"><span class="url">FAQ</span></a></li>
+		<li><a href="{% url 'guidelines-page' %}"><span class="url">User Guidelines</span></a></li>
+		<li><a href="{% url 'tou-page' %}"><span class="url">Terms of Use</span></a></li>	
+		<li><a href="{% url 'privacy-page' %}"><span class="url">Privacy</span></a></li>	
+		</ul>
+
+		</div>
+
+</div>
+
+</div>
+{% endblock content %}

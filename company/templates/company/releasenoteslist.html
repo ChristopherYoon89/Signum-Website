@@ -1,0 +1,35 @@
+{% extends "main_app/base.html" %}
+{% block content %}
+{% load static %}
+
+<div class="layout-medium">
+
+	<div class="sig-content">
+		
+	<h1 class="page-header col-blue header-underline">Release notes</h1>
+	
+	<div class="row">
+	{% for post in release_notes %}
+		<div style="margin-top: 45px;">
+		<article style="margin-top: 15px; line-height:1.5;">
+			<div>
+			<h2 style="margin-bottom: 0px;"><a href="{% url 'release-notes-detail-page' post.slug %}">
+				<span class="url-hover">{{ post.title }}</span></a></h2>
+				<div>
+				<small class="text-muted">{{ post.date_posted | date:"F j, Y" }}</small>
+				</div>
+				<div style="margin-top: 15px;">{{ post.snippet | safe }}</div>
+			<div style="margin-top: 15px;"><a class="url-hover" href="{% url 'release-notes-detail-page' post.slug %}"><small>
+				Read More</small></a></div>
+			</div>
+		</div>
+		
+		</article>
+	{% endfor %}
+	</div>
+
+	</div>
+
+</div>
+	
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends "main_app/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+
+<div class="layout-narrow">
+
+	<div class="sig-content" style="min-height: 1000px;">
+	
+	{% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-{{ message.tags }}">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="True">&times;</span>
+            </button>
+              {{ message }}
+          </div>
+          {% endfor %}
+    {% endif %}
+
+	<h3 class="page-header">Contact</h3>
+
+		<form method="POST" enctype="multipart/form-data" class="sig-form">
+			{% csrf_token %}
+			
+			<fieldset class="sig-fieldset">
+				<div class="crispy-form-container">
+				{{ l_form|crispy }}
+				</div>
+
+				<div class="sig-form-actions">
+					<button class="btn btn-outline-info" type="submit">
+						Send
+					</button>
+				</div>
+				
+			</fieldset>
+
+			<div class="sig-required">
+				* required fields
+			</div>
+
+		</form>
+
+	</div>
+
+</div>
+	
+{% endblock %}

@@ -1,0 +1,39 @@
+{% load static %}
+
+<html> 
+<head>
+{% csrf_token %}
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
+<!-- CSS -->
+<link rel="stylesheet" type="text/css" href="{% static 'main.css' %}">
+<link rel="icon" type="image/svg+xml" href="{% static 'main_app/media/Signum-tab-icon.svg' %}">
+</head>
+<!--container-->
+<body>
+
+<header>
+	{% include 'main_app/basenavbar.html' %}
+</header>
+
+
+<main>          
+	{% block content %} 
+
+	{% endblock %}
+</main>
+
+
+<footer>
+{% include 'main_app/basefooter.html' %}
+</footer>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+
+{% include 'company/cookieconsent.html' %}
+
+
+</body>
+</html>

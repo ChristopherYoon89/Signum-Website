@@ -1,0 +1,75 @@
+{% extends 'main_app/base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="layout-medium">
+
+	<div class="sig-content">
+        <h1 class="page-header col-blue header-underline">Donate in Bitcoin</h1>
+        
+		<div class="section">
+		<p>
+		This website provides free access to news data and useful tools
+		that help people stay informed in an increasingly noisy world. 
+		Even though we plan a commercial business version in the future, 
+		there are no paywalls for the basic functionalities and the goal is to keep 
+		information open and accessible to everyone.
+		</p>
+		
+		<p>
+		If you find value in this platform and want to support its continued 
+		development, you can make a voluntary donation. Contributions help cover 
+		infrastructure, development and maintenance. Donations are accepted via 
+		Bitcoin and Bitcoin Lightning.
+		</p>
+		
+		<p>
+		Apart from volutary donations, organizations and individuals can also support 
+		the project by becoming a sponsor. Sponsors will have their logo displayed 
+		on the start page as a way to show their support for open access to information. 
+		If you are interested in sponsoring rather than donating, <a href="{% url 'contact-page' %}">
+		<span class="url-underline">contact us</span></a> for further information.
+		</p>
+		
+		<p>
+		Thank you for helping keep free information alive.
+		</p>
+
+		</div>
+
+		<div class="section">
+
+		<h2>Bitcoin (BTC)</h2>
+		
+		<div class="btc-container">
+			
+			<div>
+				<span class="text-muted small">13fm7Vxz5qZV55h789uCRGxQegw5LGCBRn</span>
+			</div>
+
+			<div class="btc-qrcode-container" style="margin-top: 10px;">
+				<img src="{% static 'main_app/media/BitcoinQRCode.webp' %}">
+			</div>
+		</div>
+
+		</div>
+
+		<div class="section">
+		<h2>Bitcoin Lightning</h2>
+		
+		<div class="btc-container">
+			
+			<div>
+				<span class="text-muted small" style="word-wrap: break-word; overflow-wrap: break-word;">lnurl1dp68gurn8ghj7ampd3kx2ar0veekzar0wd5xjtnrdakj7tnhv4kxctttdehhwm30d3h82unvwqhhxur9vd5kzmrjv4ekxat9xqunwulx3rr</span>
+			</div>
+
+			<div class="btc-qrcode-container" style="margin-top: 10px;">
+				<img src="{% static 'main_app/media/BitcoinLightningQRCode.webp' %}">
+			</div>
+		</div>
+
+		</div>
+		
+	</div>
+</div>
+{% endblock content %}

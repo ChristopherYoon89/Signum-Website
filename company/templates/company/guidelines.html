@@ -1,0 +1,402 @@
+{% extends 'main_app/base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="layout-medium">
+
+	<div class="sig-content">
+
+		<h1 class="page-header col-blue header-underline">User Guidelines</h1>
+
+		<div class="section">
+		<p>
+		Welcome to the platform! This application is designed to help you discover, 
+		organize and monitor news and other content from thousands of sources on 
+		one platform. Our system extracts raw data from the web, 
+		processes the raw data, classifies articles into topical categories and 
+		extracts relevant tags and keywords. 
+		</p>
+		
+		<p>
+		This guide explains the core features and how to use them effectively.
+		</p>
+
+		</div>
+
+		<div class="section">
+		<h2 class="header-underline">Browsing and Filtering Content by Categories</h2>
+
+		<p>
+		The simplest way to use the platform is by browsing categorized content. 
+		Articles are automatically classified into topical categories based on their 
+		content. These categories allow you to quickly filter the overall news stream 
+		and focus on areas that matter most to you.
+		</p>
+
+		<p>
+		On the Signum News start page, users can scroll to get an overview of the 
+		latest news across all categories. At the top of the page, users can open a 
+		list of all categories, select one and quickly navigate to the corresponding 
+		section. Each category section also includes an upward arrow button that allows 
+		users to quickly jump back to the category list at any time.
+		</p>
+
+		<p>
+		To explore a specific category in more detail, users can either click "Read 
+		more" at the bottom of a category section or select "Articles" from the right-hand 
+		sidebar. Both options redirect the user to the dashboard's Articles section, where the 
+		full list of articles is available.
+		</p>
+
+		<p>
+		The start page is ideal for users who want a quick overview of major developments 
+		without setting up detailed preferences. For example, you might choose to browse 
+		only Money & Finance and Technology to reduce noise and focus on relevant 
+		coverage.
+		</p>
+
+		
+		<h3>
+		Categories
+		</h3>
+		
+
+		<p>
+		Signum News currently allows users to browse across 15 categories, which can be 
+		grouped into three broader clusters: Politics, Economics, and Society.
+		</p>
+
+		<div style="display:flex; justify-content:center; ">
+		<table style="width:100%; border:1px solid #000; font-size: 11pt; border-collapse:collapse; table-layout:fixed; padding: 10px; color: #1a1a1a">
+			<tr style="border-bottom:1px solid #000;">
+				<th style="width:33.33%; border-right:1px solid #000;">Politics</th>
+				<th style="width:33.33%; border-right:1px solid #000;">Economics</th>
+				<th style="width:33.33%;">Society</th>
+			</tr>
+			<tr>
+				<td style="border-right:1px solid #000;">Worldwide</td>
+				<td style="border-right:1px solid #000;">Money & Finance</td>
+				<td>Technology</td>
+			</tr>
+			<tr>
+				<td style="border-right:1px solid #000;">USA</td>
+				<td style="border-right:1px solid #000;">Companies</td>
+				<td>Science</td>
+			</tr>
+			<tr>
+				<td style="border-right:1px solid #000;">Europe</td>
+				<td style="border-right:1px solid #000;">Commodities</td>
+				<td>Culture</td>
+			</tr>
+			<tr>
+				<td style="border-right:1px solid #000;">Middle East</td>
+				<td style="border-right:1px solid #000;">Bitcoin</td>
+				<td>Panorama</td>
+			</tr>
+			<tr>
+				<td style="border-right:1px solid #000;">Asia</td>
+				<td style="border-right:1px solid #000;">&nbsp;</td>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td style="border-right:1px solid #000;">Africa</td>
+				<td style="border-right:1px solid #000;">&nbsp;</td>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td style="border-right:1px solid #000;">Latin America</td>
+				<td style="border-right:1px solid #000;">&nbsp;</td>
+				<td>&nbsp;</td>
+			</tr>
+		</table>
+		
+		</div>
+
+		<p style="margin-top: 15px;">
+		In some cases, articles may overlap multiple categories. To handle this, our 
+		system assigns both a primary and a secondary category. The start page displays 
+		only the primary category, while the Articles section in the dashboard shows both 
+		the primary and secondary classifications.
+		</p>
+
+		<p>
+		<h4>Politics</h4>
+		</p>
+
+		<p>
+		The seven geographical categories primarily focus on political news. The Worldwide 
+		category mainly, but not exclusively, covers global politics. This includes 
+		international organizations, events involving multilateral cooperation across 
+		continents, major bilateral relations and topics not confined to a specific 
+		region. Occasionally, the category Worldwide also covers events in countries outside the listed 
+		regions, such as major developments in Australia, Canada or Antarctica.
+		</p>
+
+		<p>
+		The other geographical categories focus on domestic politics within their 
+		respective regions or on bi- and multilateral issues primarily involving those 
+		areas. It is important to note that the classification of regions is not solely 
+		based on geography but also considers cultural aspects. For example, the Middle 
+		East category includes Arab countries in North Africa as well as countries in West 
+		Asia, such as Iran.
+		</p>
+
+		<p>
+		<h4>Economics</h4>
+		</p>
+
+		<p>
+		The Economics cluster includes the categories Money & Finance, Companies, 
+		Commodities and Bitcoin. Money & Finance covers monetary topics, financial 
+		developments and, in some cases, broader economic trends. This category typically 
+		focuses on macroeconomic perspectives. The "Companies" category primarily includes articles about 
+		specific companies, but it may also cover topics related to management, 
+		entrepreneurship, marketing or entire industries. Commodities addresses topics 
+		such as oil, gas, coal, industrial metals, agricultural products, livestock and 
+		rare earths. Bitcoin focuses on BTC while occasionally covering broader 
+		cryptocurrency or blockchain topics. Articles about cryptocurrencies other than 
+		Bitcoin are not published at all or only in rare cases.
+		</p>
+
+		<p>
+		<h4>Society</h4>
+		</p>
+
+		<p>
+		The Society cluster includes Technology, Science, Culture and Panorama. Technology 
+		covers a wide range of tech-related news, including software and apps, hardware, 
+		cybersecurity and hacking and engineering developments. Science primarily focuses 
+		on scientific discoveries, research developments and academic debates.
+		Culture encompasses social norms and values, art, film, music and occasionally 
+		philosophical discussions. The category Panorama is inspired by the German media 
+		landscape, where the term refers to general news and everyday events. This includes 
+		crime, extreme weather, disasters, human-interest stories, sports and unusual or 
+		odd news.
+		</p>
+
+		</div>
+
+		<div class="section">
+		<p>
+		<h2 class="header-underline">Custom Feeds</h2>
+		</p>
+
+		<p>
+		One of the most important features of Signum News is the custom feeds, which allow 
+		users to define their own algorithm and create highly targeted information streams. 
+		Custom feeds are displayed in the dashboard under the "Briefing" section, which can 
+		be accessed either via the quick-access sidebar at the right or through the dashboard 
+		side menu.
+		</p>
+
+		<p>
+		When a user creates an account, Signum automatically generates three default feeds 
+		that appear in the Briefing: All Articles, My Bookmarks and My Sources. These feeds 
+		cannot be deleted. However, users can remove them from the Briefing view via the 
+		Settings page.
+		</p>
+
+		<p>
+		On the "Add Feed" page, users can create new feeds and customize their filters and 
+		algorithm to match specific interests. Each feed can be configured using the 
+		following parameters:
+		</p>
+		
+		<p>
+		<ul>
+			<li>Feed name</li>
+			<li>Included or excluded categories</li>
+			<li>Included or excluded keywords</li>
+			<li>Included or excluded sources</li>
+			<li>Minimum user rating</li>
+			<li>Minimum algorithm rating</li>
+			<li>Minimum source rating</li>
+			<li>Minimum number of clicks</li>
+		</ul>
+
+		<p>
+		On the "Edit Feed" page, users can modify previously created feeds and adjust all 
+		of the parameters listed above. In the "Settings" page, users can also reorder 
+		their feeds and control how they appear on the "Briefing" page. 
+		</p>
+
+		<p>
+		Since Signum News is still in its infancy, we currently do not support AND/OR 
+		operators, but we plan to introduce more advanced query logic in the future. At 
+		present, all filters are combined using AND logic. For example, if an article 
+		contains an included keyword but belongs to an excluded category, it will not 
+		appear in the feed.
+		</p>
+
+		<p>
+		<h3>
+		Examples
+		</h3>
+		</p>
+
+		<p>
+		Let us assume a user wants to follow political developments in Western countries. 
+		To do so, the user can include the categories USA and Europe. At the same time, 
+		the user may wish to avoid saturated topics such as the war in Ukraine. This can 
+		be achieved by excluding specific keywords such as "Ukraine", "Zelensky", or "Donbas".
+		Additionally, the user can include or exclude certain sources or define minimum 
+		rating requirements. This configuration would surface political developments in the 
+		West while filtering out topics the user no longer wishes to follow.
+		</p>
+
+		<p>
+		Another example would be a feed dedicated to developments related to Israel and its 
+		conflicts. In this case, the user could define keywords such as "Israel", "Netanyahu"
+		and "Hamas" to filter news focused on the respective topic. Furthermore, the user 
+		could exclude sources that are considered unreliable on this issue or that exhibit 
+		a perceived bias.
+		</p>
+
+		</div>
+
+		<div class="section">
+		<p>
+		<h2 class="header-underline">Bookmark Lists for Research</h2>
+		</p>
+
+		<p>
+		Bookmark lists allow you to save articles into structured collections. These lists 
+		are designed for research, tracking topics over time or organizing reading material.
+		Instead of losing important articles in a general bookmark section, you can group 
+		them by topic and return to them later. This makes bookmark lists particularly useful 
+		for deep research and ongoing monitoring.
+		</p>
+
+		<p>
+		These bookmark lists allow users to create multiple bookmark lists, name each list
+		based on a topic or project, add articles from any feed or category and build 
+		long-term research collections. For instance, user might create bookmark lists such as "AI regulation research",
+		"crude oil market" or "Epstein research".
+		</p>
+
+		<p>
+		The customized lists are available in the "Bookmarks" section of your 
+		dashboard. You can create and edit bookmark lists via the top menu. To add an 
+		article to a specific list, click the star icon on the article and select the 
+		desired bookmark list.
+		</p>
+
+		</div>
+
+
+
+
+		<div class="section">
+		<p>
+		<h2 class="header-underline">Following Sources</h2>
+		</p>
+
+		<p>
+		If you regularly read content from specific publishers, you can follow sources 
+		directly. Following a source prioritizes its articles in your feeds and allows you 
+		to easily monitor output from trusted outlets. To follow a particular source, 
+		you can click on the + symbol next to a source. You can also search for a particular
+		source and follow it in the "Sources" section in the Dashboard side menu. 
+		</p>
+
+		<p>
+		This is particularly useful when users trust certain outlets more than others, 
+		want to track certain niche industry sources or are interested in following specific
+		regional media outlets. Moreover, the feature also allows users to compare coverage
+		across different publishers. If you want more than one following list, you can create
+		different feeds and include specific sources for each individual feed.
+		</p>
+
+		</div>
+
+
+
+
+		<div class="section">
+		<p>
+		<h2 class="header-underline">Article Ratings</h2>
+		</p>
+
+		<p>
+		Users can rate articles on a scale from 1 to 5, which allows us to receive user 
+		feedback. Ratings help us evaluate content quality and also contribute to 
+		personalization. Over time, ratings can be used as a signal for sorting and 
+		prioritizing content in your feeds.  
+		</p>
+
+		<p>
+		Individual user ratings cannot be viewed by the public, but Signum calculates 
+		averages across all user ratings for individual articles. Moreover, user
+		ratings are used to calculate an average user rating of sources in addition to
+		our internal algorithm rating of our data pipeline. 
+		</p>
+
+		</div>
+
+
+		<div class="section">
+		<p>
+		<h2 class="header-underline">Stats</h2>
+		</p>
+
+		<p>
+		Users can click the graph icon on any article to view a variety of metrics 
+		for both the article and its source, including:
+		</p>
+
+		<p>
+			<ul>
+				<li>Individual user rating</li>
+				<li>Average user rating</li>
+				<li>Algorithm rating</li>
+				<li>Article clicks</li>
+				<li>Average user rating of the source</li>
+				<li>Average algorithm rating of the source</li>
+			</ul>
+		</p>
+
+		<p>
+		We recommend that users rate articles only after reading them and based on 
+		their quality. Ratings can be updated at any time, which will adjust the 
+		article's average user rating. This average represents the aggregated 
+		rating from all users for that specific article.
+		</p>
+
+		<p>
+		The algorithm rating is generated by our internal system and is based on 
+		automated calculations. The ranking score considers multiple dimensions, 
+		including content quality, topic relevance and the average user rating of 
+		the source. Our algorithm rating of the content quality is mainly taking
+		quantitative factors into account, such as the length of the article 
+		or the information density.
+		</p>
+
+		<p>
+		The article clicks metric represents the total number of unique users who 
+		clicked the link; multiple clicks by the same user are not counted. The 
+		average user rating of a source reflects the aggregated user ratings across 
+		all articles from that source, while the average algorithmic rating of a 
+		source is calculated from the algorithmic ratings of all of its articles. 
+		</p>
+		
+
+		</div>
+
+
+		<div class="section-read-more">
+		<h3 class="underline-spacing mb-4">Read more</h3>
+
+		<ul>
+		<li><a href="{% url 'faq-page' %}"><span class="url">FAQ</span></a></li>
+		<li><a href="{% url 'public-api-docs-page' %}"><span class="url">API Documentation</span></a></li>
+		<li><a href="{% url 'tou-page' %}"><span class="url">Terms of Use</span></a></li>	
+		<li><a href="{% url 'privacy-page' %}"><span class="url">Privacy</span></a></li>	
+		</ul>
+
+		</div>
+
+
+	</div>
+
+</div>
+{% endblock content %}

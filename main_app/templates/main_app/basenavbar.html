@@ -1,0 +1,71 @@
+{% load static %}
+<nav class="navbar fixed-top navbar-expand-md navbar-dark bg-steel no-gutters justify-content-start" style="padding-left: 0px;">
+
+	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toogle navigation">
+		<span class="navbar-toggler-icon"></span>
+	</button>
+	<div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+		<ul class="navbar-nav">
+			<img class="navbar-logo" src="{% static 'main_app/media/Logo-Signum-without-bg-s.webp' %}">
+			<li class="nav-item">
+				<a class="nav-link" href="{% url 'home-page' %}"><span class="menu-text">home</span></a>
+			</li>
+
+			<li class="nav-item">
+				<a class="nav-link" href="{% url 'release-notes-page' %}"><span class="menu-text">release notes</span></a>
+			</li>
+
+			<li class="nav-item dropdown">
+				<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownBusiness" role="button" data-toggle="dropdown" aria-expanded="true">
+				<span class="menu-text">business</span>
+				</a>
+				<ul class="dropdown-menu nav-bar-dp-bg" id="dropdown-menu" aria-labelledby="navbarDropdownBusiness">
+				<li><a class="dd-item" href="{% url 'public-api-page' %}">API</a></li>
+				<li><a class="dd-item" href="{% url 'public-api-docs-page' %}">Documentation</a></li>
+				<li><a class="dd-item" href="{% url 'sponsoring-page' %}">Sponsoring</a></li>
+				<li><a class="dd-item" href="{% url 'contact-page' %}">Submit Source</a></li> 
+				<li><a class="dd-item" href="{% url 'contact-page' %}">Customer Service</a></li>              
+				</ul>
+			</li>
+			
+			<li class="nav-item dropdown">
+				<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownAbout" role="button" data-toggle="dropdown" aria-expanded="true">
+				<span class="menu-text">about</span>
+				</a>
+				<ul class="dropdown-menu nav-bar-dp-bg" id="dropdown-menu" aria-labelledby="navbarDropdownAbout">
+				<li><a class="dd-item" href="{% url 'product-page' %}">Product</a></li>
+				<li><a class="dd-item" href="{% url 'about-page' %}">Organization</a></li>
+				<li><a class="dd-item" href="{% url 'faq-page' %}">FAQs</a></li>
+				<li><a class="dd-item" href="{% url 'guidelines-page' %}">Guidelines</a></li>            
+				</ul>
+			</li>
+		</ul>
+
+		<div class="navbar-user dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownUser"
+           role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            user
+        </a>
+
+        <div class="dropdown-menu dropdown-menu-user nav-bar-dp-bg" aria-labelledby="navbarDropdownUser">
+			{% if user.is_authenticated %}
+				<a class="dd-item" href="/dashboard/briefing">
+					Dashboard
+				</a>
+				<form method="post" action="{% url 'logout-page' %}">
+					{% csrf_token %}
+					<button type="submit" class="dd-item">
+						Logout
+					</button>
+				</form>
+			{% else %}
+				<a class="dd-item" href="{% url 'login-page' %}">
+					Login
+				</a>
+				<a class="dd-item" href="{% url 'register-page' %}">
+					Register
+				</a>
+            {% endif %}
+        </div>
+    </div>
+</nav>

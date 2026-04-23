@@ -1,0 +1,288 @@
+{% extends "main_app/base.html" %}
+{% block content %}
+{% load static %}
+
+<div class="layout-medium">
+
+	<div class="sig-content">
+    
+	<h1 class="page-header col-blue header-underline">FAQ</h1>
+
+	<div class="section">
+
+	<p>
+	The Frequently Asked Questions section covers formal topics such as subscriptions, 
+	account access and general information about the platform. It is 
+	intended to provide clear answers to common administrative and technical questions.
+	</p>
+
+	<p>
+	For guidance on how to use the interface, configure feeds or work with filtering 
+	options, please refer to the <a href="{% url 'guidelines-page' %}"><span class="url-underline">
+	User Guidelines</span></a>, which provides more detailed usage instructions. If 
+	you are looking for the API documentation, see <a href="{% url 'public-api-docs-page' %}">
+	<span class="url-underline">here</span></a>.
+	</p>
+
+	</div>
+	
+
+	<div class="section">
+    
+	<h2 class="header-underline">What content is published on Signum News?</h2>
+
+    <p>
+	Signum News extracts and publishes a wide range of different information from thousands
+	of sources worldwide. The majority of our content consists of English-language news from 
+	covering global events and other topics. As we prioritize linking content that is not behind paywalls, 
+	certain media outlets are not part of our source pool.
+	</p>
+
+	<p>
+	In addition to news articles, we publish links to commentaries, podcasts, 
+	blog posts, analytical articles, statistics and in rare cases market reports or even datasets.
+	</p>
+
+	<p>
+	The news is organized into more than 15 categories, including regional categories 
+	that primarily focus on political developments, as well as categories covering money & finance, 
+	companies, science, technology or culture.
+    </p>
+
+	</div>
+	
+
+	<div class="section">
+    <h2 class="header-underline">What are the benefits of a subscription?</h2>
+      
+	<p>
+	In general, Signum News is free to use. However, we plan to roll out a business 
+	version that offers an expanded set of tools and functionalities. 
+	With a subscription, users gain an exclusive access to the full news archive as well as 
+	additional tools. The subscription includes a data analysis dashboard, automated 
+	reporting features as well as enhanced exporting tools. Of course, all advertising 
+	banners are hidden for subscribers.
+    </p>
+     
+	</div>
+
+
+	<div class="section">
+    <h2 class="header-underline">How much does a subscription cost?</h2>
+      
+	<p>
+	Further details regarding pricing for the business software will be announced once the analysis 
+	tool is ready for use.
+    </p>
+
+	</div>
+    
+
+	<div class="section">
+    <h2 class="header-underline">Can the subscription be cancelled at any time?</h2>
+
+	<p>
+	Yes, you can cancel your subscription at any time. For annual subscriptions, you will be notified 
+	by email 14 days before the subscription expires. If a subscription is not cancelled, it 
+	will be automatically renewed.
+	</p>
+
+	<p>
+	You can cancel your subscription with a single click in your profile settings under the 
+	“Subscription” section.
+	</p>
+     
+	</div>
+
+
+	<div class="section">
+    <h2 class="header-underline">What payment options are available?</h2>
+
+	<p>
+	Signum News uses Stripe for payment processing, which allows users to pay either by 
+	credit/debit card or with a stripe account. A Stripe account is not required. 
+	We are also working on a Bitcoin payment solution, which is expected to be available in the 
+	coming months.	
+	</p>
+	</div>
+
+
+	<div class="section">
+    <h2 class="header-underline">I forgot my password. What can I do?</h2>
+
+	<p>
+	Click on “Forgot password” on the login page, enter your email address and select 
+	“Reset password.” You will receive an automatically generated email that allows you 
+	to reset your password. Please check your spam folder if you do not receive the email.
+	If you have forgotten both your password and your email address, 
+	please contact us via the contact form. Further instructions will then be sent by email.
+	</p>
+    
+	</div>
+    
+	
+	<div class="section">
+    <h2 class="header-underline">How can I contact customer service?</h2>
+
+	<p>
+	For quick inquiries, you can reach us via our <span class="about-website">
+	<a href="{% url 'contact-page' %}">contact form</a></span>. For a more formal correspondence,
+	you may also send us a letter to our business address. 
+	</p>
+
+	</div>
+
+
+	<div class="section" style="margin-top: 75px;">
+    
+	
+	<div class="faq-further-question">Further Questions</div>
+
+	</div>	
+
+	<div class="section">
+	
+	<h2 class="header-underline">How often is new content published?</h2>
+
+	<p>
+	Our data crawler extracts thousands of news articles on a daily basis, which are then processed 
+	and transformed into a high-quality dataset. Between 100 and 150 news articles are uploaded to the 
+	website each day.
+	</p>
+
+	</div>
+
+	<div class="section">
+
+	<h2 class="header-underline">In which languages are the news articles available?</h2>
+
+	<p>
+	Most articles are published in English. All content meets our high quality standards and
+	aims to provide balanced, comprehensive coverage of relevant topics.
+	</p>
+	
+	</div>
+
+
+	<div class="section">
+	
+	<h2 class="header-underline">Who uses our news service?</h2>
+
+	<p>
+	Signum News is designed for readers who are dissatisfied with the current media landscape and are 
+	seeking a broader range of topics, sources and perspectives. Most of our readers identify with the 
+	liberal-conservative and libertarian spectrum. However, our audience also includes pragmatic thinkers, 
+	quantitative analysts, Bitcoiners, contrarians, rationalists or realists.
+	</p>
+
+	<p>
+	The information published by Signum News places high demands on its readers. Our audience is 
+	used to engaging with dense information and a wide range of opinions. If you 
+	are looking for propaganda, gossip or other superficial content, you are most likely in the 
+	wrong place.
+	</p>
+	
+	</div>
+
+
+	<div class="section">
+
+	<h2 class="header-underline">Can the service also be accessed on mobile devices?</h2>
+
+	<p>
+	Generally speaking, the website is fully usable via mobile browsers and optimized for smartphones and 
+	tablets. Due to the complexity of the platform and its features, we are currently developing a 
+	dedicated mobile app, which is expected to be released later this year. Until then, all functionality 
+	remains available via the mobile web version.
+	</p>
+	
+	</div>
+
+	
+	<div class="section">
+
+	<h2 class="header-underline">Is it possible to try the subscription for free?</h2>
+
+	<p>
+	No, Signum News does not offer a free trial. Free trials are frequently abused by bots
+	attempting to scrape our data. Additionally, VPN services make it easy to repeatedly create trial accounts.
+	That said, part of our content is freely accessible, allowing you to get an initial impression.
+	You can also watch our product videos, which showcase exclusive content and features. 
+	Additionally, users may start with a monthly subscription before committing to an annual plan.
+	</p>
+
+	</div>
+
+	
+	<div class="section">
+
+	<h2 class="header-underline">What happens to my data?</h2>
+
+	<p>
+	By using our website, you agree to our terms and conditions and privacy policy. We reserve the 
+	right to retain user data for up to six months after subscription cancellation, after which it 
+	is deleted. We fully comply with applicable data protection laws as defined by the EU 
+	General Data Protection Regulation (EU Regulation 2016/679).
+	</p>
+	
+	</div>
+
+	
+	<div class="section">
+	<h2 class="header-underline">Why was my account suspended?</h2>
+
+	<p>
+	We only suspend accounts in cases of serious violations of our terms of use or applicable law. 
+	In principle, we try to avoid suspensions whenever possible. If your 
+	account was suspended without justification or due to a technical error, please contact us 
+	immediately via the contact form.
+	</p>
+
+	</div>
+
+	
+	<div class="section">
+
+	<h2 class="header-underline">How can I change my profile information?</h2>
+
+	<p>
+	User can update their personal information, login details and profile description in their 
+	profile settings.
+	</p>
+	
+	</div>
+
+	
+	<div class="section">
+	
+	<h2 class="header-underline">Is it possible to include my media outlet in the aggregator?</h2>
+
+	<p>
+	Yes, we are generally open to such requests. You may submit your media outlet/source via the contact 
+	form. However, each request will be carefully reviewed by our editorial team before being added 
+	to the source pool. Please note that we do not accept payments for inclusion, nor can we guarantee 
+	that articles from your outlet will be published on Signum News. Our algorithms evaluate each 
+	link independently based on the quality and relevance of the article before it becomes part of our 
+	feed.
+	</p>
+	
+	</div>
+
+
+	<div class="section-read-more">
+
+	<h3 class="underline-spacing mb-4">Read more</h3>
+
+		<ul>
+		<li><a href="{% url 'faq-page' %}"><span class="url">FAQ</span></a></li>
+		<li><a href="{% url 'public-api-docs-page' %}"><span class="url">API Documentation</span></a></li>
+		<li><a href="{% url 'tou-page' %}"><span class="url">Terms of Use</span></a></li>	
+		<li><a href="{% url 'privacy-page' %}"><span class="url">Privacy</span></a></li>	
+		</ul>
+
+	</div>
+
+	</div>
+</div>
+	
+{% endblock %}

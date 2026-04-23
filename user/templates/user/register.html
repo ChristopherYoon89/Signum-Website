@@ -1,0 +1,48 @@
+{% extends 'main_app/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+
+<div class="layout-narrow">
+
+		<div class="sig-content" style="min-height: 1000px;">
+        <h3 class="page-header">Register</h3>
+        <form method="POST">
+            {% csrf_token %}
+			<fieldset class="sig-fieldset">
+			
+				<div class="crispy-form-container">
+					{{ form|crispy }}
+				</div>
+
+				<div class="sig-form-actions">
+				<button class="btn btn-outline-info" type="submit">Register</button>
+				</div>
+			
+			</fieldset>
+		
+			<p style="margin-top: 25px;">
+			<small class="sig-required text-muted">
+				*Required fields
+			</small>
+			</p>
+
+			<div>
+				<small class="text-muted">
+				With registering an account you agree with our 
+				<a href="{% url 'tou-page' %}" target="_blank"><u>Terms of Use</u></a> 
+				and <a href="{% url 'privacy-page' %}" target="_blank"><u>Privacy Policy</u></a>. 
+				</span></small>
+			</div>
+			
+        </form>
+        
+        <div style='margin-top:65px; margin-bottom: 55px;'>
+            <legend class="sig-legend header-underline">Already registered?</legend>
+			<div style="margin-top: 25px;">
+			<small class="text-muted"><a class="url-hover" href="{% url 'login-page' %}">Login</a></small>
+			</div>
+        </div>
+		</div>
+</div>
+{% endblock content %}
