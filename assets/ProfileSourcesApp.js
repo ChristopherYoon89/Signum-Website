@@ -8,13 +8,10 @@ import {
  } from 'antd';
 import { 
 SyncOutlined,
-StockOutlined,
 PlusOutlined,
 } from '@ant-design/icons';
 import Axios from "axios";
-import axios from 'axios';
-import moment from 'moment';
-import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "./AuthProvider.js";
 
 

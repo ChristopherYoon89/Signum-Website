@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { 
 	Layout,
-	Card,
 	Tooltip,
 	Table,
 	Tag,

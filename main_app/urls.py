@@ -2,9 +2,7 @@ from django.urls import path, re_path, include
 from . import views
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.contrib.auth import views as auth_views
-from django.views.generic import TemplateView
 from rest_framework import routers
-from . import views
 from user import views as user_view
 from user.forms import CustomLoginForm
 from company import views as comp_view

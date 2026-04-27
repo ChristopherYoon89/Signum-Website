@@ -1,21 +1,15 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import {
 	Avatar,
  } from 'antd';
 import { 
 	StarOutlined,
-	SettingOutlined,
 	AppstoreAddOutlined,
-	BellOutlined,
-	EditOutlined,
 	NotificationOutlined,
 	HomeOutlined,
 	UserOutlined,
 	ReadOutlined,
 } from '@ant-design/icons';
-import Axios from "axios";
-import axios from 'axios';
-import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from "./AuthProvider.js";
 

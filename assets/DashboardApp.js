@@ -11,7 +11,6 @@ import {
 	AppstoreAddOutlined,
 	ApiOutlined,
   } from '@ant-design/icons';
-import 'antd/dist/antd.min.css';
 import { useLocation, useNavigate, Outlet } from 'react-router-dom';
 import SidebarApp from './SidebarApp.js';
 import DashboardTopMenu from './DashboardTopMenu.js';
@@ -68,7 +67,7 @@ const items = [
 		getItem('Latin America', 'Latin America', null, null, null, '/dashboard/category/Latin America', 'Latin America'),
 		getItem('Money & Finance', 'Money & Finance', null, null, null, '/dashboard/category/Money & Finance', 'Money & Finance'),
 		getItem('Companies', 'Companies', null, null, null, '/dashboard/category/Companies', 'Companies'),
-		getItem('Commodities', 'Commodities', null, null, null, '/dashboard/category/Commodities', 'Commodities'),
+		getItem('Energy & Commodities', 'Commodities', null, null, null, '/dashboard/category/Commodities', 'Energy & Commodities'),
 		getItem('Bitcoin', 'Bitcoin', null, null, null, '/dashboard/category/Bitcoin', 'Bitcoin'),
 		getItem('Tech', 'Tech', null, null, null, '/dashboard/category/Tech', 'Tech'),
 		getItem('Science', 'Science', null, null, null, '/dashboard/category/Science', 'Science'),

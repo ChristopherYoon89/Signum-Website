@@ -9,7 +9,6 @@ import {
 	Popover,
 	Button,
 	Tag,
-	Avatar,
   } from 'antd';
 import 'antd/dist/antd.min.css';
 import {

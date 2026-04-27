@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react';
 import { 
 	Tag,
 	Rate,
-	Popover,
  } from 'antd';
 import Axios from "axios";
 import axios from 'axios';

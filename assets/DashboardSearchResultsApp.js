@@ -14,7 +14,6 @@ StarOutlined,
 PlusOutlined,
 } from '@ant-design/icons';
 import Axios from "axios";
-import axios from 'axios';
 import moment from 'moment';
 import PopOverContent from './StatsNewsArticle.js';
 import { useNavigate, useSearchParams } from "react-router-dom";

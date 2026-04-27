@@ -2,7 +2,6 @@ import React, {useState, useEffect, useRef} from 'react';
 import { 
 	Tag,
 	Card,
-	Divider,
 	Layout,
 	Row,
 	Col,
