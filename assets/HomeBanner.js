@@ -119,11 +119,12 @@ const HomeBanner = () => {
 					onClick={() => navigateDonatePage()} 
 					className="banner-container">
 				<img className="banner-icon-donate" src="/static/main_app/media/bitcoin.webp" />
-				<p className='banner-header'>Donate in Bitcoin!</p>
+				<p className='banner-header'>Donate!</p>
 
 				<p class="banner-text">
 				Help us keep this platform running! We benefit from free and open source 
-				information, but we also share our information for free.
+				information, but we also share our information for free. You can buy us a 
+				coffee or donate in Bitcoin.
 				</p>
 					</Card>
 				</Col>
