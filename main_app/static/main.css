@@ -396,7 +396,7 @@ legend {
 
 
 .nav-bar-dp-bg {
-	background: rgba(26, 26, 26, 0.96);
+	background: #1a1a1af5;
 	color: #fff;
 	border-radius: 5px; 
 }
@@ -1182,10 +1182,16 @@ form label {
 	max-height: 370px;
 	padding: 0, 0, 0, 0;
 	overflow-y: auto;
-	background: rgba(26, 26, 26, 0.9);
+	background: #1a1a1ae6;
 	font-size: 0.85rem !important;
-	border: 1px solid #154360;
 	border-radius: 10px;
+	border: 1px solid #686868;
+}
+
+
+.scrollable-indicator-card:hover {
+	border: 1px solid #949494;
+	
 }
 
 
@@ -1245,7 +1251,7 @@ form label {
 
 .home-article-title {
 	color: #2c2c2c;
-	font-size: 0.92rem;
+	font-size: 0.85rem;
 	margin-bottom: 5px;
 	font-weight: bold;
 }
@@ -1300,7 +1306,7 @@ form label {
 .ant-home-date {
 	color: #868686;
 	font-size: 0.85rem;
-	float: right;
+	margin-right: 15px;
 }
 
 
@@ -1327,6 +1333,50 @@ form label {
   align-items: center;
   gap: 12px;
   flex-shrink: 0;
+}
+
+
+.home-search-card {
+	background: #1a1a1ae6;
+	border-radius: 10px;
+	border: 1px solid #686868;
+}
+
+
+.home-search-card:hover {
+	border: 1px solid #949494;
+}
+
+
+/* input text color */
+.home-search-card input,
+.home-search-card .ant-input {
+	color: #d9d9d9 !important;
+	background-color: transparent !important;
+}
+
+/* placeholder color */
+.home-search-card input::placeholder {
+	color: #999999 !important;
+}
+
+/* if you're using Input.Search (suffix button etc.) */
+.home-search-card .ant-input-affix-wrapper {
+	background-color: transparent !important;
+	color: #d9d9d9 !important;
+}
+
+/* focus border (optional but important for dark theme) */
+.home-search-card .ant-input:focus,
+.home-search-card .ant-input-focused {
+	border-color: #555 !important;
+	box-shadow: none !important;
+}
+
+
+.home-search-engine-info {
+	color: #ff0000;
+	margin-left: 15px;
 }
 
 
@@ -1573,6 +1623,13 @@ form label {
 	display: flex;
   	justify-content: space-between;
   	width: 100%;
+}
+
+
+.dashboard-feed-board-date {
+	color: #868686;
+	font-size: 0.85rem;
+	float: right;
 }
 
 

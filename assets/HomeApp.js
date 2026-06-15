@@ -25,6 +25,7 @@ import StatsHomeIndicators from './StatsHomeIndicators.js';
 import HomeCategories from './HomeCategories.js';
 import DashboardBookmarkFeedPopover from './DashboardBookmarkFeedPopover.js';
 import { useAuth } from "./AuthProvider.js";
+import HomeSearchApp from './HomeSearchApp.js';
 
 
 function getCookie(name) {
@@ -85,6 +86,7 @@ const CategoryArticles = ({
 							<PlusOutlined
 								style={{
 									marginLeft: 5,
+							
 									fontSize: "0.85em",
 									cursor: 'pointer', 
 									color: !isauthenticated
@@ -98,34 +100,33 @@ const CategoryArticles = ({
 									?	() => toggleUserFollow(article.source_id)
 									: undefined
 								}
-							/>
+							/> 
 							</Tooltip>
 						</span>
-						<span className="ant-home-date">
-							{moment(article.date_posted).fromNow()}
-						</span>
-					</p>
-
-					<h5 className={"home-article-title"}>
+						
 						<a href={article.source_url} target="_blank" rel="noopener noreferrer">
-							<span onClick={() => createClick(article)}>
-								{article.title}
+							<span className={"home-article-title"} onClick={() => createClick(article)}>
+								{article.title} 
 							</span>
 						</a>
-					</h5>					
+						
+					</p>			
 
-					<p style={{ marginTop: 20, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+					<p style={{ marginTop: 10, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+
 						<span className="home-article-tags">
-						Tags: 
+						 <span className="ant-home-date">
+							{moment(article.date_posted).fromNow()}
+						</span>
 						<span
 							onClick={(e) => {
 								navigate(`/dashboard/tag/${encodeURIComponent(article.tag1)}?scrollToTop=true`);
 								}}  
-							style={{ marginRight: 5, marginLeft: 5, }}
+							style={{ marginRight: 5}}
 						>
 						<Tag className="table-tag" color={"purple"}>{article.tag1}</Tag>
 						</span>
-						<span 
+						<span
 							onClick={(e) => {
 								navigate(`/dashboard/tag/${encodeURIComponent(article.tag2)}?scrollToTop=true`);
 								}}
@@ -319,12 +320,23 @@ const HomeApp = () => {
 			}
 		}, [pathname, search, navigate]);
 
-
-	return(
+	return (
 		<>
 			<Layout className={"bg-dark"}>
 				<HomeBanner />
-						{!isauthenticated && (
+				
+				<Row gutter={20} style={{ marginBottom: 35,}}>
+				
+				<Col span={6}>
+				
+				</Col>
+				
+				<Col className="gutter-row" span={12} style={{ padding: 5, }}>
+
+				<h1 style={{ color: "#cacaca", textAlign: "center", marginTop: 20, }}>NEWS SEARCH ENGINE</h1>
+					<HomeSearchApp />
+
+					{!isauthenticated && (
 						<div style={{ textAlign: "center", }}>
 							<button 
 								className="home-register-button" 
@@ -332,12 +344,14 @@ const HomeApp = () => {
 									window.location.href = window.DJANGO_URLS.register;
 								}}
 							>
-							Register for free
+							Sign Up for Free
 							</button>
 						</div>
 						)}
+				</Col>
+			</Row>
 				<Row gutter={20}>
-
+				
 				<Col span={6}>
 				
 				</Col>
@@ -345,20 +359,30 @@ const HomeApp = () => {
 				<Col className="gutter-row" span={12} style={{ padding: 5, }}>
 					<StatsHomeIndicators />
 				</Col>
-			</Row>			
+			</Row>
 
-				<div ref={topSectionRef} className="toggle-button-container">
-					<HomeCategories />
-				</div>
+				<Row gugger={20} style={{ marginTop: 55, }}>
+					<Col span={6}>
+						
+					</Col>
+
+					<Col className="gutter-row" span={12} ref={topSectionRef} style={{ paddingTop: 35,}}>
+						<HomeCategories />
+					</Col>
+				</Row>			
+
+
+				<h1 style={{ color: "#cacaca", textAlign: "center", marginTop: 20, }}>POLITICS</h1>
+
 			
-				<Row gutter={20} style={{ marginTop: 55,}}>
+				<Row gutter={20} style={{ marginTop: 0, backgroundColor: "#fff"}}>
 
 					<Col 
 						className="gutter-row" 
 						span={6}>
 					
 					</Col>
-				
+					
 					<Col 
 						className="gutter-row" 
 						style={{ 
@@ -370,9 +394,7 @@ const HomeApp = () => {
 						 }} 
 						span={12}
 						>
-
-					<h1 style={{ color: "#000", marginBottom: 35, }}>POLITICS</h1>
-
+					
 					{loading ? (
 					<p>Loading articles...</p>
 					) : (
@@ -394,7 +416,7 @@ const HomeApp = () => {
 										}}
 									>
 									⬆ 
-									</button>
+									</button> 
 									</Tooltip>
 								</div>
 								
@@ -424,8 +446,10 @@ const HomeApp = () => {
 
 				</Row>
 
+				<h1 style={{ color: "#cacaca", textAlign: "center", marginTop: 20, }}>ECONOMICS</h1>
 
-				<Row gutter={20} style={{ marginTop: 85, }}>
+
+				<Row gutter={20} style={{ marginTop: 5, backgroundColor: "#fff" }}>
 
 					<Col className="gutter-row" span={6}>
 					
@@ -441,8 +465,6 @@ const HomeApp = () => {
 							paddingTop: 55,
 						 }} 
 						span={12}>
-					
-					<h1 style={{ color: "#000", marginBottom: 35, }}>ECONOMICS</h1>
 
 					{loading ? (
 					<p>Loading articles...</p>
@@ -490,11 +512,10 @@ const HomeApp = () => {
 					</>
 					)}
 					</Col>
-					
 				</Row>
 
-
-				<Row gutter={20} style={{ marginTop: 85, }}>
+				<h1 style={{ color: "#cacaca", textAlign: "center", marginTop: 20, }}>SOCIETY</h1>
+				<Row gutter={20} style={{ marginTop: 5, backgroundColor: "#fff" }}>
 				<Col className="gutter-row" span={6}>
 
 				</Col>
@@ -510,7 +531,7 @@ const HomeApp = () => {
 					}}
 					span={12}
 					>										
-					<h1 style={{ color: "#000", marginBottom: 35, }}>SOCIETY</h1>
+					
 
 					{loading ? (
 					<p>Loading articles...</p>

@@ -721,26 +721,7 @@ class HomeStatsTags(APIView):
 
 	def get(self, request, *args, **kwargs):
 
-		# Signum indicators
-		last_24h = timezone.now() - timedelta(hours=24)
-		total_articles = NewsArticle.objects.count()
-		articles_last_24h = NewsArticle.objects.filter(date_posted__gte=last_24h).count()
-		avg_user_rating = UserRating.objects.aggregate(avg=Avg('userrating'))['avg'] or 0.0
-		avg_algo_rating = NewsArticle.objects.aggregate(avg=Avg('algo_rating'))['avg'] or 0.0
-		published_sources = NewsSource.objects.filter(newsarticle__publish=True).distinct().count()
-		total_users = User.objects.count()
-
-		indicators = {
-			"total_articles": total_articles,
-			"articles_last_24h": articles_last_24h,
-			"avg_user_rating": round(avg_user_rating, 2),
-			"avg_algo_rating": round(avg_algo_rating, 2),
-			"published_sources": published_sources,
-			"total_users": total_users,
-		}
-
 		# Tags
-
 		tags_qs = NewsArticle.objects.values_list(
 			'tag1', 'tag2', 'tag3'
 		)
@@ -754,7 +735,6 @@ class HomeStatsTags(APIView):
 		]
 
 		# Popular articles
-
 		top_articles = (
 			NewsArticle.objects
 			.filter(publish=True)
@@ -777,7 +757,6 @@ class HomeStatsTags(APIView):
 		# Final data construction
 
 		data = {
-			"indicators": indicators,
 			"tags": top_tags,
 			"popular_articles": popular_articles,
 		}

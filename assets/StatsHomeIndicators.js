@@ -34,7 +34,6 @@ var csrftoken = getCookie('csrftoken');
 
 
 const StatsHomeIndicators = () => {
-	const [overalltabledata, setOverallData] = useState({});
 	const [tagstabledata, setTagsData] = useState([]);
 	const [poparticlesdata, setPopArticlesData] = useState([]);
 	const scrollContainerRef = useRef(null);
@@ -45,7 +44,6 @@ const StatsHomeIndicators = () => {
 			const getOverallData = async () => {
 				try {
 					const response = await Axios.get(`/api/home-stats-tags/`);
-					setOverallData(response.data.indicators);
 					setTagsData(response.data.tags);
 					setPopArticlesData(response.data.popular_articles);
 				} catch (error) {
@@ -67,28 +65,6 @@ const StatsHomeIndicators = () => {
       scrollContainerRef.current.scrollBy({ left: -360, behavior: 'smooth' });
     }
   };
-
-
-	const OverallIndicatorsArchive = () => {
-		return(
-			<>
-			<h2 className='home-indicator-header'>Signum Indicators</h2>
-				<Card
-					bordered={false}
-					className='scrollable-indicator-card'
-					>
-					<div style={{textAlign: 'center' }}>
-						<p>Total number of articles in the archive: <Tag color={"geekblue"}>{overalltabledata.total_articles}</Tag></p>
-						<p>New articles (last 24h): <Tag color={"green"}>{overalltabledata.articles_last_24h}</Tag></p>			
-						<p>Total number of published sources: <Tag color={"red"}>{overalltabledata.published_sources}</Tag></p>
-						<p>Average user rating: <Tag color={"yellow"}>{overalltabledata.avg_user_rating}</Tag></p>
-						<p>Average algorithm rating: <Tag color={"purple"}>{overalltabledata.avg_algo_rating}</Tag></p>
-						<p>Total number of active users: <Tag color={"geekblue"}>{overalltabledata.total_users}</Tag></p>
-					</div>
-				</Card>
-			</>
-		);
-	};
 
 
 	const colors = [
@@ -160,23 +136,6 @@ const StatsHomeIndicators = () => {
 		<>
 			<Layout className={"bg-dark"}>
 				<Row gutter={[15, 15]}>
-					<LeftOutlined
-						onClick={scrollLeft}
-						style={{
-							position: 'absolute',
-							left: 0,
-							top: '50%',
-							zIndex: 10,
-							transform: 'translateY(-50%)',
-							fontSize: 14,
-							cursor: 'pointer',
-							background: '#1a1a1a',
-							borderRadius: '50%',
-							border: '1px solid #154360',
-							padding: '8px',
-							boxShadow: '0 0 6px rgba(0,0,0,0.2)'
-						}}
-					/>
 					<div className='home-indicator-scroll-container' ref={scrollContainerRef}>
 						<Col xs={24} sm={12} md={12}>
 							<PopArticles />
@@ -184,27 +143,7 @@ const StatsHomeIndicators = () => {
 						<Col xs={24} sm={12} md={12}>
 							<StatsHomeTags />
 						</Col>
-						<Col xs={24} sm={12} md={12}>
-							<OverallIndicatorsArchive />
-						</Col>
 					</div>
-					<RightOutlined
-						onClick={scrollRight}
-						style={{
-							position: 'absolute',
-							right: 0,
-							top: '50%',
-							zIndex: 10,
-							transform: 'translateY(-50%)',
-							fontSize: 14,
-							cursor: 'pointer',
-							background: '#1a1a1a',
-							borderRadius: '50%',
-							border: '1px solid #154360',
-							padding: '8px',
-							boxShadow: '0 0 6px rgba(0,0,0,0.2)'
-						}}
-					/>
 				</Row>
 			</Layout>
 		</>

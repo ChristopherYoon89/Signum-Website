@@ -74,7 +74,10 @@ const items = [
 		getItem('Culture & Philosophy', 'Culture', null, null, null, '/dashboard/category/Culture', 'Culture'),
 		getItem('Panorama & Crime', 'Panorama', null, null, null, '/dashboard/category/Panorama', 'Panorama'),
 	]),
-	getItem('Sources', 'all-sources', <NotificationOutlined />, null, null, '/dashboard/all-sources', 'All Sources'),	
+	getItem('Sources', 'sub3', <NotificationOutlined />, [
+		getItem('My Sources', 'my-sources', null, null, null, '/dashboard/mysources', 'My Sources'),
+		getItem('All Sources', 'all-sources', null, null, null, '/dashboard/all-sources', 'All Sources'),
+	]),	
 	getItem('API', 'api', <ApiOutlined />, null, null, '/dashboard/api', 'Add API Key'),
 ]
 

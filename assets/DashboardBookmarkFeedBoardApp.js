@@ -452,7 +452,7 @@ const DashboardBookmarkFeedBoardApp = () => {
 												{ 
 													usersettings.show_article_timestamp && (
 														<>
-														<span className="ant-home-date">
+														<span className="dashboard-feed-board-date">
 															{moment(article.date_posted).fromNow()}
 														</span>
 														</>

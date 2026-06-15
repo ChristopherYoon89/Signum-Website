@@ -269,8 +269,8 @@ const DashboardFeedBoardApp = () => {
 					{feeds.map((feed, index) => (
 						<Col key={index} xs={24} sm={12} md={8} style={{ display: "flex", flexDirection: "column", minHeight: 0, }}>
 							<p className="dashboard-feed-board-title">
-								<Tag color={"red"}><ControlOutlined color={"red"} style={{marginRight: 5, }}/>{feed.title}</Tag>
-									{feed.feed_type === "personal_feed" && (
+								<Tag color={"red"}>{feed.title}</Tag>
+									{feed.feed_type === "personal_feed" ? (
 										<Tooltip title="Edit feed" placement="top">
 											<span
 												onClick={() => navigate(`/dashboard/briefing/editfeed/${feed.id}`)}
@@ -284,7 +284,22 @@ const DashboardFeedBoardApp = () => {
 												/>
 											</span>
 										</Tooltip>
-									)}
+									) : (
+										<Tooltip title="Edit feed" placement="top">
+											<span
+												onClick={() => navigate(`/dashboard/settings`)}
+											>
+												<ToolOutlined
+													style={{
+														fontSize: 16,
+														color: "#969696",
+														cursor: 'pointer',
+													}}
+												/>
+											</span>
+										</Tooltip>
+									)
+									}
 								</p>
 							<Card className="scrollable-menu" style={{ flex: 1, minHeight: 0, overflowY: 'auto', overflowX: 'auto', }}>
 								{feed.articles.length > 0 ? (
@@ -417,7 +432,7 @@ const DashboardFeedBoardApp = () => {
 
 													{ usersettings.show_article_timestamp && (
 															<>
-															<span className="ant-home-date">
+															<span className="dashboard-feed-board-date">
 																{moment(article.date_posted).fromNow()}
 															</span>
 															</>

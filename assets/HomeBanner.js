@@ -63,7 +63,7 @@ const HomeBanner = () => {
 						className="banner-container"
 						onClick={() => navigateProductPage()}
 						>
-					<WifiOutlined style={{ fontSize: "26pt", marginBottom: 10, marginTop: 5, color: "#00ff15" }}/>
+					<WifiOutlined style={{ fontSize: "26pt", marginBottom: 10, marginTop: 5, color: "#1f989c" }}/>
 					<p className='banner-header'>High-Signal Content</p>
 
 					<p class="banner-text">
@@ -76,7 +76,7 @@ const HomeBanner = () => {
 				<Card 
 						onClick={() => navigateProductPage()}
 						className="banner-container">
-					<ControlOutlined style={{ fontSize: "26pt", marginBottom: 10, marginTop: 5, color: "#07ffff" }}/>
+					<ControlOutlined style={{ fontSize: "26pt", marginBottom: 10, marginTop: 5, color: "#8f35b3" }}/>
 					<p className='banner-header'>Customize Feed & Algorithm</p>
 
 					<p class="banner-text">
@@ -89,7 +89,7 @@ const HomeBanner = () => {
 				<Card
 						onClick={() => navigateProductPage()} 
 						className="banner-container">
-					<ApartmentOutlined style={{ fontSize: "26pt", marginBottom: 10, marginTop: 5, color: "#ff07ea" }} />
+					<ApartmentOutlined style={{ fontSize: "26pt", marginBottom: 10, marginTop: 5, color: "#b0b335" }} />
 					<p className='banner-header'>News Analysis</p>
 
 					<p class="banner-text">
@@ -104,7 +104,7 @@ const HomeBanner = () => {
 					onClick={() => navigateAPIPage()} 
 					className="banner-container"
 				>	
-				<ApiOutlined style={{ fontSize: "26pt", marginBottom: 10, marginTop: 5, color: "#0077ff" }}/>
+				<ApiOutlined style={{ fontSize: "26pt", marginBottom: 10, marginTop: 5, color: "#1f989c" }}/>
 				
 				<p className='banner-header'>API Access</p>
 
