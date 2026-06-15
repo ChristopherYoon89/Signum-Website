@@ -63,24 +63,24 @@ const HomeBanner = () => {
 						className="banner-container"
 						onClick={() => navigateProductPage()}
 						>
-					<WifiOutlined style={{ fontSize: "26pt", marginBottom: 10, marginTop: 5, color: "#1f989c" }}/>
+					<WifiOutlined style={{ fontSize: "26pt", marginBottom: 10, marginTop: 5, color: "#48ff00" }}/>
 					<p className='banner-header'>High-Signal Content</p>
 
 					<p class="banner-text">
 					Worldwide aggregated and curated news articles, analysis and other 
-					content from thousands of sources about current events and other topics.
-				</p>
+					content from thousands of sources about current events and general topics.
+					</p>
 					</Card>
 				</Col>
 				<Col span={4} >
 				<Card 
 						onClick={() => navigateProductPage()}
 						className="banner-container">
-					<ControlOutlined style={{ fontSize: "26pt", marginBottom: 10, marginTop: 5, color: "#8f35b3" }}/>
-					<p className='banner-header'>Customize Feed & Algorithm</p>
+					<ControlOutlined style={{ fontSize: "26pt", marginBottom: 10, marginTop: 5, color: "#fbff00" }}/>
+					<p className='banner-header'>Personal Feeds & Customized Algorithms</p>
 
 					<p class="banner-text">
-					Create your own news feeds by customizing your algorithm, filters, 
+					Create your own news feeds by customizing your algorithm, categories,
 					sources and keywords.
 				</p>
 					</Card>
@@ -89,11 +89,11 @@ const HomeBanner = () => {
 				<Card
 						onClick={() => navigateProductPage()} 
 						className="banner-container">
-					<ApartmentOutlined style={{ fontSize: "26pt", marginBottom: 10, marginTop: 5, color: "#b0b335" }} />
+					<ApartmentOutlined style={{ fontSize: "26pt", marginBottom: 10, marginTop: 5, color: "#cd4fff" }} />
 					<p className='banner-header'>News Analysis</p>
 
 					<p class="banner-text">
-					Access your personal dashboard to manage news and use AI tools to analyze trends, 
+					Access your personal dashboard to manage news and analyze trends, 
 					relevant topics, keywords and user signals.
 					</p>
 					</Card>
@@ -104,9 +104,9 @@ const HomeBanner = () => {
 					onClick={() => navigateAPIPage()} 
 					className="banner-container"
 				>	
-				<ApiOutlined style={{ fontSize: "26pt", marginBottom: 10, marginTop: 5, color: "#1f989c" }}/>
+				<ApiOutlined style={{ fontSize: "26pt", marginBottom: 10, marginTop: 5, color: "#41d3d8" }}/>
 				
-				<p className='banner-header'>API Access</p>
+				<p className='banner-header'>Public API</p>
 
 				<p class="banner-text">
 				Get access to our API and integrate large amounts of news data into your 

@@ -47,6 +47,43 @@ function getCookie(name) {
 var csrftoken = getCookie('csrftoken');
 
 
+function ScrollReveal({ children }) {
+	const ref = useRef(null);
+	const [isVisible, setIsVisible] = useState(false);
+
+	useEffect(() => {
+		const observer = new IntersectionObserver(
+			([entry]) => {
+				if (entry.isIntersecting) {
+					setIsVisible(true);
+				}
+			},
+			{
+				threshold: 0.02, // starts when 2% visible
+			}
+		);
+
+		if (ref.current) {
+			observer.observe(ref.current);
+		}
+
+		return () => observer.disconnect();
+	}, []);
+
+	return (
+		<div
+			ref={ref}
+			className={`scroll-reveal ${
+				isVisible ? "visible" : ""
+			}`}
+		>
+			{children}
+		</div>
+	);
+};
+
+
+
 const CategoryArticles = ({ 
 												articles, 
 												navigate, 
@@ -331,13 +368,12 @@ const HomeApp = () => {
 				
 				</Col>
 				
-				<Col className="gutter-row" span={12} style={{ padding: 5, }}>
+				<Col className="gutter-row" span={12} style={{ padding: 0, }}>
 
-				<h1 style={{ color: "#cacaca", textAlign: "center", marginTop: 20, }}>NEWS SEARCH ENGINE</h1>
 					<HomeSearchApp />
 
 					{!isauthenticated && (
-						<div style={{ textAlign: "center", }}>
+						<div style={{ textAlign: "center", marginTop: 5, }}>
 							<button 
 								className="home-register-button" 
 								onClick={() => {
@@ -349,8 +385,11 @@ const HomeApp = () => {
 						</div>
 						)}
 				</Col>
-			</Row>
-				<Row gutter={20}>
+			</Row >
+
+			<ScrollReveal>
+				
+			<Row gutter={20} style={{marginTop: 35, }}>
 				
 				<Col span={6}>
 				
@@ -361,20 +400,26 @@ const HomeApp = () => {
 				</Col>
 			</Row>
 
-				<Row gugger={20} style={{ marginTop: 55, }}>
+			</ScrollReveal>	
+
+				<Row gugger={20} style={{ marginTop: 25, background: "#11131f" }}>
 					<Col span={6}>
 						
 					</Col>
 
-					<Col className="gutter-row" span={12} ref={topSectionRef} style={{ paddingTop: 35,}}>
+					<Col className="gutter-row" span={12} ref={topSectionRef} style={{ paddingTop: 15,}}>
 						<HomeCategories />
 					</Col>
-				</Row>			
+				</Row>		
 
+				
 
-				<h1 style={{ color: "#cacaca", textAlign: "center", marginTop: 20, }}>POLITICS</h1>
-
+				<ScrollReveal>
 			
+				<h1 className="home-header-search" style={{ textAlign: "center", marginTop: 20, }}>POLITICS</h1>
+				
+				</ScrollReveal>
+						
 				<Row gutter={20} style={{ marginTop: 0, backgroundColor: "#fff"}}>
 
 					<Col 
@@ -390,7 +435,6 @@ const HomeApp = () => {
 							paddingLeft: 150,
 							paddingRight: 185,
 							paddingBottom: 55,
-							paddingTop: 55,
 						 }} 
 						span={12}
 						>
@@ -400,6 +444,7 @@ const HomeApp = () => {
 					) : (
 					<>
 						{["Worldwide", "USA", "Europe", "Middle East", "Asia", "Latin America", "Africa"].map((category) => (
+							<ScrollReveal>
 							<div className='home-category-scroll-section' key={category} id={category}>
 								<div className="category-header-container">
 									<h4 className="home-category-header">{category}</h4>
@@ -438,6 +483,7 @@ const HomeApp = () => {
 									read more
 								</span>
 							</div>
+							</ScrollReveal>
 						))}
 					</>
 					)}
@@ -446,9 +492,12 @@ const HomeApp = () => {
 
 				</Row>
 
-				<h1 style={{ color: "#cacaca", textAlign: "center", marginTop: 20, }}>ECONOMICS</h1>
 
+				<ScrollReveal>
 
+				<h1 className="home-header-search" style={{ textAlign: "center", marginTop: 20, }}>ECONOMICS</h1>
+
+				</ScrollReveal>
 				<Row gutter={20} style={{ marginTop: 5, backgroundColor: "#fff" }}>
 
 					<Col className="gutter-row" span={6}>
@@ -462,7 +511,6 @@ const HomeApp = () => {
 							paddingLeft: 150,
 							paddingRight: 185,
 							paddingBottom: 55,
-							paddingTop: 55,
 						 }} 
 						span={12}>
 
@@ -471,6 +519,7 @@ const HomeApp = () => {
 					) : (
 					<>
 						{["Money & Finance", "Companies", "Commodities", "Bitcoin"].map((category) => (
+							<ScrollReveal>
 							<div className='home-category-scroll-section' key={category} id={category}>
 								<div className="category-header-container">
 								<h4 className="home-category-header">{category}</h4>
@@ -508,13 +557,19 @@ const HomeApp = () => {
 									>read more
 								</span>
 							</div>
+							</ScrollReveal>
 						))}
 					</>
 					)}
 					</Col>
 				</Row>
 
-				<h1 style={{ color: "#cacaca", textAlign: "center", marginTop: 20, }}>SOCIETY</h1>
+				<ScrollReveal>
+
+				<h1 className="home-header-search" style={{ textAlign: "center", marginTop: 20, }}>SOCIETY</h1>
+				
+				</ScrollReveal>
+				
 				<Row gutter={20} style={{ marginTop: 5, backgroundColor: "#fff" }}>
 				<Col className="gutter-row" span={6}>
 
@@ -527,7 +582,6 @@ const HomeApp = () => {
 							paddingLeft: 150,
 							paddingRight: 185,
 							paddingBottom: 55,
-							paddingTop: 55,
 					}}
 					span={12}
 					>										
@@ -538,6 +592,7 @@ const HomeApp = () => {
 					) : (
 					<>
 						{["Tech", "Science", "Culture", "Panorama"].map((category) => (
+							<ScrollReveal>
 							<div className='home-category-scroll-section' key={category} id={category}>
 								<div className="category-header-container">
 								<h4 className="home-category-header">{category}</h4>
@@ -576,6 +631,7 @@ const HomeApp = () => {
 									read more
 								</span>
 							</div>
+							</ScrollReveal>
 						))}
 					</>
 					)}

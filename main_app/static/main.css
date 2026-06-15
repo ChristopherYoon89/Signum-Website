@@ -13,6 +13,13 @@
     font-style: normal;
 }
 
+@font-face {
+    font-family: "Roblox";
+    src: url("fonts/roblox_2/RobloxFont-Regular.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
 
 * {
 	box-sizing: border-box;
@@ -633,8 +640,8 @@ footer {
 
 
 .ant-btn-primary {
-	background-color: #295bff !important;
-	border-color: #295bff !important;
+	background-color: #2563eb !important;
+	border-color: #2563eb !important;
 }
 
 
@@ -649,8 +656,8 @@ footer {
 	padding: 5px 10px;
 	background-color: #1a1a1a;
 	color: #bebebe;
-	border: 1px solid #154360;
-	border-radius: 4px;
+	border: 1px solid #686868;
+	border-radius: 6px;
 	cursor: pointer;
 	font-size: 0.75rem;
 	transition: background-color 0.3s, transform 0.2s;
@@ -674,17 +681,15 @@ footer {
 	padding: 5px 10px;
 	background-color: #1a1a1a;
 	color: #bebebe;
-	border: 1px solid #154360;
-	border-radius: 4px;
+	border-radius: 6px;
 	cursor: pointer;
-	font-size: 0.75rem;
+	font-size: 0.95rem;
 	transition: background-color 0.3s, transform 0.2s;
-	margin-bottom: 65px;
+	margin-bottom: 0px;
 }
 
 
 .home-register-button:hover {
-	background-color: rgba(26, 26, 26, 0.9);
 	color: #fff;
 }
 
@@ -1119,8 +1124,7 @@ form label {
 	transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 	max-height: 0;
 	opacity: 0;
-	padding: 0 20 20 20;
-	border: 1px solid #154360;
+	padding: 1 20 20 20;	
 	margin-top: 10px;
 	pointer-events: none;
 }
@@ -1337,14 +1341,9 @@ form label {
 
 
 .home-search-card {
-	background: #1a1a1ae6;
+	background: transparent;
 	border-radius: 10px;
-	border: 1px solid #686868;
-}
-
-
-.home-search-card:hover {
-	border: 1px solid #949494;
+	border: none;
 }
 
 
@@ -1352,7 +1351,8 @@ form label {
 .home-search-card input,
 .home-search-card .ant-input {
 	color: #d9d9d9 !important;
-	background-color: transparent !important;
+	background-color: #000 !important;
+	
 }
 
 /* placeholder color */
@@ -1364,6 +1364,7 @@ form label {
 .home-search-card .ant-input-affix-wrapper {
 	background-color: transparent !important;
 	color: #d9d9d9 !important;
+	flex: 1
 }
 
 /* focus border (optional but important for dark theme) */
@@ -1376,7 +1377,55 @@ form label {
 
 .home-search-engine-info {
 	color: #ff0000;
-	margin-left: 15px;
+	text-align: center;
+}
+
+
+.home-search-engine-container {
+	display: flex;
+	justify-content: center;
+	flex: 1;
+	align-items: center;
+	width: 100% !important;
+}
+
+.home-search-engine-container .ant-input {
+	width: 2000px;
+}
+
+
+.home-search-info-container {
+	display:flex;
+	justify-content: center;
+	flex: 1;
+	margin-top: 25px;
+}
+
+
+.home-header-search {
+	font-family: "Roblox";
+	color: rgb(197, 197, 197) !important;
+	font-size: 54;
+}
+
+
+.scroll-reveal {
+	opacity: 0;
+	transform: translateY(60px);
+	transition:
+		opacity 0.8s ease-out,
+		transform 0.8s ease-out;
+}
+
+.scroll-reveal.visible {
+	
+	opacity: 1;
+	transform: translateY(0);
+}
+
+.home-search-engine-text {
+	text-align: center;
+	color: #c7c7c7;
 }
 
 
@@ -1646,6 +1695,7 @@ form label {
 
 .sig-form-input {
 	margin-top: 5px;
+	width: 60%;
 }
 
 
