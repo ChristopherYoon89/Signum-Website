@@ -659,7 +659,7 @@ footer {
 	border: 1px solid #686868;
 	border-radius: 6px;
 	cursor: pointer;
-	font-size: 0.75rem;
+	font-size: 0.95rem;
 	transition: background-color 0.3s, transform 0.2s;
 }
   
@@ -682,6 +682,7 @@ footer {
 	background-color: #1a1a1a;
 	color: #bebebe;
 	border-radius: 6px;
+	border-color: #444444;
 	cursor: pointer;
 	font-size: 0.95rem;
 	transition: background-color 0.3s, transform 0.2s;
@@ -911,6 +912,8 @@ form label {
   	margin-left: 24px;    
   	flex-shrink: 0;
 }
+
+
 
 
 /* SIGNUM CONTENT */
@@ -1165,6 +1168,11 @@ form label {
 	color: #F6339A;
 	font-weight: bold;
 	cursor: pointer;
+}
+
+
+.testing {
+	color: #0084d1;
 }
 
 
@@ -1447,7 +1455,7 @@ form label {
 	color: #fff;
 	width: 270px;
 	font-size: 0.85rem;
-	border-color: #154360;
+	border-color: #686868;
 	border-style: solid;
 	border-width: 1px;
 	border-radius: 10px !important;
@@ -2105,4 +2113,38 @@ form label {
 	display: flex; 
 	justify-content: center; 
 	margin-top: 65px;
+}
+
+
+
+.product-user-features-grid {
+		max-width: 1100px;
+	margin: 0 auto;
+	display: flex;
+	gap: 40px;
+	justify-content: center;
+	align-items: stretch;
+}
+
+
+.product-user-column {
+	flex: 2;
+	display: flex;
+	flex-direction: column;
+}
+
+
+.product-users {
+	display: flex;
+	justify-content: center;
+	max-width: 10%;
+	margin: 10px auto 0;
+}
+
+
+.product-user-feature-box {
+	flex: 1;
+	padding: 20px;
+	margin-top: 20px;
+	text-align: center;
 }

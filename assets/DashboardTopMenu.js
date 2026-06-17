@@ -51,9 +51,11 @@ const ButtonsMainMenu = ({ navigate }) => {
 				onClick={() => navigate(`/dashboard/briefing/addfeed`)}
 				>
 					<Badge
+						className="feed-add-badge"
 						offset={[-2, 20]}
 						count={
 							<PlusCircleTwoTone 
+							
 								style={{
 									color: '#000000',
 									cursor: 'pointer',
@@ -67,7 +69,7 @@ const ButtonsMainMenu = ({ navigate }) => {
 						alignItems: "center",
 						justifyContent: "center",
 						height: "100%",
-					}}/>} 
+					}}/>}  
 						style={{ backgroundColor: "#5b15ffff", verticalAlign: 'left', cursor: "pointer", }} 
 						/>
 				</Badge>

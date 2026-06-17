@@ -46,7 +46,7 @@ const InputSearch = ({ searchinput, onChangeSearchInput }) => {
 
 			<div className='sig-form-input'>
 				<Input 
-					placeholder="Enter keywords separated by spaces"
+					placeholder="The world’s largest database with high-quality news and analysis"
 					onChange={(e) => onChangeSearchInput(e.target.value)}
 					style={{
 						marginTop: 30,
@@ -83,15 +83,13 @@ const HomeSearchApp = () => {
 
 
 	const navigate_search_page = () => {
+		window.scrollTo({top: 0,behavior: "smooth"});
 		navigate("/dashboard/search");
 	};
 
 
 	const handleSearch = () => {
-		if (!isauthenticated) {
-			setSearchButtonInfo("Log in to use the engine");
-			return;
-		};
+		if (!isauthenticated) return;
 		
 		const isSearchInputValid = searchinput.trim().length > 0;
 		
@@ -107,6 +105,7 @@ const HomeSearchApp = () => {
 		const params = new URLSearchParams()
 		params.set("q", searchinput);
 
+		window.scrollTo({top: 0,behavior: "smooth"});
 		navigate(`/dashboard/search/results?${params.toString()}`);
 	};
 
@@ -127,20 +126,31 @@ const HomeSearchApp = () => {
 							onChangeSearchInput={onChangeSearchInput}
 						/>
 
+						<Tooltip
+							title={
+								!isauthenticated
+									? "Log in to use search engine"
+									: undefined
+							}
+						>
 						<Button 
 							type='primary'
-							onClick={handleSearch}
+							onClick={
+							isauthenticated
+									?	() => handleSearch()
+									: undefined
+							}
 							style={{ marginTop: 35, marginLeft: 15 }}
 						>
 						Search
 						</Button>
+						</Tooltip>
 						</div>
 							
 						</Col>
 					</Row>
 				
 					<div className="home-search-info-container">
-						
 						<p>
 						<span
 							className='sig-form-more-filters'
@@ -149,15 +159,12 @@ const HomeSearchApp = () => {
 						>
 						Advanced search
 						</span>
-						</p>
-
-						
+						</p>	
 					</div>
-
 					
-						<div className="home-search-engine-info">
-								{searchbuttoninfo}
-						</div>
+					<div className="home-search-engine-info">
+							{searchbuttoninfo}
+					</div>
 						
 				</Card>
 			</Layout>

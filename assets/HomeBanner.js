@@ -7,8 +7,8 @@ import {
 import {
 	ApiOutlined,
 	ApartmentOutlined,
-	ControlOutlined,
 	WifiOutlined,
+	AppstoreAddOutlined,
 } from '@ant-design/icons';
 import { useNavigate } from "react-router-dom";
 
@@ -63,7 +63,7 @@ const HomeBanner = () => {
 						className="banner-container"
 						onClick={() => navigateProductPage()}
 						>
-					<WifiOutlined style={{ fontSize: "26pt", marginBottom: 10, marginTop: 5, color: "#48ff00" }}/>
+					<WifiOutlined style={{ fontSize: "26pt", marginBottom: 10, marginTop: 5, color: "#215f14" }}/>
 					<p className='banner-header'>High-Signal Content</p>
 
 					<p class="banner-text">
@@ -76,11 +76,11 @@ const HomeBanner = () => {
 				<Card 
 						onClick={() => navigateProductPage()}
 						className="banner-container">
-					<ControlOutlined style={{ fontSize: "26pt", marginBottom: 10, marginTop: 5, color: "#fbff00" }}/>
-					<p className='banner-header'>Personal Feeds & Customized Algorithms</p>
+					<AppstoreAddOutlined style={{ fontSize: "26pt", marginBottom: 10, marginTop: 5, color: "#ffbb00" }}/>
+					<p className='banner-header'>Personal Feeds</p>
 
 					<p class="banner-text">
-					Create your own news feeds by customizing your algorithm, categories,
+					Create your own news feeds by customizing your algorithm and filtering categories,
 					sources and keywords.
 				</p>
 					</Card>
@@ -89,7 +89,7 @@ const HomeBanner = () => {
 				<Card
 						onClick={() => navigateProductPage()} 
 						className="banner-container">
-					<ApartmentOutlined style={{ fontSize: "26pt", marginBottom: 10, marginTop: 5, color: "#cd4fff" }} />
+					<ApartmentOutlined style={{ fontSize: "26pt", marginBottom: 10, marginTop: 5, color: "#781c8f" }} />
 					<p className='banner-header'>News Analysis</p>
 
 					<p class="banner-text">
@@ -109,7 +109,7 @@ const HomeBanner = () => {
 				<p className='banner-header'>Public API</p>
 
 				<p class="banner-text">
-				Get access to our API and integrate large amounts of news data into your 
+				Get real-time access to our API and integrate large amounts of news data into your 
 				own systems and software.  
 				</p>
 				</Card>
@@ -122,8 +122,8 @@ const HomeBanner = () => {
 				<p className='banner-header'>Donate!</p>
 
 				<p class="banner-text">
-				Help us keep this platform running! We benefit from free and open source 
-				information, but we also share our information for free. You can buy us a 
+				We benefit from free and open source information, but we also share our information 
+				for free. Please, help us keep this platform running! You can buy us a 
 				coffee or donate in Bitcoin.
 				</p>
 					</Card>

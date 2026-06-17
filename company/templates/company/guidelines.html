@@ -13,12 +13,13 @@
 		Welcome to the platform! This application is designed to help you discover, 
 		organize and monitor news and other content from thousands of sources on 
 		one platform. Our system extracts raw data from the web, 
-		processes the raw data, classifies articles into topical categories and 
-		extracts relevant tags and keywords. 
+		processes the raw data, transforms it into a structured dataset, 
+		classifies articles into topical categories and assigns relevant tags and keywords. 
 		</p>
 		
 		<p>
-		This guide explains the core features and how to use them effectively.
+		This guide includes best practices and explains the core features on the front-end and how to use them 
+		effectively.
 		</p>
 
 		</div>
@@ -38,7 +39,7 @@
 		latest news across all categories. At the top of the page, users can open a 
 		list of all categories, select one and quickly navigate to the corresponding 
 		section. Each category section also includes an upward arrow button that allows 
-		users to quickly jump back to the category list at any time.
+		users to jump back to the category overview at any time.
 		</p>
 
 		<p>
@@ -49,10 +50,9 @@
 		</p>
 
 		<p>
-		The start page is ideal for users who want a quick overview of major developments 
-		without setting up detailed preferences. For example, you might choose to browse 
-		only Money & Finance and Technology to reduce noise and focus on relevant 
-		coverage.
+		The start page is ideal for users who want to search our news database for a 
+		specific topic or to get a quick overview of major developments filtered by categories
+		without setting up detailed preferences.
 		</p>
 
 		
@@ -63,7 +63,7 @@
 
 		<p>
 		Signum News currently allows users to browse across 15 categories, which can be 
-		grouped into three broader clusters: Politics, Economics, and Society.
+		grouped into three broader clusters: politics, economics and society.
 		</p>
 
 		<div style="display:flex; justify-content:center; ">
@@ -85,7 +85,7 @@
 			</tr>
 			<tr>
 				<td style="border-right:1px solid #000;">Europe</td>
-				<td style="border-right:1px solid #000;">Commodities</td>
+				<td style="border-right:1px solid #000;">Energy & Commodities</td>
 				<td>Culture</td>
 			</tr>
 			<tr>
@@ -147,15 +147,15 @@
 
 		<p>
 		The Economics cluster includes the categories Money & Finance, Companies, 
-		Commodities and Bitcoin. Money & Finance covers monetary topics, financial 
+		Energy & Commodities and Bitcoin. Money & Finance covers monetary topics, financial 
 		developments and, in some cases, broader economic trends. This category typically 
 		focuses on macroeconomic perspectives. The "Companies" category primarily includes articles about 
 		specific companies, but it may also cover topics related to management, 
-		entrepreneurship, marketing or entire industries. Commodities addresses topics 
+		entrepreneurship, marketing or entire industries. Energy & Commodities addresses topics 
 		such as oil, gas, coal, industrial metals, agricultural products, livestock and 
 		rare earths. Bitcoin focuses on BTC while occasionally covering broader 
 		cryptocurrency or blockchain topics. Articles about cryptocurrencies other than 
-		Bitcoin are not published at all or only in rare cases.
+		Bitcoin are published only in rare cases. 
 		</p>
 
 		<p>
@@ -177,22 +177,43 @@
 		</div>
 
 		<div class="section">
+		<h2 class="header-underline">Searching our database</h2>
+
+		<p>
+		Another simple way to use the platform is by searching the 
+		Signum News database. A simple and quick search can be done on the start page of the 
+		website. If you want to use more sophisticated search queries, click on Advanced Search
+		which redirects you to a dedicated search page, where you can define multiple filters
+		and search for specific topics. 
+		</p>
+
+		<p>
+		The search filters include date ranges, included categories, keywords, included or 
+		excluded sources and various quantitative indicators such as minimum number of clicks, 
+		minimum average user rating, minimum algorithm rating and minimum source rating. 
+		Currently, Signum News does not provide an AI based search tool, but rather conducts 
+		searches through structured queries and logic based search algorithms.
+		</p>
+
+		</div>
+
+		<div class="section">
 		<p>
 		<h2 class="header-underline">Custom Feeds</h2>
 		</p>
 
 		<p>
 		One of the most important features of Signum News is the custom feeds, which allow 
-		users to define their own algorithm and create highly targeted information streams. 
+		users to create targeted information streams and define their own algorithms and filters. 
 		Custom feeds are displayed in the dashboard under the "Briefing" section, which can 
 		be accessed either via the quick-access sidebar at the right or through the dashboard 
 		side menu.
 		</p>
 
 		<p>
-		When a user creates an account, Signum automatically generates three default feeds 
-		that appear in the Briefing: All Articles, My Bookmarks and My Sources. These feeds 
-		cannot be deleted. However, users can remove them from the Briefing view via the 
+		When a user creates an account, Signum automatically generates two default feeds 
+		that appear in the Briefing: All Articles and My Sources. These feeds 
+		cannot be deleted. However, users can remove them from the Briefing via the 
 		Settings page.
 		</p>
 
@@ -215,9 +236,11 @@
 		</ul>
 
 		<p>
-		On the "Edit Feed" page, users can modify previously created feeds and adjust all 
-		of the parameters listed above. In the "Settings" page, users can also reorder 
-		their feeds and control how they appear on the "Briefing" page. 
+		Users can edit the briefings by clicking on the tools icon next to the feed name in the 
+		Briefings section. On the "Edit Feed" page, users can modify previously created 
+		feeds and adjust the parameters listed above. In the "Settings" page, 
+		users can hide their feeds, reorder their feeds or control how they appear 
+		on the "Briefing" page. 
 		</p>
 
 		<p>
@@ -225,7 +248,17 @@
 		operators, but we plan to introduce more advanced query logic in the future. At 
 		present, all filters are combined using AND logic. For example, if an article 
 		contains an included keyword but belongs to an excluded category, it will not 
-		appear in the feed.
+		appear in the feed. Within a specific filter field, the algorithm is based on 
+		the OR operator. For instance, if a user selects two included categories the 
+		articles are either in one or the other category. The same is true for the 
+		keywords and sources filter. If you provide multiple keywords, articles with 
+		at least one keyword will be shown.  
+		</p>
+
+		<p>
+		It is generally recommended, to view the briefings
+		as experimental. Users are supposed to do research on categories and tags 
+		and adapt the filter algorithm, if it doesn't work as expected.
 		</p>
 
 		<p>
@@ -235,23 +268,54 @@
 		</p>
 
 		<p>
-		Let us assume a user wants to follow political developments in Western countries. 
-		To do so, the user can include the categories USA and Europe. At the same time, 
-		the user may wish to avoid saturated topics such as the war in Ukraine. This can 
-		be achieved by excluding specific keywords such as "Ukraine", "Zelensky", or "Donbas".
-		Additionally, the user can include or exclude certain sources or define minimum 
-		rating requirements. This configuration would surface political developments in the 
-		West while filtering out topics the user no longer wishes to follow.
+		Custom feeds and algorithms can be used in various ways. Let's assume a user 
+		is interested in tech and science and might	want to create a daily briefing 
+		on these topics. To do so, the user navigates to the Briefing section of the dashboard,
+		adds a simple feed and selects the two included categories Tech and Science.
 		</p>
 
 		<p>
-		Another example would be a feed dedicated to developments related to Israel and its 
-		conflicts. In this case, the user could define keywords such as "Israel", "Netanyahu"
-		and "Hamas" to filter news focused on the respective topic. Furthermore, the user 
-		could exclude sources that are considered unreliable on this issue or that exhibit 
-		a perceived bias.
+		However, the user could also set advanced filters to get a more fine-grained feed. 
+		Let's assume the user works as a network administrator and 
+		is interested in a feed focusing on IT- and cyber security news and analysis. For 
+		this, the user creates a new feed selects Tech as 
+		included category and defines included keywords and tags such as IT security, 
+		cyber attacks and hacker. This feed would allow the network administrator 
+		to keep track of cyber attacks and to get information when and how the 
+		servers have to be patched and updated.
 		</p>
 
+		<p>
+		The platform can be also used in more sophisticated ways that are optimized for 
+		individual professional needs, for instance, for users working in finance. Let's say 
+		an investor wants to customize a daily news briefing that helps him or her make better 
+		financial decisions. First, the investor adds a feed that streamlines general 
+		political developments in different geographical regions and selects categories 
+		such as Worldwide, USA and Europe. 
+		</p>
+
+		<p>
+		In the next step, the investor creates a feed focusing on monetary policy and 
+		central banking. To implement this, the user adds a new feed 
+		and defines included keywords and tags such as Federal Reserve, Central Banking, 
+		ECB, inflation and interests. Moreover, the investor uses the My Sources feed 
+		to follow a broad range of news and analysis on financial markets by following 
+		specific sources such as Bloomberg, the Wallstreet Journal and Yahoo! Finance. The 
+		user could also add a briefing feed and select specific sources to follow preferred 
+		outlets or niche markets.
+		</p>
+		
+		<p>
+		Then, the investor adds and customizes a variety of feeds that allow him 
+		or her to follow news articles about specific companies, markets and industries he  
+		or she is invested in. To do so, the investor uses the names of companies, brands 
+		and their competitors as included keywords and tags, or to a broader view
+		define the industry names. The investor could be specifically interested in 
+		the oil market. In this case, he or she could add a feed displaying the Energy & 
+		Commodities category or further narrow down the filter algorithm and use the 
+		oil tag to specifically filter articles about oil and fossil fuels. 
+		</p>
+	
 		</div>
 
 		<div class="section">
@@ -293,16 +357,23 @@
 
 		<p>
 		If you regularly read content from specific publishers, you can follow sources 
-		directly. Following a source prioritizes its articles in your feeds and allows you 
-		to easily monitor output from trusted outlets. To follow a particular source, 
-		you can click on the + symbol next to a source. You can also search for a particular
-		source and follow it in the "Sources" section in the Dashboard side menu. 
+		directly. Following sources can be used in various ways. First, the Briefing 
+		section streamlines in its MySources Feed all articles of the sources you follow. 
+		Second, the list of all the sources you follow without displaying their articles can 
+		be found in the "Sources" section of the dashboard. 
 		</p>
 
 		<p>
-		This is particularly useful when users trust certain outlets more than others, 
+		To follow a particular source, you can click on the + symbol next to a source. You 
+		can also search for a particular source in the Sources section in the Dashboard side 
+		menu and click on the + symbol in the Action column. Another way to follow one or more 
+		sources is to create a new feed and define included sources. 
+		</p>
+
+		<p>
+		Following sources is particularly useful when users trust certain outlets more than others, 
 		want to track certain niche industry sources or are interested in following specific
-		regional media outlets. Moreover, the feature also allows users to compare coverage
+		regional media outlets. Moreover, the feature allows users to compare coverage
 		across different publishers. If you want more than one following list, you can create
 		different feeds and include specific sources for each individual feed.
 		</p>
@@ -365,10 +436,10 @@
 		<p>
 		The algorithm rating is generated by our internal system and is based on 
 		automated calculations. The ranking score considers multiple dimensions, 
-		including content quality, topic relevance and the average user rating of 
+		including data availability, content quality, topic relevance and ratings of 
 		the source. Our algorithm rating of the content quality is mainly taking
-		quantitative factors into account, such as the length of the article 
-		or the information density.
+		quantitative factors into account, such as the length of the article,
+		information density or the use of specific words and language.
 		</p>
 
 		<p>

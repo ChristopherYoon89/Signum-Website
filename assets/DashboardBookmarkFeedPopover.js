@@ -34,12 +34,12 @@ const DashboardBookmarkFeedPopover = ({ article, setUserBookmarks }) => {
 	const [listoffeeds, setListOfFeeds] = useState([]);
 	const [feedtitle, setFeedTitle] = useState('');
 	const [userfeedlistbookmarked, setUserFeedListBookmarked] = useState([]);
-	const [titleinputplaceholder, setTitleInputPlaceholder] = useState('Add new bookmark feed')
+	const [titleinputplaceholder, setTitleInputPlaceholder] = useState('Add new bookmark list')
 	const [titleinputstatus, setTitleInputStatus] = useState('');
 
 
 	const onChangeFeedTitle = (value) =>{
-		setTitleInputPlaceholder('Add new bookmark feed');
+		setTitleInputPlaceholder('Add new bookmark list');
 		setTitleInputStatus('');
 		setFeedTitle(value);
 	};
@@ -95,7 +95,7 @@ const DashboardBookmarkFeedPopover = ({ article, setUserBookmarks }) => {
 			setTitleInputStatus('error');
 			return;
 		} else {
-			setTitleInputPlaceholder('Add new bookmark feed');
+			setTitleInputPlaceholder('Add new bookmark list');
 			setTitleInputStatus('');
 		}
 

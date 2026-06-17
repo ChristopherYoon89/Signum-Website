@@ -373,7 +373,7 @@ const HomeApp = () => {
 					<HomeSearchApp />
 
 					{!isauthenticated && (
-						<div style={{ textAlign: "center", marginTop: 5, }}>
+						<div style={{ textAlign: "center", marginTop: 35, }}>
 							<button 
 								className="home-register-button" 
 								onClick={() => {
@@ -389,14 +389,23 @@ const HomeApp = () => {
 
 			<ScrollReveal>
 				
-			<Row gutter={20} style={{marginTop: 35, }}>
+			<Row gutter={20} style={{marginTop: 85, }}>
 				
 				<Col span={6}>
 				
 				</Col>
 				
 				<Col className="gutter-row" span={12} style={{ padding: 5, }}>
-					<StatsHomeIndicators />
+					<StatsHomeIndicators 
+						isauthenticated={isauthenticated}
+						userfollows={userfollows}
+						createClick={createClick}
+						userbookmarks={userbookmarks}
+						toggleUserFollow={toggleUserFollow} 
+						setUserBookmarks={setUserBookmarks}
+						DashboardBookmarkFeedPopover={DashboardBookmarkFeedPopover}
+						ArticleStatsPopOverContent={ArticleStatsPopOverContent}
+					/>
 				</Col>
 			</Row>
 
@@ -453,11 +462,26 @@ const HomeApp = () => {
 									>	
 									<button className="btn-home-back-to-top" 
 										onClick={() => {
-											topSectionRef.current?.scrollIntoView({
-												behavior: "smooth",
-												block: "start",
+											const navbarOffset = 50;
+
+											const element =
+												topSectionRef.current;
+
+											if (element) {
+												const y =
+													element.getBoundingClientRect().top +
+													window.pageYOffset -
+													navbarOffset;
+
+												window.scrollTo({
+													top: y,
+													behavior: "smooth",
+												});
+											}
+
+											navigate(location.pathname, {
+												replace: true,
 											});
-											navigate(location.pathname, { replace: true });
 										}}
 									>
 									⬆ 
@@ -528,12 +552,26 @@ const HomeApp = () => {
 									>	
 									<button className="btn-home-back-to-top" 
 										onClick={() => {
-											topSectionRef.current?.scrollIntoView({
-												behavior: "smooth",
-												block: "start",
-											});
+											const navbarOffset = 50;
 
-											navigate(location.pathname, { replace: true });
+											const element =
+												topSectionRef.current;
+
+											if (element) {
+												const y =
+													element.getBoundingClientRect().top +
+													window.pageYOffset -
+													navbarOffset;
+
+												window.scrollTo({
+													top: y,
+													behavior: "smooth",
+												});
+											}
+
+											navigate(location.pathname, {
+												replace: true,
+											});
 										}}
 										>
 										⬆ 
@@ -601,13 +639,27 @@ const HomeApp = () => {
 									> 	
 								<button className="btn-home-back-to-top" 
 									onClick={() => {
-										topSectionRef.current?.scrollIntoView({
-											behavior: "smooth",
-											block: "start",
-										});
+											const navbarOffset = 50;
 
-										navigate(location.pathname, { replace: true });
-									}}
+											const element =
+												topSectionRef.current;
+
+											if (element) {
+												const y =
+													element.getBoundingClientRect().top +
+													window.pageYOffset -
+													navbarOffset;
+
+												window.scrollTo({
+													top: y,
+													behavior: "smooth",
+												});
+											}
+
+											navigate(location.pathname, {
+												replace: true,
+											});
+										}}
 									>
 									⬆ 
 								</button>
@@ -623,6 +675,7 @@ const HomeApp = () => {
 									userbookmarks={userbookmarks} 
 									toggleUserFollow={toggleUserFollow}
 									setUserBookmarks={setUserBookmarks}
+									ArticleStatsPopOverContent={ArticleStatsPopOverContent}
 								/>
 								<span 
 									className="home-read-more"
