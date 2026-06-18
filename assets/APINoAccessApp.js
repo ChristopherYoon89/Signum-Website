@@ -31,7 +31,7 @@ const APINoAccessApp = () => {
         
         <div className='api-info-container'>
         Since Signum News is in its early stages, we only offer contact sales 
-        API access, which allows us to carefully scale our hardware infrastructure. 
+        API access. 
         </div>  
 
         <div className='api-info-container'>

@@ -10,7 +10,7 @@
 
 		<p>
 		The Signum News API provides structured access to aggregated news articles,
-		sources, and categories. Results can be filtered, ordered and paginated
+		sources and categories. Results can be filtered, ordered and paginated
 		using URL parameters.
 		</p>
 
@@ -78,7 +78,7 @@
 		<h3>Filter Fields</h3>
 
 		<p>
-		The articles endpoint provides a wide range of filters that allows the user 
+		The articles endpoint provides a wide range of filters that allow the user 
 		to narrow down the preferred articles. Here is a list of the filters of
 		the articles endpoint: 
 		</p>
@@ -163,8 +163,9 @@ max_source_algo_rating
 
 			<p>
 			<li>
-			<code>date_from</code>/<code>date_to</code>: The two date filters allows user 
-			to filter articles based on their publication date or upload date.  
+			<code>date_from</code>/<code>date_to</code>: The two date filters allow users 
+			to filter articles based on their publication date or upload date. By using both date 
+			filters, you can retrieve articles published within a specific period of time. 
 			</li>
 			</p>
 
@@ -201,9 +202,9 @@ max_source_algo_rating
 			<p>
 			<li>
 			<code>min_source_user_rating</code>/<code>max_source_user_rating</code>:
-			These fields allow users to filter articles based on the overall quality of 
-			their source. The values reflect the average user rating across all articles 
-			published by a particular source, making it possible to include only highly 
+			The two fields allow users to filter articles based on the minimum or maximum 
+			user rating of a source. The values reflect the average user rating 
+			across all articles published by a particular source, making it possible to include only highly 
 			rated publishers or exclude lower-rated ones.
 			</li>
 			</p>
@@ -211,7 +212,7 @@ max_source_algo_rating
 			<p>
 			<li>
 			<code>min_source_article_count</code>/<code>max_source_article_count</code>:
-			These fields allow users to filter articles based on the publishing volume of 
+			The two fields allow users to filter articles based on the publishing volume of 
 			their source. The values represent the total number of articles available from 
 			a particular source, making it possible to focus on high-volume publishers or 
 			limit results to more selective outlets.
@@ -221,7 +222,7 @@ max_source_algo_rating
 			<p>
 			<li>
 			<code>min_source_algo_rating</code>/<code>max_source_algo_rating</code>:
-			These fields allow users to filter articles based on the overall algorithmic 
+			The two fields filter articles based on the overall algorithmic 
 			performance of their source. The values represent the average algorithmic rating 
 			across all articles published by a particular source, enabling users to focus on 
 			sources that consistently score higher according to the ranking system.
@@ -237,7 +238,7 @@ max_source_algo_rating
 		<h3>Ordering Fields</h3>
 
 		<p>
-		The ordering fields displayed below allow users to control how results are sorted. 
+		The ordering fields displayed below can be used to control how results are sorted. 
 		By default, the articles are ordered by <code>-date_posted</code> and ascending for all the other
 		ordering fields, but the direction can be reversed by prefixing the field with 
 		a minus symbol (-).
@@ -306,7 +307,7 @@ GET /api/public/news-articles/175/
 		It provides aggregated metrics that describe each source, including 
 		user ratings, publishing volume and average algorithmic performance. The News 
 		Sources endpoint allows users to retrieve and explore available publishers, filter 
-		them by name or rating, and sort results based on quality or activity. 
+		them by name or rating and sort results based on quality or activity. 
 		</p>
 
 <pre>
@@ -373,8 +374,8 @@ max_article_count
 			<p>
 			<li>
 			<code>min_user_rating</code>/<code>max_user_rating</code>:
-			The filters search articles based on the user_rating field and allow users 
-			to filter sources based on the average user rating across all articles 
+			The two filters can be used to search for articles based on the user_rating field 
+			The field is based on the average user rating across all articles 
 			published by a particular source.
 			</li>
 			</p>
@@ -382,11 +383,11 @@ max_article_count
 			<p>
 			<li>
 			<code>min_source_algo_rating</code>/<code>max_source_algo_rating</code>:
-			The min_source_algo_rating and max_source_algo_rating fields 
+			The two fields min_source_algo_rating and max_source_algo_rating 
 			allow users to filter sources based on the average algorithmic rating of all articles 
 			published by a particular source, helping to focus on consistently high- or 
 			low-scoring publishers. The algorithmic rating represents a ranking score that consists 
-			of the quality of the article and the relevance of the topic.
+			of the availability of the data, the quality of the content and the relevance of the topic.
 			</li>
 			</p>
 
@@ -400,9 +401,9 @@ max_article_count
 		<h3>Ordering Fields</h3>
 
 		<p>
-		These ordering fields allow users to control how news sources are sorted in the 
+		The ordering fields allow users to control how news sources are sorted in the 
 		response. Sources can be ordered alphabetically by name, by platform, by average 
-		user rating, by average algorithmic rating, or by total article count. By default, 
+		user rating, by average algorithmic rating or by total article count. By default, 
 		results are returned in ascending order, but the direction can be reversed by 
 		prefixing a field with a minus symbol (-), for example <code>-average_rating</code> or 
 		<code>-article_count</code>. The default ordering is the <code>name</code> field,
@@ -562,9 +563,9 @@ page_size
 
 		<p>
 		The following example URLs demonstrate how to use the available filtering, 
-		ordering, and pagination parameters. These examples illustrate common 
-		query patterns, such as retrieving articles from a specific source, 
-		filtering by tags or date ranges, applying rating thresholds, and sorting 
+		ordering and pagination parameters. These examples illustrate common 
+		query patterns such as retrieving articles from a specific source, 
+		filtering by tags or date ranges, applying rating thresholds and sorting 
 		results. Parameters can be freely combined to construct more precise 
 		queries tailored to specific use cases.
 		</p>
@@ -651,6 +652,7 @@ GET /api/public/news-articles/?category_primary_name=Technology
 		<h3 class="underline-spacing mb-4">Read more</h3>
 
 		<ul>
+		<li><a href="{% url 'public-api-page' %}"><span class="url">Request API Access</span></a></li>
 		<li><a href="{% url 'faq-page' %}"><span class="url">FAQ</span></a></li>
 		<li><a href="{% url 'guidelines-page' %}"><span class="url">User Guidelines</span></a></li>
 		<li><a href="{% url 'tou-page' %}"><span class="url">Terms of Use</span></a></li>	

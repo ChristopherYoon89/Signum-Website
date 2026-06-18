@@ -180,15 +180,6 @@ const CategoryArticles = ({
 						</span>
 					</span>
 						<span>
-							<Tooltip
-								title={
-									!isauthenticated
-										? "Log in to add bookmark"
-										: userbookmarks.includes(article.id) 
-										? "Remove bookmark" 
-										: "Add bookmark"
-								}
-							>
 							<Popover 
 								placement="right"
 								content={<DashboardBookmarkFeedPopover
@@ -211,7 +202,6 @@ const CategoryArticles = ({
 								}}
 							/>
 							</Popover>
-							</Tooltip>
 							
 							<Popover
 								placement="right"
@@ -219,11 +209,9 @@ const CategoryArticles = ({
 								trigger='click'
 								color="rgba(26, 26, 26, 0.9)"
 								>
-								<Tooltip
-								title={"Article stats"}
-								>
+							
 								<StockOutlined className="antd-home-icon" style={{ marginLeft: 25 }} />
-								</Tooltip>
+							
 							</Popover>
 						</span>
 					</p>
@@ -425,7 +413,7 @@ const HomeApp = () => {
 
 				<ScrollReveal>
 			
-				<h1 className="home-header-search" style={{ textAlign: "center", marginTop: 20, }}>POLITICS</h1>
+				<h1 className="home-header-search" style={{ textAlign: "center", marginTop: 20, }}>LATEST</h1>
 				
 				</ScrollReveal>
 						

@@ -10,7 +10,7 @@
         
 		<p>
 		Our API provides structured access to our database of news 
-		articles, sources and categories collected from thousands of publishers. 
+		articles, analysis and other content from thousands of publishers. 
 		It is designed for developers and organizations that need programmatic 
 		access to news data with flexible filtering and ordering.
 		All endpoints return normalized data that can be integrated into
@@ -19,9 +19,9 @@
 
 		<p>
 		As Signum News is still in its early stages, we currently provide API access 
-		via contact-based sales only. This approach allows us to scale our hardware 
-		infrastructure in a responsible manner. If you are interested in API access, please use 
-		the <a href="{% url 'contact-page' %}"><span class="url-underline">contact form</span></a> and include a short description of your requirements.
+		via contact-based sales only. If you are interested in accessing the API, please use 
+		the <a href="{% url 'contact-page' %}"><span class="url-underline">contact 
+		form</span></a> and include a short description of your requirements.
 		</p>
 		
 		<p>
@@ -31,7 +31,7 @@
 		rating, click counts or source-level metrics such as average rating or 
 		article volume. Basic keyword matching on article titles is also available. 
 		Results can be ordered by publication date, algorithmic rating, engagement 
-		metrics, or source performance indicators, with reverse chronological order 
+		metrics or source performance indicators, with reverse chronological order 
 		used by default.
 		</p> 
 		
@@ -45,7 +45,7 @@
 		</p>
 		
 		<p>
-		Category endpoints expose the available news taxonomy. Clients can retrieve 
+		The category endpoint provides the available news taxonomy. Clients can retrieve 
 		categories by name and order them by identifier or alphabetically. This allows 
 		applications to dynamically discover available categories and build filtering 
 		interfaces without maintaining a separate taxonomy.

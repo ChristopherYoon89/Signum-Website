@@ -9,8 +9,20 @@
         
 		<div class="section">
 		<p>
-		This website provides free access to news data and useful tools
-		that help people stay informed in an increasingly noisy world. 
+		Signum News provides free access to news data and tools
+		that help people stay informed in an increasingly noisy world.
+		We heavily benefit from public, free and open source information, but our 
+		data and platforms are also free to use. 
+		</p>
+
+		<p>
+		At the same time, maintaining a global content database, integrated data 
+		pipelines and the Signum platform requires hardware infrastructure, data 
+		processing, ongoing development and maintenance. Servers, data pipelines 
+		and engineering all create real operational costs.
+		</p>
+		
+		<p>
 		Even though we plan a commercial business version in the future, 
 		there are no paywalls for the basic functionalities and the goal is to keep 
 		information open and accessible to everyone.
@@ -23,9 +35,9 @@
 		</p>
 		
 		<p>
-		Apart from volutary donations, organizations and individuals can also support 
+		Apart from voluntary donations, organizations and individuals can also support 
 		the project by becoming a sponsor. Sponsors will have their logo displayed 
-		on the start page as a way to show their support for open access to information. 
+		on the start page as a way to show their support. 
 		If you are interested in sponsoring rather than donating, <a href="{% url 'contact-page' %}">
 		<span class="url-underline">contact us</span></a> for further information.
 		</p>
@@ -36,44 +48,32 @@
 
 		</div>
 
-		<div class="section">
+	
 
-		<h2>Buy us a coffee!</h2>
+		<div class="three-column-grid">
 		
-		<div class="btc-container">
+		<div class="column-card">
+
+			<h4>Buy us a coffee!</h4>
 
 			<div class="btc-qrcode-container" style="margin-top: 10px;">
 				<img src="{% static 'main_app/images/buy-me-a-coffee-qr-code.png' %}">
 			</div>
 		</div>
-
-		</div>
-
-		<div class="section">
-
-		<h2>Bitcoin (BTC)</h2>
 		
-		<div class="btc-container">
-			
-			<div>
-				<span class="text-muted small">13fm7Vxz5qZV55h789uCRGxQegw5LGCBRn</span>
-			</div>
+		<div class="column-card">
 
+			<h4>Bitcoin (BTC)</h4>
+			
 			<div class="btc-qrcode-container" style="margin-top: 10px;">
 				<img src="{% static 'main_app/media/BitcoinQRCode.webp' %}">
 			</div>
-		</div>
 
 		</div>
-
-		<div class="section">
-		<h2>Bitcoin Lightning</h2>
 		
-		<div class="btc-container">
-			
-			<div>
-				<span class="text-muted small" style="word-wrap: break-word; overflow-wrap: break-word;">specialrescue097@walletofsatoshi.com</span>
-			</div>
+		<div class="column-card">
+
+			<h4>Bitcoin Lightning</h4>
 
 			<div class="btc-qrcode-container" style="margin-top: 10px;">
 				<img src="{% static 'main_app/media/BitcoinLightningQRCode.webp' %}">

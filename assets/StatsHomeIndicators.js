@@ -84,15 +84,7 @@ const PopArticles = ({
 							</span>
 							</span>
 							<span>
-								<Tooltip
-									title={
-										!isauthenticated
-											? "Log in to add bookmark"
-											: userbookmarks.includes(article.id) 
-											? "Remove bookmark" 
-											: "Add bookmark"
-									}
-								>
+								
 								<Popover 
 									placement="right"
 									content={<DashboardBookmarkFeedPopover
@@ -114,7 +106,6 @@ const PopArticles = ({
 									}}
 								/>
 								</Popover>
-								</Tooltip>
 								
 								<Popover
 									placement="right"
@@ -122,11 +113,7 @@ const PopArticles = ({
 									trigger='click'
 									color="rgb(24, 24, 24)"
 								>
-								<Tooltip
-									title={"Article stats"}
-								>
 								<StockOutlined className="antd-home-icon" style={{ marginLeft: 25 }} />
-								</Tooltip>
 								</Popover>
 							</span>
 						</p>

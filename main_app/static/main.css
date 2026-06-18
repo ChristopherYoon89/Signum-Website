@@ -1810,6 +1810,42 @@ form label {
 	width: 150px;
 }
 
+.three-column-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+	margin-top: 45px;
+	margin-bottom: 25px;
+}
+
+.column-card {
+    box-sizing: border-box;
+    width: 100%;
+	overflow-wrap: break-word;
+    padding-top: 10px;
+	padding-bottom: 35px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+	text-align: center;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+
+
+@media (max-width: 900px) {
+    .three-column-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .three-column-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
 
 /* FAQ PAGE */
 

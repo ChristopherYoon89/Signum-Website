@@ -56,11 +56,11 @@ const CompNoBookmarkFeed = ({ onNavigateAddBookmarkFeed }) => {
 				</p>
 				
 				<p>
-				<span style={{ fontWeight: 'bold', }}>No bookmark feeds yet</span>
+				<span style={{ fontWeight: 'bold', }}>No bookmark lists yet</span>
 				</p>
 				
 				<div className='nobookmark-info-container'>
-				Create your own bookmark feeds for specific research topics and save articles for later.
+				Create your own bookmark lists for specific research topics and save articles for later.
 				</div>
 
 				<p style={{ marginTop: 36, }}>
@@ -68,7 +68,7 @@ const CompNoBookmarkFeed = ({ onNavigateAddBookmarkFeed }) => {
 						type="primary"
 						onClick={() => onNavigateAddBookmarkFeed()}
 					>
-					Create bookmark feed
+					Create bookmark list
 					</Button>
 				</p>
 			</div>
