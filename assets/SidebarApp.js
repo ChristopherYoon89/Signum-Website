@@ -38,6 +38,10 @@ const SidebarApp = () => {
 	const { isauthenticated, user } = useAuth();
 	const profileImage = user?.profile_image_url;
 
+
+	console.log("User:", user);
+	console.log("Profile image:", user?.profile_image_url);
+
 	const navigate = useNavigate();
 
 	const handleClick = (route) => {

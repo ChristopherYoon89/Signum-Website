@@ -125,6 +125,10 @@ const DashboardSearchResultsApp = () => {
 
 
 	const toggleUserFollow = async (record) => {
+		if (!isauthenticated) {
+			return;
+		};
+
 		const isFollowed = userfollows.includes(record.source_id)
 
 		setUserFollows(prev =>

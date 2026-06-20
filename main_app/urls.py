@@ -33,8 +33,8 @@ urlpatterns = [
 	path('donate/', comp_view.donation_view, name='donate-page'), 
 	path('release-notes/', comp_view.ReleaseNotesListView.as_view(), name="release-notes-page"),
 	path('release-notes/<slug>/', comp_view.ReleaseNoteView.as_view(), name='release-notes-detail-page'),
-	re_path(r"^dashboard/.*$", views.home_view),
 	path("ckeditor5/", include("django_ckeditor_5.urls")),
+	re_path(r"^(?!api/|media/).*", views.home_view),
 	
 	#### API URLs for internal usage ####
 

@@ -1403,10 +1403,9 @@ form label {
 
 
 .home-search-info-container {
-	display:flex;
+	display: flex;
 	justify-content: center;
 	flex: 1;
-	margin-top: 25px;
 }
 
 
@@ -1741,7 +1740,7 @@ form label {
 	align-items: center;
 	text-align: center;
 	font-size: 0.85rem;
-	margin-top: 30px;
+	margin-top: 40px;
 	color: #b3b3b3;
 }
 

@@ -647,18 +647,7 @@ const DashboardSearchApp = () => {
 						/>
 						</Col>
 					</Row>
-				
-					<div>
-						<span
-							className='sig-form-more-filters'
-							onClick={onShowAdditionalFilters}
-						>
-						{showmoretext}
-						</span>
-					</div>
 
-					{(showfilters)  && (
-					<>
 					<Divider />
 
 					<Row>
@@ -675,6 +664,19 @@ const DashboardSearchApp = () => {
 							/>
 						</Col>
 					</Row>
+				
+					<div>
+						<span
+							className='sig-form-more-filters'
+							onClick={onShowAdditionalFilters}
+						>
+						{showmoretext}
+						</span>
+					</div>
+
+					{(showfilters)  && (
+					<>
+					
 
 					<Divider />
 

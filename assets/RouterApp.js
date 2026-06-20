@@ -23,11 +23,13 @@ import DashboardBookmarkFeedEditApp from './DashboardBookmarkFeedEditApp.js';
 import DashboardBookmarkFeedDeleteApp from './DashboardBookmarkFeedDeleteApp.js';
 import DashboardFeedDeleteApp from './DashboardFeedDeleteApp.js';
 import DashboardExportDataApp from './DashboardExportDataApp.js';
+import HomeSearchResultsApp from './HomeSearchResultsApp.js';
 
 
 const AppRouter = () => (
 	<Routes>
 		<Route exact path="/" element={<HomeApp />} />
+		<Route path="/search-results" element={<HomeSearchResultsApp />} />
 		<Route 
 			path="/dashboard" 
 			element={

@@ -43,6 +43,7 @@ from rest_framework.decorators import api_view, permission_classes
 from .pagination import (
 	ArticleCategoryPagination,
 	SourcesPagination,
+	SearchResultsPagination,
 )
 from django.core.paginator import Paginator
 
@@ -770,7 +771,8 @@ class SearchResultView(APIView):
 	Fetches articles based on search query and filters
 	-> DashboardSearchResultsApp.js
 	"""
-	permission_classes = [IsAuthenticated]
+
+	pagination_class = SearchResultsPagination
 
 	def get(self, request):
 		queryset = (
@@ -858,10 +860,12 @@ class SearchResultView(APIView):
 			)
 
 		queryset = queryset.order_by("-date_posted")
-		queryset = queryset[:100]
-		serializer = SearchNewsArticleSerializer(queryset, many=True)
+		paginator = self.pagination_class()
+		page = paginator.paginate_queryset(queryset, request)
+		
+		serializer = SearchNewsArticleSerializer(page, many=True)
 
-		return Response(serializer.data)
+		return paginator.get_paginated_response(serializer.data)
 	
 
 

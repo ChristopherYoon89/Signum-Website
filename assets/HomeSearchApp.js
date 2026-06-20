@@ -40,7 +40,7 @@ function getCookie(name) {
 var csrftoken = getCookie('csrftoken');
 
 
-const InputSearch = ({ searchinput, onChangeSearchInput }) => {
+const InputSearch = ({ searchinput, onChangeSearchInput, handleSearch }) => {
 	return(
 		<>
 
@@ -53,6 +53,11 @@ const InputSearch = ({ searchinput, onChangeSearchInput }) => {
 						width: '100%',
 					}}	
 					value={searchinput}
+					onKeyDown={(e) => {
+							if (e.key === 'Enter') {
+									handleSearch();
+							}
+					}}
 				/>
 			</div>
 		</>
@@ -84,12 +89,11 @@ const HomeSearchApp = () => {
 
 	const navigate_search_page = () => {
 		window.scrollTo({top: 0,behavior: "smooth"});
-		navigate("/dashboard/search");
+		navigate("/search-results");
 	};
 
 
 	const handleSearch = () => {
-		if (!isauthenticated) return;
 		
 		const isSearchInputValid = searchinput.trim().length > 0;
 		
@@ -106,7 +110,13 @@ const HomeSearchApp = () => {
 		params.set("q", searchinput);
 
 		window.scrollTo({top: 0,behavior: "smooth"});
-		navigate(`/dashboard/search/results?${params.toString()}`);
+		navigate(`/search-results?${params.toString()}`);
+	};
+
+
+	const navigateAdvancedSearch = () => {
+		navigate(`/dashboard/search`);
+		window.scrollTo({top: 0,behavior: "smooth"});
 	};
 
 
@@ -124,27 +134,16 @@ const HomeSearchApp = () => {
 						<InputSearch 
 							searchinput={searchinput}
 							onChangeSearchInput={onChangeSearchInput}
+							handleSearch={handleSearch}
 						/>
 
-						<Tooltip
-							title={
-								!isauthenticated
-									? "Log in to use search engine"
-									: undefined
-							}
-						>
 						<Button 
 							type='primary'
-							onClick={
-							isauthenticated
-									?	() => handleSearch()
-									: undefined
-							}
+							onClick={() => handleSearch()}
 							style={{ marginTop: 35, marginLeft: 15 }}
 						>
 						Search
 						</Button>
-						</Tooltip>
 						</div>
 							
 						</Col>
@@ -154,7 +153,7 @@ const HomeSearchApp = () => {
 						<p>
 						<span
 							className='sig-form-more-filters'
-							onClick={navigate_search_page}
+							onClick={navigateAdvancedSearch}
 							style={{ textAlign: "left", flex: 1}}
 						>
 						Advanced search

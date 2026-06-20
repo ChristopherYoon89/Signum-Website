@@ -99,18 +99,8 @@ const DashboardApp = () => {
       navigate(`${pathname}?${params.toString()}`, { replace: true });
     }
   }, [pathname, search, navigate]);
+ 
 
-
-	useEffect(() => {
-		if ((pathname.startsWith("/dashboard/briefing")) || 
-		(pathname.startsWith("/dashboard/settings")) ||
-		(pathname.startsWith("/dashboard/bookmarks")) ||
-		(pathname.startsWith("/dashboard/profile"))) {
-			setOpenKeys(["sub1"]);
-		} else if (pathname.startsWith("/dashboard/category")) {
-			setOpenKeys(["sub2"]);
-		}
-	}, [pathname]);
 
 
 	const findItemByKey = (items, key) => {
@@ -148,7 +138,7 @@ const DashboardApp = () => {
 	};
 
 
-	const selectedItem = findItemByUrl(items, pathname);
+	const selectedItem = findItemByUrl(items, decodeURIComponent(pathname));
 	const selectedKey = selectedItem?.key;
 	const selectedKeys = selectedKey ? [selectedKey] : [];
 
@@ -178,6 +168,51 @@ const DashboardApp = () => {
 	}, [pathname]);
 
 
+	const onOpenChange = (keys) => {
+    setOpenKeys(keys);
+	};
+
+
+	const getParentKey = (pathname) => {
+    if (
+        pathname.startsWith("/dashboard/briefing") ||
+        pathname.startsWith("/dashboard/settings") ||
+        pathname.startsWith("/dashboard/bookmarks") ||
+        pathname.startsWith("/dashboard/profile")
+    ) {
+        return "sub1";
+    }
+
+    if (pathname.startsWith("/dashboard/category")) {
+        return "sub2";
+    }
+
+    if (
+        pathname.startsWith("/dashboard/mysources") ||
+        pathname.startsWith("/dashboard/all-sources")
+    ) {
+        return "sub3";
+    }
+
+    return null;
+	};
+
+
+	useEffect(() => {
+    const parent = getParentKey(pathname);
+
+    if (parent) {
+        setOpenKeys(prev => {
+            if (prev.includes(parent)) {
+                return prev;
+            }
+
+            return [...prev, parent];
+        });
+    }
+}, [pathname]);
+
+
 	return (
 		<>
 			<Layout className="bg-light">
@@ -189,7 +224,7 @@ const DashboardApp = () => {
 				
 				<Menu
 					openKeys={openKeys}
-					onOpenChange={setOpenKeys}
+					onOpenChange={onOpenChange}
 					theme= 'dark'
 					mode="inline"
 					items={items}
