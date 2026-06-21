@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from django.db.models import F, Window
+from django.db.models import F, Window, Count
 from django.db.models.functions import RowNumber
 from main_app.managerserializer import (
 	NewsArticleSerializer,
@@ -967,3 +967,37 @@ class GetBookmarkFeedBoardAllView(APIView):
             })
 
         return Response(response)
+	
+
+
+class SearchSuggestionsView(APIView):
+	'''
+	API View that retrieves keywords from search input and generate 
+	suggestions in dropdown
+	-> HomeSearchApp.js
+	'''
+
+	def get(self, request):
+		keyword_string = request.GET.get("keyword_string", "").strip()
+
+		if len(keyword_string) < 2:
+			return Response([])
+
+		queryset = (
+			NewsArticle.objects
+			.filter(publish=True)
+			.values("title", "tag1", "tag2", "tag3")
+		)
+
+		counter = Counter()
+
+		for row in queryset:
+			for tag in (row["title"], row["tag1"], row["tag2"], row["tag3"]):
+				if tag and tag.lower().startswith(keyword_string.lower()):
+					counter[tag] += 1
+
+		suggestions = [
+			tag for tag, _ in counter.most_common(10)
+		]
+
+		return Response(suggestions)

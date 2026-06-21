@@ -40,7 +40,7 @@ function getCookie(name) {
 var csrftoken = getCookie('csrftoken');
 
 
-const InputSearch = ({ searchinput, onChangeSearchInput }) => {
+const InputSearch = ({ searchinput, onChangeSearchInput, handleSearch }) => {
 	return(
 		<>
 			<div className="sig-form-header">
@@ -65,6 +65,11 @@ const InputSearch = ({ searchinput, onChangeSearchInput }) => {
 						width: 400,
 					}}	
 					value={searchinput}
+					onKeyDown={(e) => {
+							if (e.key === 'Enter') {
+									handleSearch();
+							}
+					}}
 				/>
 			</div>
 		</>
@@ -181,7 +186,7 @@ const SelectExclKeywords = ({ onChangeExclKeywords, feedexclkeywords }) => {
 };
 
 
-const SelectInclSource = ({ feedinclsourcesdisabled, onChangeInclSource, sourcesoptions, feedinclsource }) => {
+const SelectInclSource = ({ sourcesoptions, feedinclsource, feedinclsourcesdisabled, onChangeInclSource }) => {
 	return(
 		<>
 			<div className="sig-form-header">
@@ -211,7 +216,7 @@ const SelectInclSource = ({ feedinclsourcesdisabled, onChangeInclSource, sources
 					style={{
 						width: 400,
 					}}
-					placeholder="Select sources"
+					placeholder="Select"
 					onChange={onChangeInclSource}
 					options={sourcesoptions}
 					value={feedinclsource}
@@ -455,7 +460,7 @@ const DashboardSearchApp = () => {
 	useEffect(() => {
 		const fetchSources = async () => {
 			try {
-				const response = await axios.get('/api/NewsSourcesAll');
+				const response = await axios.get('/api/NewsAddEditFeedSourcesAll');
 				const mappedsources = response.data.map((row) => ({
 						value: row.id,
 						label: row.name,
@@ -644,6 +649,7 @@ const DashboardSearchApp = () => {
 						<InputSearch 
 							searchinput={searchinput}
 							onChangeSearchInput={onChangeSearchInput}
+							handleSearch={handleSearch}
 						/>
 						</Col>
 					</Row>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
 	Card,
 	Input,
@@ -10,7 +10,9 @@ import {
 	Divider,
 	Alert,
 	Select,
+	Dropdown,
 	DatePicker,
+	AutoComplete,
   } from 'antd';
 import {
 	QuestionCircleOutlined,
@@ -40,26 +42,28 @@ function getCookie(name) {
 var csrftoken = getCookie('csrftoken');
 
 
-const InputSearch = ({ searchinput, onChangeSearchInput, handleSearch }) => {
+const InputSearch = ({ 
+	searchinput, 
+	onChangeSearchInput, 
+	handleSearch, 
+	searchdropdowndata, 
+	opendropdown,  
+}) => {
 	return(
 		<>
-
-			<div className='sig-form-input'>
-				<Input 
-					placeholder="The world’s largest database with high-quality news and analysis"
-					onChange={(e) => onChangeSearchInput(e.target.value)}
-					style={{
-						marginTop: 30,
-						width: '100%',
-					}}	
+			<div className="sig-form-input">
+      <AutoComplete
+        options={searchdropdowndata}
+        style={{ width: "100%" }}
+      >
+        <Input
 					value={searchinput}
-					onKeyDown={(e) => {
-							if (e.key === 'Enter') {
-									handleSearch();
-							}
-					}}
-				/>
-			</div>
+					onChange={(e) => onChangeSearchInput(e.target.value)}
+          placeholder="The world’s largest database with high-quality news and analysis"
+          onPressEnter={handleSearch}
+        />
+      </AutoComplete>
+    </div>
 		</>
 	);
 };
@@ -68,7 +72,8 @@ const InputSearch = ({ searchinput, onChangeSearchInput, handleSearch }) => {
 const HomeSearchApp = () => {
 	const { isauthenticated, user } = useAuth();
 	const [searchinput, setSearchInput] = useState('');
-	const [searchbuttoninfo, setSearchButtonInfo] = useState('');
+	const [opendropdown, setOpenDropdown] = useState(false);
+	const [searchdropdowndata, setSearchDropdownData] = useState([]);
 	
 	const [showalert, setShowAlert] = useState(false);
 	const [alertmessage, setAlertMessage] = useState('');
@@ -81,15 +86,56 @@ const HomeSearchApp = () => {
 	
 	const navigate = useNavigate();
 
-
-	const onChangeSearchInput = (value) => {
-		setSearchInput(value);
-	};
-
-
+	
 	const navigate_search_page = () => {
 		window.scrollTo({top: 0,behavior: "smooth"});
 		navigate("/search-results");
+	};
+
+
+	const onChangeSearchInput = (value) => {
+		console.log(value);
+		setSearchInput(value);
+		setOpenDropdown(true);
+	};
+
+	useEffect(() => {
+
+    const timeout = setTimeout(() => {
+        fetchSuggestions(searchinput);
+    }, 300);
+
+    return () => clearTimeout(timeout);
+
+	}, [searchinput]);
+
+
+	const fetchSuggestions = async (value) => {
+		setOpenDropdown(true);
+
+		if (value.length < 2) {
+        setSearchDropdownData([]);
+        return;
+    }
+
+		try {
+			const response = await axios.get(`/api/search-suggestions`,
+				{ 
+					params: {
+						keyword_string: value,
+					}
+				}
+			);
+
+			setSearchDropdownData(
+				response.data.map(item => ({
+					value: item
+				}))
+			);
+
+		} catch(error) {
+			console.log(`Error retrieving search keywords`, error);
+		};
 	};
 
 
@@ -98,12 +144,7 @@ const HomeSearchApp = () => {
 		const isSearchInputValid = searchinput.trim().length > 0;
 		
 		if (!isSearchInputValid) {
-			setSearchButtonInfo('Please provide at least one keyword for your search');
 			return;
-		};
-
-		if (isSearchInputValid) {
-			setSearchButtonInfo('');
 		};
 		
 		const params = new URLSearchParams()
@@ -120,6 +161,11 @@ const HomeSearchApp = () => {
 	};
 
 
+	const handleOpenChange = (open) => {
+  	setOpenDropdown(open);
+	};
+
+
 	return (
 		<>
 			<Layout style={{ background: "transparent" }}>
@@ -130,11 +176,12 @@ const HomeSearchApp = () => {
 						<h1 className="home-header-search" style={{ textAlign: "center", marginTop: 0, }}>SEARCH</h1>
 						
 						<div className="home-search-engine-container" >
-							
+						
 						<InputSearch 
 							searchinput={searchinput}
 							onChangeSearchInput={onChangeSearchInput}
 							handleSearch={handleSearch}
+							searchdropdowndata={searchdropdowndata} 
 						/>
 
 						<Button 
@@ -161,10 +208,6 @@ const HomeSearchApp = () => {
 						</p>	
 					</div>
 					
-					<div className="home-search-engine-info">
-							{searchbuttoninfo}
-					</div>
-						
 				</Card>
 			</Layout>
 		</>

@@ -305,11 +305,11 @@ const DashboardFeedBoardApp = () => {
 								{feed.articles.length > 0 ? (
 									feed.articles.map((article, i) => (
 										<div className="dashboard-feed-board-article" key={i} style={{ marginBottom: '12px' }}>
-											<p className="briefing-source-row">
-												<span className="home-source-left">
+											<div className="briefing-source-row">
+												
 													<span
 														onClick={() => navigate(`/dashboard/source/${encodeURIComponent(article.source_name)}?scrollToTop=true`)}
-														className="home-source"
+														className="dashboard-source"
 													>
 													{article.source_name}
 													</span>
@@ -327,6 +327,7 @@ const DashboardFeedBoardApp = () => {
 														<PlusOutlined
 															style={{
 																marginLeft: 5,
+																marginRight: 5,
 																fontSize: 12,
 																cursor: 'pointer', 
 																color: !isauthenticated
@@ -343,66 +344,38 @@ const DashboardFeedBoardApp = () => {
 														/>
 														</Tooltip>
 														</span>
+														
+														<span 
+															className="dashboard-title"
+															onClick={() => createClick(article)}
+														>
+														<a href={article.source_url} target="_blank">
+														<strong>{article.title}</strong>
+														</a>
 														</span>
+												
+												</div>
+												
+												<div style={{
+														marginTop: 10,
+														display: "flex",
+														justifyContent: "space-between",
+														alignItems: "center",
+												}}>
 
-														<div className="home-source-right">
-														<Tooltip
-															title={
-																!isauthenticated
-																	? "Log in to bookmark article"
-																	: userbookmarks.includes(article.id)
-																	? "Remove"
-																	: "Add bookmark"
-															}
-														>
-														<Popover 
-															placement="right"
-															content={<DashboardBookmarkFeedPopover
-																article={article}
-																setUserBookmarks={setUserBookmarks}
-																/>}
-															trigger='click'
-															color="rgba(26, 26, 26, 0.9)"
-														>
-														<StarOutlined
-															className="antd-home-icon"
-															style={{
-																marginLeft: 10,
-																cursor: 'pointer',
-																color: !isauthenticated
-																	? "#868686"
-																	: userbookmarks.includes(article.id)
-																		? "#ffac00"
-																		: "#868686",
-															}}
-														/>
-														</Popover>
-														</Tooltip>
-														<Popover
-															placement="right"
-															content={<ArticleStatsPopOverContent record={article} />} 
-															trigger='click'
-															color="rgba(26, 26, 26, 0.9)"
-															>
-															<Tooltip
-															title={"Article stats"}
-															>
-															<StockOutlined
-																className="antd-home-icon"
-																style={{ marginLeft: 10, color: "#868686" }} />
-															</Tooltip>
-														</Popover>
-													</div>
-												</p>
-												<span 
-												className="table-title"
-												onClick={() => createClick(article)}
-												>
-												<a href={article.source_url} target="_blank">
-													<strong>{article.title}</strong>
-												</a>
-												</span>
-												<div style={{marginTop: 10,  }}>
+													<div style={{
+														display: "flex",
+														alignItems: "center",
+														flexWrap: "wrap",
+													}}>
+													{ usersettings.show_article_timestamp && (
+															<>
+															<span className="dashboard-feed-board-date">
+																{moment(article.date_posted).fromNow()}
+															</span>
+															</>
+														)}
+
 													{ usersettings.show_article_tags && (
 														<>
 														<span 
@@ -430,13 +403,45 @@ const DashboardFeedBoardApp = () => {
 													)
 												}
 
-													{ usersettings.show_article_timestamp && (
-															<>
-															<span className="dashboard-feed-board-date">
-																{moment(article.date_posted).fromNow()}
-															</span>
-															</>
-														)}
+												</div>
+
+												<div className="dashboard-bookmark-stats-right">
+														<Popover 
+															placement="right"
+															content={<DashboardBookmarkFeedPopover
+																article={article}
+																setUserBookmarks={setUserBookmarks}
+																/>}
+															trigger='click'
+															color="rgba(26, 26, 26, 0.9)"
+														>
+														<StarOutlined
+															className="antd-home-icon"
+															style={{
+																marginLeft: 10,
+																cursor: 'pointer',
+																color: !isauthenticated
+																	? "#868686"
+																	: userbookmarks.includes(article.id)
+																		? "#ffac00"
+																		: "#868686",
+															}}
+														/>
+														</Popover>
+														
+														<Popover
+															placement="right"
+															content={<ArticleStatsPopOverContent record={article} />} 
+															trigger='click'
+															color="rgba(26, 26, 26, 0.9)"
+														>	
+														<StockOutlined
+															className="antd-home-icon"
+															style={{ marginLeft: 10, color: "#868686" }} 
+														/>	
+														</Popover>
+													</div>
+													
 												</div>
 												
 											<Divider />	

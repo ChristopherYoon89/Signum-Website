@@ -55,7 +55,8 @@ urlpatterns = [
 	path('api/home-stats-tags/', views.HomeStatsTags.as_view(), name='home-stats-tags'),
 	path('api/update-user-settings/', user_view.UpdateUserSettingsView.as_view(), name="update_user_settings"),
 	path('api/search-results/', views.SearchResultView.as_view(), name='searchresults'),
-
+	path('api/search-suggestions/', views.SearchSuggestionsView.as_view(), name="search-keywords"),
+ 
 	#### Public API urls for internal usage (Dashboard) ####
 
 	path('api/fetch-single-key/', api_public_view.APIKeyEditFetchView.as_view(), name='apikeysingleedit'),

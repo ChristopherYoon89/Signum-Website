@@ -320,12 +320,11 @@ const DashboardBookmarkFeedBoardApp = () => {
 									</Tooltip>
 								</p>
 							<Card className="scrollable-menu" style={{ flex: 1, minHeight: 0, overflowY: 'auto', overflowX: 'auto', }}>
-							{
-								feed.articles.length > 0 ? (
+							{ feed.articles.length > 0 ? (
 									feed.articles.map((article, i) => (
 										<div className="dashboard-feed-board-article" key={i} style={{ marginBottom: '12px' }}>
-											<p className="briefing-source-row">
-												<span className="home-source-left">
+											<div className="briefing-source-row">
+												
 													<span
 														onClick={() => navigate(`/dashboard/source/${encodeURIComponent(article.source_name)}?scrollToTop=true`)}
 														className="home-source"
@@ -346,6 +345,7 @@ const DashboardBookmarkFeedBoardApp = () => {
 														<PlusOutlined
 															style={{
 																marginLeft: 5,
+																marginRight: 5,
 																fontSize: 12,
 																cursor: 'pointer', 
 																color: !isauthenticated
@@ -362,18 +362,71 @@ const DashboardBookmarkFeedBoardApp = () => {
 														/>
 														</Tooltip>
 														</span>
-														</span>
 
-														<div className="home-source-right">
-														<Tooltip
-															title={
-																!isauthenticated
-																	? "Log in to bookmark article"
-																	: userbookmarks.includes(article.id)
-																	? "Remove"
-																	: "Add bookmark"
-															}
+														<span 
+															className="dashboard-title"
+															onClick={() => countClick(article)} 
 														>
+														<a href={article.source_url} target="_blank">
+														<strong>{article.title}</strong>
+														</a>
+														</span>
+													
+													</div>
+													
+													
+													<div style={{
+														marginTop: 10,
+														display: "flex",
+														justifyContent: "space-between",
+														alignItems: "center",
+													}}>
+
+													<div style={{
+														display: "flex",
+														alignItems: "center",
+														flexWrap: "wrap",
+													}}>
+
+													{usersettings.show_article_timestamp && (
+															<>
+															<span className="dashboard-feed-board-date">
+																{moment(article.date_posted).fromNow()}
+															</span>
+															</>
+														)
+													}
+
+													{usersettings.show_article_tags && (
+															<>
+															<span 
+																onClick={(e) => {
+																	navigate(`/dashboard/tag/${encodeURIComponent(article.tag1)}?scrollToTop=true`);
+																	}}
+															>
+															<Tag className="table-tag" color={"purple"}>{article.tag1}</Tag>
+															</span>
+															<span
+																onClick={(e) => {
+																	navigate(`/dashboard/tag/${encodeURIComponent(article.tag2)}?scrollToTop=true`);
+																	}}
+															>
+															<Tag className="table-tag" color={"green"}>{article.tag2}</Tag>
+															</span>
+															<span
+																onClick={(e) => {
+																	navigate(`/dashboard/tag/${encodeURIComponent(article.tag3)}?scrollToTop=true`);
+																	}}
+															>
+															<Tag className="table-tag" color={"blue"}>{article.tag3}</Tag>
+															</span>
+															</>
+														)
+													}
+
+													</div> 
+
+													<div className="dashboard-bookmark-stats-right">
 														<Popover 
 															placement="right"
 															content={<DashboardBookmarkFeedPopover
@@ -396,72 +449,25 @@ const DashboardBookmarkFeedBoardApp = () => {
 															}}
 														/>
 														</Popover>
-														</Tooltip>
+
 														<Popover
 															placement="right"
 															content={<ArticleStatsPopOverContent record={article} />} 
 															trigger='click'
 															color="rgba(26, 26, 26, 0.9)"
 															>
-															<Tooltip
-															title={"Article stats"}
-															>
+
 															<StockOutlined
 																className="antd-home-icon"
 																style={{ marginLeft: 10, color: "#868686" }} />
-															</Tooltip>
+
 														</Popover>
+														</div>
 													</div>
-												</p>
-												<span 
-													className="table-title"
-													onClick={() => countClick(article)} 
-												>
-												<a href={article.source_url} target="_blank">
-												<strong>{article.title}</strong>
-												</a>
-												</span>
-												<div style={{marginTop: 10,  }}>
-												{ 
-													usersettings.show_article_tags && (
-														<>
-														<span 
-															onClick={(e) => {
-																navigate(`/dashboard/tag/${encodeURIComponent(article.tag1)}?scrollToTop=true`);
-																}}
-														>
-														<Tag className="table-tag" color={"purple"}>{article.tag1}</Tag>
-														</span>
-														<span
-															onClick={(e) => {
-																navigate(`/dashboard/tag/${encodeURIComponent(article.tag2)}?scrollToTop=true`);
-																}}
-														>
-														<Tag className="table-tag" color={"green"}>{article.tag2}</Tag>
-														</span>
-														<span
-															onClick={(e) => {
-																navigate(`/dashboard/tag/${encodeURIComponent(article.tag3)}?scrollToTop=true`);
-																}}
-														>
-														<Tag className="table-tag" color={"blue"}>{article.tag3}</Tag>
-														</span>
-														</>
-													)
-												}
-												{ 
-													usersettings.show_article_timestamp && (
-														<>
-														<span className="dashboard-feed-board-date">
-															{moment(article.date_posted).fromNow()}
-														</span>
-														</>
-													)
-												}
-												</div>
 												
 											<Divider />	
-											</div>
+											
+										</div>
 										)
 									)
 								) : (

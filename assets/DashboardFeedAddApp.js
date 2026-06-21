@@ -228,7 +228,7 @@ const SelectInclSource = ({ sourcesoptions, feedinclsource, feedinclsourcesdisab
 					mode="multiple"
 					allowClear
 					style={{ width: 400, }}
-					placeholder="Please select"
+					placeholder="Select"
 					onChange={onChangeInclSource}
 					options={sourcesoptions}
 					value={feedinclsource}

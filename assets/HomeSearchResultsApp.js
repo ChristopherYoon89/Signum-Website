@@ -87,15 +87,15 @@ function ScrollReveal({ children }) {
 
 
 const CategoryArticles = ({ 
-												article, 
-												navigate, 
-												isauthenticated, 
-												userfollows, 
-												createClick, 
-												userbookmarks, 
-												toggleUserFollow,
-												setUserBookmarks,
-											}) => {
+		article, 
+		navigate, 
+		isauthenticated, 
+		userfollows, 
+		createClick, 
+		userbookmarks, 
+		toggleUserFollow,
+		setUserBookmarks,
+	}) => {
 	return (
 		<div className={"home-article-container"}>
 				<Card 
@@ -465,42 +465,62 @@ const HomeSearchResultsApp = () => {
 					<>
 						<div style={{marginTop: 25, }}>
 						<h3>Results</h3>
-						<Divider style={{borderColor: "#e0e7e7", marginTop: 10, }} />
+
+						<Divider
+								style={{
+										borderColor: "#e0e7e7",
+										marginTop: 10,
+								}}
+						/>
+
 						<ScrollReveal>
-						{tabledata.map((article) => (
-							
-							<div 
-								key={article.id}
-								className='home-category-scroll-section'>
-								
-								<CategoryArticles 
-									article={article}
-									navigate={navigate}
-									isauthenticated={isauthenticated}
-									userfollows={userfollows}
-									createClick={createClick}
-									userbookmarks={userbookmarks}
-									toggleUserFollow={toggleUserFollow} 
-									setUserBookmarks={setUserBookmarks}
-								/>
-								
-							</div>
-						))}
+								{tabledata.length === 0 ? (
+										<>
+										<div className="search-results-noarticles">
+										No articles found
+										</div>
+										</>
+								) : (
+										tabledata.map((article) => (
+												<div
+														key={article.id}
+														className="home-category-scroll-section"
+												>
+														<CategoryArticles
+																article={article}
+																navigate={navigate}
+																isauthenticated={isauthenticated}
+																userfollows={userfollows}
+																createClick={createClick}
+																userbookmarks={userbookmarks}
+																toggleUserFollow={toggleUserFollow}
+																setUserBookmarks={setUserBookmarks}
+														/>
+												</div>
+										))
+								)}
 						</ScrollReveal>
 
 						{!loading && hasMore && (
-							<div style={{ textAlign: "center", marginTop: 16, flexShrink: 0, height: 70, }}>
-								<Button
-									type="secondary"
-									loading={loadingMore}
-									onClick={() => getData(page + 1)}
+								<div
+										style={{
+												textAlign: "center",
+												marginTop: 16,
+												flexShrink: 0,
+												height: 70,
+										}}
 								>
-									{loadingMore ? "Loading..." : "Load more"}
-								</Button>
-							</div>
+										<Button
+												loading={loadingMore}
+												onClick={() => getData(page + 1)}
+										>
+												{loadingMore ? "Loading..." : "Load more"}
+										</Button>
+								</div>
 						)}
-						</div>
-					</>
+				</div>
+		</>
+					
 					)}
 
 					</Col>

@@ -308,15 +308,6 @@ const ArticlesCategoryApp = () => {
 			width: 170,
 			render: (record) => (
 			<div>
-				<Tooltip
-					placement="top"
-					title={
-						!isauthenticated 
-						? "Log in to add bookmark"
-						:	userbookmarks.includes(record.id) 
-						? "Remove" 
-						: "Add bookmark"}
-				>
 				
 			<Popover 
 				placement="right"
@@ -341,7 +332,6 @@ const ArticlesCategoryApp = () => {
 			/>
 			</Popover>
 			
-			</Tooltip>
 				<span 
 					style={{ marginRight: 20}}
 					onClick={(e) => {
@@ -352,18 +342,14 @@ const ArticlesCategoryApp = () => {
 				content={<PopOverContent record={record}/>}
 				trigger='click'
 				color="rgba(26, 26, 26, 0.9)"
-				>
-			<Tooltip
-					placement="top"
-					title={"Article stats"}
-				>
+			>
+		
 			<StockOutlined 
 				className="antd-home-icon"
 				style={{ 
 					color: "#868686", 
 					fontSize: 15, }}	
 			/>
-			</Tooltip>
 			</Popover>
 			</span>
 			</div>

@@ -6,6 +6,7 @@ import {
 	Popover,
 	Tooltip,
 	Tag,
+	Button,
  } from 'antd';
 import { 
 SyncOutlined,
@@ -42,57 +43,80 @@ var csrftoken = getCookie('csrftoken');
 
 const DashboardSearchResultsApp = () => {
 	const [tabledata, setstate] = useState([]);
-  const [loading, setloading] = useState(true);
+  const [loading, setLoading] = useState(true);
   const [userbookmarks, setUserBookmarks] = useState([]);
 	const [userfollows, setUserFollows] = useState([]);
 	const { isauthenticated, user } = useAuth();
 	const navigate = useNavigate();
 	const [searchParams] = useSearchParams();
 
+	const [page, setPage] = useState(1);
+	const [hasMore, setHasMore] = useState(true);
+	const [loadingMore, setLoadingMore] = useState(false);
+
 
 	useEffect(() => {
-		if (!isauthenticated) {
-			return;
+		setPage(1);
+		setHasMore(true);
+		setstate([]);
+		getData(1);
+	}, [searchParams]);
+
+
+  const getData = async (pageNumber = 1) => {
+
+		if (pageNumber === 1) {
+			setLoading(true);
+		} else {
+			setLoadingMore(true);
+		}
+
+		const paramsObject = Object.fromEntries(searchParams.entries());
+
+		try {
+			const response = await Axios.get(`/api/search-results`, 
+				{ params: {
+					...paramsObject,
+				page: pageNumber 
+				}
+			});
+
+			const newData = response.data.results.map(row => ({
+				id: row.id,
+				source: row.source,
+				source_id: row.source_id,
+				source_name: row.source_name,
+				source_url: row.source_url,
+				title: row.title,
+				date_posted: row.date_posted,
+				language: row.language,
+				category_primary: row.category_primary,
+				category_primary_name: row.category_primary_name,
+				category_primary_id: row.category_primary_id,
+				tag1: row.tag1,
+				tag2: row.tag2,
+				tag3: row.tag3,
+				algo_rating: parseFloat(row.algo_rating),
+				average_rating: parseFloat(row.average_rating),
+				clicks_count: parseFloat(row.clicks_count), 
+				average_sourcerating: parseFloat(row.average_sourcerating),
+				average_algo_sourcerating: parseFloat(row.average_algo_sourcerating),
+			}));
+			if (pageNumber === 1) {
+				setstate(newData);
+			} else {
+				setstate(prev => [...prev, ...newData]);
+			}
+			setHasMore(response.data.next !== null);
+			setPage(pageNumber);
+		} catch (error) {
+			console.error("Failed to fetch article data");
+		} finally {
+			setLoading(false);
+			setLoadingMore(false);
 		};
-
-		setloading(true);
-    const getData = async () => {
-			const paramsObject = Object.fromEntries(searchParams.entries());
-      try {
-        const response = await Axios.get(`/api/search-results`, 
-					{ params: paramsObject });
-
-        setloading(false);
-        setstate(
-          response.data.map(row => ({
-            id: row.id,
-            source: row.source,
-						source_id: row.source_id,
-            source_name: row.source_name,
-            source_url: row.source_url,
-            title: row.title,
-            date_posted: row.date_posted,
-            language: row.language,
-            category_primary: row.category_primary,
-						category_primary_name: row.category_primary_name,
-						category_primary_id: row.category_primary_id,
-            tag1: row.tag1,
-            tag2: row.tag2,
-            tag3: row.tag3,
-            algo_rating: parseFloat(row.algo_rating),
-						average_rating: parseFloat(row.average_rating),
-						clicks_count: parseFloat(row.clicks_count), 
-						average_sourcerating: parseFloat(row.average_sourcerating),
-						average_algo_sourcerating: parseFloat(row.average_algo_sourcerating),
-          }))
-        );
-      } catch (error) {
-        console.error("Failed to fetch article data");
-      }
-    };
-    getData();
-  }, [searchParams]);
-
+	};
+	
 
 	const countClick = async (record) => {
 		window.open(record.source_url, "_blank");
@@ -290,15 +314,7 @@ const DashboardSearchResultsApp = () => {
 			width: 15,
 			render: (record) => (
 			<div>
-				<Tooltip
-					placement="top"
-					title={
-						!isauthenticated
-						? "Log in to add bookmark"
-						:	userbookmarks.includes(record.id) 
-						? "Remove" 
-						: "Add bookmark"}
-				>
+
 			<Popover 
 				placement="right"
 				content={<DashboardBookmarkFeedPopover
@@ -320,27 +336,25 @@ const DashboardSearchResultsApp = () => {
 				}}
 			/>
 			</Popover>
-			</Tooltip>
+			
 				<span 
 					style={{ marginRight: 20}}
 					onClick={(e) => {
 					e.stopPropagation();
 				}}>
+
 			<Popover 
 				placement="right"
 				content={<PopOverContent record={record}/>}
 				trigger='click'
 				color="rgba(26, 26, 26, 0.9)"
 				>
-			<Tooltip
-					placement="top"
-					title={"Show stats"}
-				>
+
 			<StockOutlined 
 				style={{ 
 					color: "#868686", 
 					fontSize: 15, }}	/>
-			</Tooltip>
+
 			</Popover>
 			</span>
 			</div>
@@ -359,31 +373,48 @@ const DashboardSearchResultsApp = () => {
 			<Layout>
 					<div className="div-data-manager">
 					{loading ? (
-					<div style={{ 
-						display: 'flex', 
-						justifyContent: 'center', 
-						alignItems: 'center', 
-						height: 650, 
-						width: '100%', 
-						textAlign: 'center'
-						}}>
+						<div style={{ 
+							display: 'flex', 
+							justifyContent: 'center', 
+							alignItems: 'center', 
+							height: '100%', 
+							width: '100%', 
+							textAlign: 'center'
+							}}>
 					<SyncOutlined spin style={{color: "#5e5e5e", fontSize: 24,}}/>
 					</div>
 					) : (
+						<>
+						<div style={{ flex: 1, minHeight: 0, overflowY: "auto", }}>
 						<Table
 							className={"custom-scrollbar"}
 							columns={columns}
 							dataSource={tabledata}
 							pagination={false}
-							scroll={{ y: 800 }}
 							onChange={onChangeSorter}
 							onRow={() => ({
 								style: { cursor: "pointer", marginTop: 0, },
 								})} 
 							size="large"
+							rowKey="id"
+							sticky={true}
 						/>
+
+						{!loading && hasMore && (
+							<div style={{ textAlign: "center", marginTop: 16, flexShrink: 0, height: 70, }}>
+								<Button
+									type="secondary"
+									loading={loadingMore}
+									onClick={() => getData(page + 1)}
+								>
+									{loadingMore ? "Loading..." : "Load more"}
+								</Button>
+							</div>
+						)}
+						</div>
+					</>
 					)}
-					</div>
+				</div>
 			</Layout>
 		</>
 	);

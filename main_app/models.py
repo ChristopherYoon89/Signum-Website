@@ -21,7 +21,7 @@ class NewsSource(models.Model):
 			models.Index(fields=[
 				"name", "viaplatform", "average_rating", "article_count", "average_algo_rating"
 				]),
-		]
+		] 
 
 	def __str__(self):
 		return self.name

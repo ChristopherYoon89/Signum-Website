@@ -1436,6 +1436,15 @@ form label {
 }
 
 
+/* SEARCH RESULTS */
+
+
+.search-results-noarticles {
+	min-height: 555px;
+	color: #313131;
+}
+
+
 /* STATS POPOVER */
 
 .article-stats-text {
@@ -1481,6 +1490,7 @@ form label {
 
 .scrollable-menu {
 	background: transparent;
+	box-shadow: 0 3px 10px rgba(0,0,0,0.1);
 }
 
 
@@ -1602,7 +1612,7 @@ form label {
 	margin-left: 0px !important;
 	padding-left: 0px !important;
 	font-weight: bold !important;
-	font-size: 0.9rem;
+	font-size: 0.85rem;
 	color: #252525;
 }
 
@@ -1675,17 +1685,12 @@ form label {
 }
 
 
-.briefing-source-row {
-	display: flex;
-  	justify-content: space-between;
-  	width: 100%;
-}
-
 
 .dashboard-feed-board-date {
 	color: #868686;
 	font-size: 0.85rem;
-	float: right;
+	float: left;
+	margin-right: 10px;
 }
 
 
@@ -2172,8 +2177,13 @@ form label {
 .product-users {
 	display: flex;
 	justify-content: center;
-	max-width: 10%;
+	max-width: 55px;
 	margin: 10px auto 0;
+}
+
+
+.product-users img {
+	max-width: 75px;
 }
 
 
@@ -2182,4 +2192,58 @@ form label {
 	padding: 20px;
 	margin-top: 20px;
 	text-align: center;
+}
+
+
+
+/* DASHBOARD BRIEFING */
+
+.dashboard-source-title-left {
+  display: inline-flex;
+    align-items: center;
+}
+
+
+.dashboard-bookmark-stats-right {
+	display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+
+.dashboard-source {
+	color: #295bff;
+	font-size: 0.85rem;
+	font-weight: bold;
+	
+}
+
+
+.dashboard-source:hover {
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+
+
+.dashboard-title {
+	margin-left: 0px !important;
+	padding-left: 0px !important;
+	font-weight: bold !important;
+	font-size: 0.85rem;
+	color: #252525;
+}
+
+
+
+.dashboard-source-title-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+}
+
+.dashboard-title {
+    margin-left: 5px;
 }
