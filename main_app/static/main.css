@@ -1383,6 +1383,34 @@ form label {
 }
 
 
+
+.search-autocomplete-dropdown {
+  background: #141414 !important;
+  border-radius: 8px;
+  padding: 6px;
+}
+
+/* each option */
+.search-autocomplete-dropdown .ant-select-item {
+  color: #d1d1d1 !important;
+}
+
+/* hover state */
+.search-autocomplete-dropdown .ant-select-item-option-active {
+  background: #1a1a1ae6 !important;
+  color: #ffffff !important;
+}
+
+/* selected state */
+.search-autocomplete-dropdown .ant-select-item-option-selected {
+  background: #3a3a3a !important;
+  color: #ffffff !important;
+}
+
+
+
+
+
 .home-search-engine-info {
 	color: #ff0000;
 	text-align: center;
@@ -2246,4 +2274,32 @@ form label {
 
 .dashboard-title {
     margin-left: 5px;
+}
+
+
+.feed-list {
+  height: 80vh;
+  overflow-y: auto;
+  border-right: 1px solid #eee;
+}
+
+.feed-item {
+  padding: 6px;
+  cursor: pointer;
+  border-top: 1px solid #b4b4b4;
+}
+
+.feed-item:hover {
+  background: #f5f5f5;
+}
+
+.feed-item.active {
+  background: #e6f4ff;
+  font-weight: 600;
+}
+
+
+.dashboard-feed-board-title{
+	color: #3d3d3d;
+	font-size: 0.85rem;
 }

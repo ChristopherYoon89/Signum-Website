@@ -50,28 +50,14 @@ var csrftoken = getCookie('csrftoken');
 
 
 const DashboardFeedBoardApp = () => {
+	const [feeds, setFeeds] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const scrollContainerRef = useRef(null);
 	const [userbookmarks, setUserBookmarks] = useState([]); 
 	const [userfollows, setUserFollows] = useState([]);
 	const { isauthenticated, user, usersettings } = useAuth();
 
-	const [feeds, setFeeds] = useState([]);
-	const [selectedFeedId, setSelectedFeedId] = useState(null);
-	const [articles, setArticles] = useState([]);
-	const [page, setPage] = useState(1);
-	const [hasMore, setHasMore] = useState(false);
-	const [loadingArticles, setLoadingArticles] = useState(false);
-
 	const navigate = useNavigate();
-
-	const handleSelectFeed = async (feedId) => {
-		console.log(feedId);
-    setSelectedFeedId(feedId);
-    setPage(1);
-    setArticles([]);
-    fetchArticles(feedId, 1);
-	};
 
 	useEffect(() => {
 		if (!isauthenticated) {
@@ -158,28 +144,6 @@ const DashboardFeedBoardApp = () => {
 	};
 
 
-	const fetchArticles = async (feedId, pageNumber = 1) => {
-    setLoadingArticles(true);
-
-    try {
-        const res = await axios.get(
-            `/api/board-feeds-single/?feed_id=${feedId}&page=${pageNumber}`
-        );
-
-        setArticles(prev =>
-            pageNumber === 1
-                ? res.data.articles
-                : [...prev, ...res.data.articles]
-        );
-
-        setHasMore(res.data.has_more);
-        setPage(pageNumber);
-    } finally {
-        setLoadingArticles(false);
-    }
-	};
-
-
 	useEffect(() => {
 		setLoading(true);
 
@@ -245,6 +209,20 @@ const DashboardFeedBoardApp = () => {
 	};
 
 
+
+	const scrollRight = () => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollBy({ left: 360, behavior: 'smooth' }); // scroll by column width + gutter
+    }
+  };
+
+  const scrollLeft = () => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollBy({ left: -360, behavior: 'smooth' });
+    }
+  };
+
+
 	return (
 		<>
 		<Layout>
@@ -271,30 +249,61 @@ const DashboardFeedBoardApp = () => {
 					flex: 1,
 					minHeight: 0
 				}}>
-
-				<Col span={4}>
-
-					{feeds.map(feed => (
-								<div
-									key={feed.id}
-									onClick={() => handleSelectFeed(feed.id)}
-									className={`feed-item ${selectedFeedId === feed.id ? "active" : ""}`}
-								>
-									<div className="dashboard-feed-board-title">
-									{feed.title}
-									
-									</div>
-								</div>
-						))}
-				
-				</Col>
-						
-				<Col span={18}>
-						<div className="article-panel">
+				<LeftOutlined
+					onClick={scrollLeft}
+					style={{
+						position: 'absolute',
+						left: 0,
+						top: '50%',
+						zIndex: 10,
+						transform: 'translateY(-50%)',
+						fontSize: 12,
+						cursor: 'pointer',
+						background: '#fff',
+						borderRadius: '50%',
+						padding: '8px',
+						boxShadow: '0 0 6px rgba(0,0,0,0.2)'
+					}}
+				/>
+				<div className='dashboard-feed-board-scroll-container' ref={scrollContainerRef}>
+					{feeds.map((feed, index) => (
+						<Col key={index} xs={24} sm={12} md={8} style={{ display: "flex", flexDirection: "column", minHeight: 0, }}>
+							<p className="dashboard-feed-board-title">
+								<Tag color={"red"}>{feed.title}</Tag>
+									{feed.feed_type === "personal_feed" ? (
+										<Tooltip title="Edit feed" placement="top">
+											<span
+												onClick={() => navigate(`/dashboard/briefing/editfeed/${feed.id}`)}
+											>
+												<ToolOutlined
+													style={{
+														fontSize: 16,
+														color: "#969696",
+														cursor: 'pointer',
+													}}
+												/>
+											</span>
+										</Tooltip>
+									) : (
+										<Tooltip title="Edit feed" placement="top">
+											<span
+												onClick={() => navigate(`/dashboard/settings`)}
+											>
+												<ToolOutlined
+													style={{
+														fontSize: 16,
+														color: "#969696",
+														cursor: 'pointer',
+													}}
+												/>
+											</span>
+										</Tooltip>
+									)
+									}
+								</p>
 							<Card className="scrollable-menu" style={{ flex: 1, minHeight: 0, overflowY: 'auto', overflowX: 'auto', }}>
-								
-								{articles.length > 0 ? (
-									articles.map((article, i) => (
+								{feed.articles.length > 0 ? (
+									feed.articles.map((article, i) => (
 										<div className="dashboard-feed-board-article" key={i} style={{ marginBottom: '12px' }}>
 											<div className="briefing-source-row">
 												
@@ -436,6 +445,7 @@ const DashboardFeedBoardApp = () => {
 												</div>
 												
 											<Divider />	
+											
 	
 											</div>
 										
@@ -444,12 +454,37 @@ const DashboardFeedBoardApp = () => {
 									) : (
 										<p>No articles found</p>
 									)}
-									
-									</Card>
-						</div>
-				
-				</Col>
+									{feed.hasMore && (
+												<div style={{ textAlign: 'center', marginTop: 10 }}>
+													<Button
+														onClick={() => loadMoreArticles(feed.id)}
+														loading={feed.loadingMore}
+													>
+														Load More
+													</Button>
+												</div>
+											)}
+											</Card>
+										</Col>
+									))}
+									</div>
 
+						<RightOutlined
+							onClick={scrollRight}
+							style={{
+								position: 'absolute',
+								right: 0,
+								top: '50%',
+								zIndex: 10,
+								transform: 'translateY(-50%)',
+								fontSize: 12,
+								cursor: 'pointer',
+								background: '#fff',
+								borderRadius: '50%',
+								padding: '8px',
+								boxShadow: '0 0 6px rgba(0,0,0,0.2)'
+							}}
+						/>
 				</Row>
 				</Layout>	
 				)}

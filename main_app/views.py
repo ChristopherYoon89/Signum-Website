@@ -978,26 +978,35 @@ class SearchSuggestionsView(APIView):
 	'''
 
 	def get(self, request):
-		keyword_string = request.GET.get("keyword_string", "").strip()
+		keyword_string = request.GET.get("keyword_string", "").strip().lower()
 
 		if len(keyword_string) < 2:
 			return Response([])
 
+		# I rank titles by recency
+		title_suggestions = list(
+			NewsArticle.objects
+			.filter(publish=True, title__icontains=keyword_string)
+			.order_by("-date_posted")
+			.values_list("title", flat=True)[:5]
+		)
+
+		# and rank tags by frequency
 		queryset = (
 			NewsArticle.objects
 			.filter(publish=True)
-			.values("title", "tag1", "tag2", "tag3")
+			.values("tag1", "tag2", "tag3")
 		)
 
 		counter = Counter()
 
 		for row in queryset:
-			for tag in (row["title"], row["tag1"], row["tag2"], row["tag3"]):
-				if tag and tag.lower().startswith(keyword_string.lower()):
+			for tag in (row["tag1"], row["tag2"], row["tag3"]):
+				if tag and tag.lower().startswith(keyword_string):
 					counter[tag] += 1
 
-		suggestions = [
-			tag for tag, _ in counter.most_common(10)
+		tag_suggestions = [
+			tag for tag, _ in counter.most_common(5)
 		]
 
-		return Response(suggestions)
+		return Response(tag_suggestions + title_suggestions)

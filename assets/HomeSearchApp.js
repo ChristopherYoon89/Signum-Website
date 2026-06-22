@@ -55,6 +55,7 @@ const InputSearch = ({
       <AutoComplete
         options={searchdropdowndata}
         style={{ width: "100%" }}
+				popupClassName="search-autocomplete-dropdown"
       >
         <Input
 					value={searchinput}
@@ -187,7 +188,7 @@ const HomeSearchApp = () => {
 						<Button 
 							type='primary'
 							onClick={() => handleSearch()}
-							style={{ marginTop: 35, marginLeft: 15 }}
+							style={{ marginTop: 5, marginLeft: 15 }}
 						>
 						Search
 						</Button>
