@@ -503,19 +503,19 @@ const HomeSearchResultsApp = () => {
 
 						{!loading && hasMore && (
 								<div
-										style={{
-												textAlign: "center",
-												marginTop: 16,
-												flexShrink: 0,
-												height: 70,
-										}}
+									style={{
+											textAlign: "center",
+											marginTop: 16,
+											flexShrink: 0,
+											height: 70,
+									}}
 								>
-										<Button
-												loading={loadingMore}
-												onClick={() => getData(page + 1)}
-										>
-												{loadingMore ? "Loading..." : "Load more"}
-										</Button>
+								<Button
+									loading={loadingMore}
+									onClick={() => getData(page + 1)}
+								>
+								{loadingMore ? "Loading..." : "Load more"}
+								</Button>
 								</div>
 						)}
 				</div>

@@ -521,7 +521,6 @@ def get_articles_for_feed(feed, user, order_by_var):
 
 class GetFeedBoardAllView(APIView):
 	permission_classes = [IsAuthenticated]
-	PAGE_SIZE = 10
 
 	def get(self, request):
 		user = request.user
@@ -534,19 +533,10 @@ class GetFeedBoardAllView(APIView):
 		response = []
 
 		for feed in feeds:
-			order_by_var = check_order_by(feed.order_by)
-			articles = get_articles_for_feed(feed, user, order_by_var)
-
-			paginator = Paginator(articles, self.PAGE_SIZE)
-			page = paginator.get_page(1)
-
 			response.append({
 				"id": feed.id,
 				"title": feed.title,
 				"feed_type": feed.feed_type,
-				"articles": NewsArticleSerializer(page.object_list, many=True).data,
-				"page": 1,
-				"has_more": page.has_next()
 			})
 
 		return Response(response)

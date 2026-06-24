@@ -168,6 +168,11 @@ const DashboardBookmarkFeedPopover = ({ article, setUserBookmarks }) => {
 						className="bookmark-input"
 						value={feedtitle}
 						onChange={(e) => onChangeFeedTitle(e.target.value)}
+						onKeyDown={(e) => {
+							if (e.key === 'Enter') {
+									addNewBookmarkFeed();
+							}
+					}}
 					/>
 					<Button 
 						type="primary" 

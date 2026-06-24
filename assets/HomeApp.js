@@ -8,6 +8,7 @@ import {
 	Popover,
 	Tag,
 	Tooltip,
+	Empty,
   } from 'antd';
 import {
 	StarOutlined,
@@ -83,20 +84,35 @@ function ScrollReveal({ children }) {
 };
 
 
+const CompNoArticles = () => {
+	return(
+		<>
+			<div className="home-empty-container">
+				<p>
+				<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+				</p>
+			</div>
+		</>
+	);
+};
+
+
 
 const CategoryArticles = ({ 
-												articles, 
-												navigate, 
-												isauthenticated, 
-												userfollows, 
-												createClick, 
-												userbookmarks, 
-												toggleUserFollow,
-												setUserBookmarks,
-											}) => {
+		articles, 
+		navigate, 
+		isauthenticated, 
+		userfollows, 
+		createClick, 
+		userbookmarks, 
+		toggleUserFollow,
+		setUserBookmarks,
+	}) => {
 	return (
 		<div className={"home-article-container"}>
-			{articles.map((article) => (
+			{
+				articles.length > 0 ? (				
+				articles.map((article) => (
 				<Card 
 					key={article.id}
 					className={"bg-transparent"}
@@ -217,9 +233,13 @@ const CategoryArticles = ({
 					</p>
 					<Divider style={{ borderColor: "#e0e7e7" }}/>
 				</Card>
-			))}
+			))) : (
+				<>
+					<CompNoArticles />
+				</>
+			)}
 		</div>
-	);
+	) 
 };
 
 
@@ -407,9 +427,7 @@ const HomeApp = () => {
 					<Col className="gutter-row" span={12} ref={topSectionRef} style={{ paddingTop: 15,}}>
 						<HomeCategories />
 					</Col>
-				</Row>		
-
-				
+				</Row>						
 
 				<ScrollReveal>
 			
@@ -422,7 +440,6 @@ const HomeApp = () => {
 					<Col 
 						className="gutter-row" 
 						span={6}>
-					
 					</Col>
 					
 					<Col 

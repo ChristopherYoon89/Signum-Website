@@ -70,7 +70,7 @@ const ButtonsMainMenu = ({ navigate }) => {
 						justifyContent: "center",
 						height: "100%",
 					}}/>}  
-						style={{ backgroundColor: "#5b15ffff", verticalAlign: 'left', cursor: "pointer", }} 
+						style={{ backgroundColor: "#295bff", verticalAlign: 'left', cursor: "pointer", }} 
 						/>
 				</Badge>
 				</span>
@@ -101,7 +101,7 @@ const ButtonsMainMenu = ({ navigate }) => {
 						justifyContent: "center",
 						height: "100%",
 					}}/>}
-						style={{ backgroundColor: "#5b15ffff", 
+						style={{ backgroundColor: "#295bff", 
 							verticalAlign: 'left', 
 							cursor: "pointer", 
 							display: "flex",
@@ -127,7 +127,7 @@ const ButtonsMainMenu = ({ navigate }) => {
 						justifyContent: "center",
 						height: "100%",
 					}}/>} 
-					style={{ backgroundColor: "#5b15ffff", verticalAlign: 'left', cursor: "pointer", }} 
+					style={{ backgroundColor: "#295bff", verticalAlign: 'left', cursor: "pointer", }} 
 					/>
 				</span>
 				</Tooltip>
@@ -146,7 +146,7 @@ const ButtonsMainMenu = ({ navigate }) => {
 						justifyContent: "center",
 						height: "100%",
 					}}/>} 
-					style={{ backgroundColor: "#5b15ffff", verticalAlign: 'left', cursor: "pointer", }} 
+					style={{ backgroundColor: "#295bff", verticalAlign: 'left', cursor: "pointer", }} 
 					/>
 				</span>
 				</Tooltip>
@@ -165,7 +165,7 @@ const ButtonsMainMenu = ({ navigate }) => {
 						justifyContent: "center",
 						height: "100%",
 					}}/>} 
-					style={{ backgroundColor: "#5b15ffff", verticalAlign: 'center', cursor: "pointer", }} 
+					style={{ backgroundColor: "#295bff", verticalAlign: 'center', cursor: "pointer", }} 
 					/>
 				</span>
 				</Tooltip>		
@@ -193,7 +193,7 @@ const ButtonsAPI = ({ navigate }) => {
 					justifyContent: "center",
 					height: "100%",
 				}}/>} 
-					style={{ backgroundColor: "#5b15ffff", verticalAlign: 'left', cursor: "pointer", }} 
+					style={{ backgroundColor: "#295bff", verticalAlign: 'left', cursor: "pointer", }} 
 					/>
 			</span>
 			</Tooltip>
@@ -212,7 +212,7 @@ const ButtonsAPI = ({ navigate }) => {
 					justifyContent: "center",
 					height: "100%",
 				}}/>} 
-					style={{ backgroundColor: "#5b15ffff", verticalAlign: 'left', cursor: "pointer", }} 
+					style={{ backgroundColor: "#295bff", verticalAlign: 'left', cursor: "pointer", }} 
 					/>
 			</span>
 			</Tooltip>

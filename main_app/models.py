@@ -131,7 +131,7 @@ class BookmarkFeed(models.Model):
 	order_by = models.CharField(max_length=250, choices=BMFEEDORDER_CHOICES, default="by_date_of_bookmark_added", db_index=True)
 	publish_boolean = models.BooleanField(default=True, db_index=True)
 	date_created = models.DateTimeField(default=timezone.now, blank=True, null=True)
-	date_updated = models.DateTimeField(null=True, blank=True, db_index=True)
+	date_updated = models.DateTimeField(default=timezone.now, null=True, blank=True, db_index=True)
 
 	def __str__(self):
 		return f"{self.user} Bookmark Feed"

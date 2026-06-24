@@ -49,6 +49,7 @@ const PopArticles = ({
 		setUserBookmarks,
 		DashboardBookmarkFeedPopover,
 		ArticleStatsPopOverContent,
+		navigate
 	}) => {
 
 	return(
@@ -130,7 +131,7 @@ const PopArticles = ({
 };
 
 	
-const StatsHomeTags = ({ tagstabledata }) => {
+const StatsHomeTags = ({ tagstabledata, navigate }) => {
 	
 	const colors = [
 		"#5e5e5e", 
@@ -146,10 +147,10 @@ const StatsHomeTags = ({ tagstabledata }) => {
 					<div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
 					{tagstabledata.map((tag, index) => (
 						<span
-						onClick={(e) => {
-							e.stopPropagation(); 
-							navigate(`/dashboard/tag/${encodeURIComponent(tag)}?scrollToTop=true`);
-							}}
+							onClick={(e) => {
+								e.stopPropagation(); 
+								navigate(`/dashboard/tag/${encodeURIComponent(tag)}?scrollToTop=true`);
+								}}
 						>
 						<Tag key={index} className="table-tag" color={colors[index % colors.length]}>
 							{tag}
@@ -223,11 +224,13 @@ const StatsHomeIndicators = ({
 								setUserBookmarks={setUserBookmarks}
 								DashboardBookmarkFeedPopover={DashboardBookmarkFeedPopover}
 								ArticleStatsPopOverContent={ArticleStatsPopOverContent}
+								navigate={navigate}
 							/>
 						</Col>
 						<Col xs={24} sm={12} md={12}>
 							<StatsHomeTags 
 								tagstabledata={tagstabledata}
+								navigate={navigate}
 							/>
 						</Col>
 					</div>

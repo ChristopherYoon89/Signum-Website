@@ -315,15 +315,7 @@ const ArticlesSourceApp = () => {
 			width: 170,
 			render: (record) => (
 				<div>
-				<Tooltip
-					placement="top"
-					title={
-						!isauthenticated 
-						? "Log in to add bookmark"
-						:	userbookmarks.includes(record.id) 
-						? "Remove" 
-						: "Add bookmark"}
-				>
+				
 				<Popover 
 					placement="right"
 					content={<DashboardBookmarkFeedPopover
@@ -346,28 +338,24 @@ const ArticlesSourceApp = () => {
 					}}
 				/>
 				</Popover>	
-				</Tooltip>
-					<span 
-						style={{ marginRight: 20}}
-						onClick={(e) => {
-						e.stopPropagation();
-					}}>
+				
+				<span 
+					style={{ marginRight: 20}}
+					onClick={(e) => {
+					e.stopPropagation();
+				}}>
 				<Popover
 					placement="right"
 					content={<PopOverContent record={record}/>}
 					trigger='click'
 					color="rgba(26, 26, 26, 0.9)"
 				>
-				<Tooltip 
-					placement="top"
-					title={"Article stats"}
-				>
+				
 				<StockOutlined 
 					style={{ 
 						color: "#868686", 
 						fontSize: 15, }}	
 				/>
-				</Tooltip>
 				</Popover>
 				</span>
 			</div>

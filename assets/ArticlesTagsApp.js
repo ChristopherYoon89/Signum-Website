@@ -301,15 +301,6 @@ const ArticlesTagsApp = () => {
 			width: 170,
 			render: (record) => (
 				<div>
-				<Tooltip
-					placement="top"
-					title={
-						!isauthenticated 
-						? "Log in to add bookmark"
-						:	userbookmarks.includes(record.id) 
-						? "Remove" 
-						: "Add bookmark"}
-				>
 				<Popover 
 					placement="right"
 					content={<DashboardBookmarkFeedPopover
@@ -331,7 +322,6 @@ const ArticlesTagsApp = () => {
 					}}
 				/>
 				</Popover>
-				</Tooltip>
 					<span 
 						style={{ marginRight: 20}}
 						onClick={(e) => {
@@ -343,16 +333,13 @@ const ArticlesTagsApp = () => {
 					trigger='click'
 					color="rgba(26, 26, 26, 0.9)"
 					>
-				<Tooltip
-					placement="top"
-					title={"Article stats"}
-				>
+				
 				<StockOutlined 
 					style={{ 
 						color: "#868686", 
 						fontSize: 15, }}	
 				/>
-				</Tooltip>
+				
 				</Popover>
 				</span>
 				</div>

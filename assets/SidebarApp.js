@@ -93,26 +93,10 @@ const SidebarApp = () => {
 
 				<div
 					className="navigation-item"
-					onClick={() => handleClick('/?scrollToTop=true')}
-				>
-					<HomeOutlined className="navigation-item-icon" />
-					<span class="side-nav-text">Home</span>
-				</div>
-
-				<div
-					className="navigation-item"
 					onClick={() => handleClick("/dashboard/briefing?scrollToTop=true")}
 				>
 					<AppstoreAddOutlined className="navigation-item-icon" />
 					<span class="side-nav-text">Briefing</span>
-				</div>
-
-				<div
-					className="navigation-item"
-					onClick={() => handleClick("/dashboard/category/All-Articles?scrollToTop=true")}
-				>
-					<ReadOutlined className="navigation-item-icon" />
-					<span class="side-nav-text">Articles</span>
 				</div>
 
 				<div
@@ -125,10 +109,18 @@ const SidebarApp = () => {
 
 				<div
 					className="navigation-item"
-					onClick={() => handleClick("/dashboard/mysources/?scrollToTop=true")}
+					onClick={() => handleClick("/dashboard/category/All-Articles?scrollToTop=true")}
 				>
-					<NotificationOutlined className="navigation-item-icon" />
-					<span>MySources</span>
+					<ReadOutlined className="navigation-item-icon" />
+					<span class="side-nav-text">Articles</span>
+				</div>
+
+				<div
+					className="navigation-item"
+					onClick={() => handleClick('/?scrollToTop=true')}
+				>
+					<HomeOutlined className="navigation-item-icon" />
+					<span class="side-nav-text">Home</span>
 				</div>
 
 			</div>

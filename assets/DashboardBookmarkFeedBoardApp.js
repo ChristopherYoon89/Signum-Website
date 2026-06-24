@@ -19,8 +19,9 @@ PlusOutlined,
 LeftOutlined,
 RightOutlined,
 ToolOutlined,
+DeleteOutlined,
 } from '@ant-design/icons';
-import Axios from "axios";
+import axios from "axios";
 import moment from 'moment';
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "./AuthProvider.js";
@@ -47,6 +48,20 @@ function getCookie(name) {
 var csrftoken = getCookie('csrftoken');
 
 
+const CompNoBookmarkedArticles = ({ onNavigateAddBookmarkFeed }) => {
+	return(
+		<>
+			<div className="nobookmark-icon-container">
+				<p>
+				<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+				</p>
+			</div>
+		</>
+	);
+};
+
+
+
 const CompNoBookmarkFeed = ({ onNavigateAddBookmarkFeed }) => {
 	return(
 		<>
@@ -54,16 +69,8 @@ const CompNoBookmarkFeed = ({ onNavigateAddBookmarkFeed }) => {
 				<p>
 				<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
 				</p>
-				
-				<p>
-				<span style={{ fontWeight: 'bold', }}>No bookmark lists yet</span>
-				</p>
-				
-				<div className='nobookmark-info-container'>
-				Create your own bookmark lists for specific research topics and save articles for later.
-				</div>
 
-				<p style={{ marginTop: 36, }}>
+				<p style={{ marginTop: 0, }}>
 					<Button
 						type="primary"
 						onClick={() => onNavigateAddBookmarkFeed()}
@@ -78,13 +85,21 @@ const CompNoBookmarkFeed = ({ onNavigateAddBookmarkFeed }) => {
 
 
 const DashboardBookmarkFeedBoardApp = () => {
-	const [feeds, setFeeds] = useState([]);
   const [loading, setLoading] = useState(true);
 	const scrollContainerRef = useRef(null);
 	const [userbookmarks, setUserBookmarks] = useState([]); 
 	const [userfollows, setUserFollows] = useState([]);	
 	const { isauthenticated, user, usersettings } = useAuth();
+
+	const [feeds, setFeeds] = useState([]);
+	const [selectedFeed, setSelectedFeed] = useState(null);
+	const [articles, setArticles] = useState([]);
+	const [page, setPage] = useState(1); 
+	const [hasMore, setHasMore] = useState(false);
+	const [loadingArticles, setLoadingArticles] = useState(false);
+	
 	const navigate = useNavigate();
+	
 	const { pathname, search } = useLocation();
 	const params = new URLSearchParams(search);
 
@@ -98,6 +113,15 @@ const DashboardBookmarkFeedBoardApp = () => {
 	}, [pathname, search, navigate]);
 
 
+	const handleSelectedFeed = async (feed) => {
+		console.log(feed.id);
+    setSelectedFeed(feed);
+    setPage(1);
+    setArticles([]);
+    fetchArticles(feed.id, 1);
+	};
+
+
 	useEffect(() => {
 		if (!isauthenticated) {
 			setUserBookmarks([]);
@@ -106,7 +130,7 @@ const DashboardBookmarkFeedBoardApp = () => {
 
     const fetchUserBookmarks = async () => {
       try {
-        const response = await Axios.get(`/api/UserBookmarks/`);
+        const response = await axios.get(`/api/UserBookmarks/`);
         const bookmarks = response.data.map(row => row.newsarticle_bookmarked);
         setUserBookmarks(bookmarks);
       } catch (error) {
@@ -149,7 +173,7 @@ const DashboardBookmarkFeedBoardApp = () => {
 		);
 
 		try {
-			const response = await Axios.post(
+			const response = await axios.post(
 				`/api/SourceUserFollowToggle/`,
 				{ source: record.source_id },
 				{ headers: { 'X-CSRFToken': csrftoken } }
@@ -179,77 +203,68 @@ const DashboardBookmarkFeedBoardApp = () => {
 	};
 
 
+	const fetchArticles = async (feedId, pageNumber = 1) => {
+		setLoadingArticles(true);
+
+		try {
+			const response = await axios.get(`/api/board-bookmark-feeds-single/?feed_id=${feedId}&page=${pageNumber}`);
+
+			setArticles(prev =>
+				pageNumber === 1
+					? response.data.articles 
+					: [...prev, ...response.data.articles]
+			);
+			setHasMore(response.data.has_more);
+			setPage(pageNumber);
+		} catch(error) {
+			console.log(error);
+		} finally {
+			setLoadingArticles(false);
+		}
+	};
+
+
 	useEffect(() => {
-		const fetchFeeds = async () => {
+		const getFeeds = async () => {
+			setLoading(true);
+			setLoading(true)
 			try {
-				const response = await Axios.get(`/api/board-bookmark-feeds/`);
+				const response = await axios.get(`/api/board-bookmark-feeds/`);
 
-				const feedsWithState = response.data.map(feed => ({
-					...feed,
-					hasMore: feed.hasmore,
-					page: 1,
-					loadingMore: false
-				}));
+				setFeeds(response.data);
 
-				setFeeds(feedsWithState);
-				setLoading(false);
-
+				if (response.data.length) {
+					handleSelectedFeed(response.data[0]);
+				}
 			} catch (error) {
-				console.error("Failed to fetch bookmark feeds");
+				console.error('Failed to fetch feeds', error);
+			} finally {
+				setLoading(false);
 			}
 		};
-
-		fetchFeeds();
+		getFeeds();
 	}, []);
 
 
-	const loadMoreArticles = async (feedId) => {
-		setFeeds(prev =>
-			prev.map(feed =>
-				feed.id === feedId
-					? { ...feed, loadingMore: true }
-					: feed
-			)
-		);
-
-		const feed = feeds.find(f => f.id === feedId);
-		const nextPage = feed.page + 1;
+	const loadMoreArticles = async () => {
+		const nextPage = page + 1;
 
 		try {
-			const response = await Axios.get(
-				`/api/board-bookmark-feeds-single/?feed_id=${feedId}&page=${nextPage}`
+			const response = await axios.get(
+				`/api/board-bookmark-feeds-single/?feed_id=${selectedFeed.id}&page=${nextPage}`
 			);
-			setFeeds(prev =>
-				prev.map(feed =>
-					feed.id === feedId
-						? {
-								...feed,
-								articles: [...feed.articles, ...response.data.articles],
-								page: nextPage,
-								hasMore: response.data.hasmore,
-								loadingMore: false
-							}
-						: feed
-				)
-			);
+
+			setArticles(prev => [
+					...prev,
+					...response.data.articles
+				]);
+			setPage(nextPage);
+			setHasMore(response.data.has_more);
 		} catch (error) {
 			console.error("Failed loading more bookmark articles");
 		}
 	};
 
-
-	const scrollRight = () => {
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollBy({ left: 360, behavior: 'smooth' }); // scroll by column width + gutter
-    }
-  };
-
-
-  const scrollLeft = () => {
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollBy({ left: -360, behavior: 'smooth' });
-    }
-  };
 
 
 	const onNavigateAddBookmarkFeed = () => {
@@ -259,7 +274,7 @@ const DashboardBookmarkFeedBoardApp = () => {
 
 	return (
 		<>
-			<Layout>
+			<Layout className="dashboard-feed-board-layout" style={{ height: "100%", flex: 1, minHeight: 0, }}>
 			<Card
 				style={{ borderColor: '#FFF', }}
 				bodyStyle={{ paddingTop: 10, paddingLeft: 10, }}
@@ -283,56 +298,68 @@ const DashboardBookmarkFeedBoardApp = () => {
 					flex: 1,
 					minHeight: 0 }}
 				>
-				<LeftOutlined
-					onClick={scrollLeft}
-					style={{
-						position: 'absolute',
-						left: 0,
-						top: '50%',
-						zIndex: 10,
-						transform: 'translateY(-50%)',
-						fontSize: 12,
-						cursor: 'pointer',
-						background: '#fff',
-						borderRadius: '50%',
-						padding: '8px',
-						boxShadow: '0 0 6px rgba(0,0,0,0.2)'
+				
+				<Col 
+					span={4} 
+					style={{ 
+						height: '100%', display: 'flex', 
 					}}
-				/>
-				<div className='dashboard-feed-board-scroll-container' ref={scrollContainerRef}>
-					{feeds.length > 0 ? (					
-					feeds.map((feed, index) => (
-						<Col key={index} xs={24} sm={12} md={8} style={{ display: "flex", flexDirection: "column", minHeight: 0, }}>
-							<p className="dashboard-feed-board-title">
-								<Tag color={"orange"}><StarOutlined color={"#ffac00"} style={{marginRight: 5, }} />{feed.title}</Tag>
-									<Tooltip title="Edit feed" placement="top">
-										<span
-											onClick={() => navigate(`/dashboard/bookmarks/editfeed/${feed.id}`)}
-										>
-										<ToolOutlined
-											style={{
-												fontSize: 16,
-												color: "#969696",
-												cursor: 'pointer',
-											}}
-										/>
-										</span>
-									</Tooltip>
-								</p>
-							<Card className="scrollable-menu" style={{ flex: 1, minHeight: 0, overflowY: 'auto', overflowX: 'auto', }}>
-							{ feed.articles.length > 0 ? (
-									feed.articles.map((article, i) => (
+				>
+
+				<div className="dashboard-feeds-container">
+					{ feeds.length > 0 ? (
+						feeds.map(feed => (
+							<div 
+								key={feed.id}
+								onClick={() => handleSelectedFeed(feed)}
+								className={`feed-item ${selectedFeed.id === feed.id ? "active" : ""}`}
+								>
+								<div className="dashboard-feed-board-title">
+								{feed.title}
+								</div>
+								</div>
+						))) : (
+							<>
+							<div className="dashboard-feed-board-title">
+								No bookmark list yet
+							</div>
+							</>
+						)
+						}
+				</div>
+
+				 
+				
+				</Col>
+
+				<Col 
+					span={15}
+					style={{
+						height: '100%',
+						display: 'flex',
+					}}
+				>
+					<div className="article-panel"
+						style={{ display: "flex", flexDirection: "column", minHeight: 0, width: "100%" }}
+					>
+					<Card className="scrollable-menu" style={{ flex: 1, minHeight: 0, overflowY: 'auto' }}>
+						{ feeds.length > 0 ? (
+							articles.length > 0 ? (
+								articles.map((article, i) => (
+									<>
 										<div className="dashboard-feed-board-article" key={i} style={{ marginBottom: '12px' }}>
-											<div className="briefing-source-row">
+											<div className="briefing-source-row" >
+
+												<div className="dashboard-source-title-left">
 												
-													<span
+													<div 
 														onClick={() => navigate(`/dashboard/source/${encodeURIComponent(article.source_name)}?scrollToTop=true`)}
 														className="home-source"
 													>
 													{article.source_name}
-													</span>
+													</div>
 
-													<span>
+													<div>
 														<Tooltip
 															title={
 																!isauthenticated
@@ -361,19 +388,58 @@ const DashboardBookmarkFeedBoardApp = () => {
 															}
 														/>
 														</Tooltip>
-														</span>
+														</div>
 
-														<span 
+														<div  
 															className="dashboard-title"
 															onClick={() => countClick(article)} 
 														>
 														<a href={article.source_url} target="_blank">
 														<strong>{article.title}</strong>
 														</a>
-														</span>
+														</div>
+
+														</div>
+
+														<div className="dashboard-bookmark-stats-right">
+														<Popover 
+															placement="right"
+															content={<DashboardBookmarkFeedPopover
+																article={article}
+																setUserBookmarks={setUserBookmarks}
+																/>}
+															trigger='click'
+															color="rgba(26, 26, 26, 0.9)"
+														>
+														<StarOutlined
+															className="antd-home-icon"
+															style={{
+																marginLeft: 10,
+																marginRight: 10,
+																cursor: 'pointer',
+																color: !isauthenticated
+																	? "#868686"
+																	: userbookmarks.includes(article.id)
+																		? "#ffac00"
+																		: "#868686",
+															}}
+														/>
+														</Popover>
+
+														<Popover
+															placement="right"
+															content={<ArticleStatsPopOverContent record={article} />} 
+															trigger='click'
+															color="rgba(26, 26, 26, 0.9)"
+															>
+															<StockOutlined
+																className="antd-home-icon"
+																style={{ marginLeft: 10, color: "#868686" }} 
+															/>
+														</Popover>
+														</div>
 													
 													</div>
-													
 													
 													<div style={{
 														marginTop: 10,
@@ -425,96 +491,74 @@ const DashboardBookmarkFeedBoardApp = () => {
 													}
 
 													</div> 
-
-													<div className="dashboard-bookmark-stats-right">
-														<Popover 
-															placement="right"
-															content={<DashboardBookmarkFeedPopover
-																article={article}
-																setUserBookmarks={setUserBookmarks}
-																/>}
-															trigger='click'
-															color="rgba(26, 26, 26, 0.9)"
-														>
-														<StarOutlined
-															className="antd-home-icon"
-															style={{
-																marginLeft: 10,
-																cursor: 'pointer',
-																color: !isauthenticated
-																	? "#868686"
-																	: userbookmarks.includes(article.id)
-																		? "#ffac00"
-																		: "#868686",
-															}}
-														/>
-														</Popover>
-
-														<Popover
-															placement="right"
-															content={<ArticleStatsPopOverContent record={article} />} 
-															trigger='click'
-															color="rgba(26, 26, 26, 0.9)"
-															>
-
-															<StockOutlined
-																className="antd-home-icon"
-																style={{ marginLeft: 10, color: "#868686" }} />
-
-														</Popover>
-														</div>
+													
 													</div>
 												
 											<Divider />	
 											
 										</div>
-										)
-									)
-								) : (
-									<p>No articles bookmarked</p>
-								)
-							}
-							{
-								feed.hasMore && (
-										<div style={{ textAlign: 'center', marginTop: 10 }}>
-											<Button
-												onClick={() => loadMoreArticles(feed.id)}
-												loading={feed.loadingMore}
-											>
-												Load More
-											</Button>
-										</div>
-								)
-							}
-											
-							</Card>
-							</Col>
-							))) : (
+									</>
+								))
+							) : (
+								<>
+									<CompNoBookmarkedArticles />
+								</>
+							)) : (
 								<>
 									<CompNoBookmarkFeed 
-										onNavigateAddBookmarkFeed={onNavigateAddBookmarkFeed}
+									onNavigateAddBookmarkFeed={onNavigateAddBookmarkFeed}
 									/>
 								</>
 							)}
-							</div>
 
-						<RightOutlined
-							onClick={scrollRight}
+									<div style={{ textAlign: "center", }}>
+										{hasMore && (
+											<Button
+												loading={loadingArticles}
+												onClick={loadMoreArticles}
+											>
+											Load More
+											</Button>
+
+											)}
+									</div>
+					</Card>
+
+					</div>
+
+				</Col>
+
+				<Col span={1}>
+					<>
+						<div 
+							onClick={() => navigate(`/dashboard/bookmarks/editfeed/${selectedFeed.id}`)}
+						>
+							<ToolOutlined
+								style={{
+									marginTop: 5,
+									fontSize: 16,
+									color: "#969696",
+									cursor: 'pointer',
+								}}
+							/>
+						</div>
+
+						<div 
+							onClick={() => navigate(`/dashboard/bookmarks/editfeed/${selectedFeed.id}/delete-feed`)}
+						>
+						<DeleteOutlined 
 							style={{
-								position: 'absolute',
-								right: 0,
-								top: '50%',
-								zIndex: 10,
-								transform: 'translateY(-50%)',
-								fontSize: 12,
+								marginTop: 10,
+								fontSize: 16,
+								color: "#969696",
 								cursor: 'pointer',
-								background: '#fff',
-								borderRadius: '50%',
-								padding: '8px',
-								boxShadow: '0 0 6px rgba(0,0,0,0.2)'
 							}}
 						/>
-					</Row>
+						</div>
+					</>
+				</Col>
+
+				</Row>
 				</Layout>	
 				)}
 				</Card>

@@ -148,7 +148,8 @@ const DashboardApp = () => {
 		const item = findItemByUrl(items, decodedPath);
 
 		if (decodedPath === '/dashboard/briefing/addfeed') return setTitle('Add Feed');
-		if (decodedPath === '/dashboard/briefing/editfeed') return setTitle('Edit Feed');
+		if (decodedPath.includes('delete-feed')) return setTitle('Delete Feed')
+		if (decodedPath.startsWith('/dashboard/briefing/editfeed')) return setTitle('Edit Feed');
 		if (decodedPath === '/dashboard/bookmarks/addfeed') return setTitle('Add Bookmark Feed');
 		if (decodedPath === '/dashboard/bookmarks/editfeed') return setTitle('Edit Bookmark Feed');
 		if (decodedPath === '/dashboard/export') return setTitle('Export Data');

@@ -927,6 +927,7 @@ class GetBookmarkFeedBoardView(APIView):
         return Response({
             "feed_id": bookmark_feed.id,
             "title": bookmark_feed.title,
+			""
             "articles": NewsArticleSerializer(articles, many=True).data,
             "hasmore": page.has_next()
         })
@@ -935,7 +936,6 @@ class GetBookmarkFeedBoardView(APIView):
 
 class GetBookmarkFeedBoardAllView(APIView):
     permission_classes = [IsAuthenticated]
-    PAGE_SIZE = 10
 
     def get(self, request):
         user = request.user
@@ -948,22 +948,10 @@ class GetBookmarkFeedBoardAllView(APIView):
         response = []
 
         for feed in feeds:
-            bookmarks = get_articles_for_bookmark_feed(feed, user)
-            paginator = Paginator(bookmarks, self.PAGE_SIZE)
-            page = paginator.get_page(1)
-
-            articles = [
-                b.newsarticle_bookmarked
-                for b in page.object_list
-            ]
-
             response.append({
                 "id": feed.id,
                 "title": feed.title,
                 "ranking": feed.ranking,
-                "articles": NewsArticleSerializer(articles, many=True).data,
-                "page": 1,
-                "hasmore": page.has_next()
             })
 
         return Response(response)

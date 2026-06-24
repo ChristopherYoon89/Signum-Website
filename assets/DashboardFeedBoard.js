@@ -9,16 +9,16 @@ import {
 	Popover,
 	Button,
 	Tag,
+	Empty,
   } from 'antd';
 import 'antd/dist/antd.min.css';
 import {
 	SyncOutlined,
-	RightOutlined,
-	LeftOutlined,
 	PlusOutlined,
 	StarOutlined,
 	StockOutlined,
 	ToolOutlined,
+	DeleteOutlined,
 	ControlOutlined,
 } from '@ant-design/icons';
 import Axios from "axios";
@@ -49,6 +49,19 @@ function getCookie(name) {
 var csrftoken = getCookie('csrftoken');
 
 
+const CompNoArticles = () => {
+	return(
+		<>
+			<div className="nobookmark-icon-container">
+				<p>
+				<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+				</p>
+			</div>
+		</>
+	);
+};
+
+
 const DashboardFeedBoardApp = () => {
 	const [loading, setLoading] = useState(true);
 	const scrollContainerRef = useRef(null);
@@ -58,6 +71,7 @@ const DashboardFeedBoardApp = () => {
 
 	const [feeds, setFeeds] = useState([]);
 	const [selectedFeedId, setSelectedFeedId] = useState(null);
+	const [selectedFeed, setSelectedFeed] = useState(null);
 	const [articles, setArticles] = useState([]);
 	const [page, setPage] = useState(1);
 	const [hasMore, setHasMore] = useState(false);
@@ -65,12 +79,11 @@ const DashboardFeedBoardApp = () => {
 
 	const navigate = useNavigate();
 
-	const handleSelectFeed = async (feedId) => {
-		console.log(feedId);
-    setSelectedFeedId(feedId);
+	const handleSelectedFeed = async (feed) => {
+    setSelectedFeed(feed);
     setPage(1);
     setArticles([]);
-    fetchArticles(feedId, 1);
+    fetchArticles(feed.id, 1);
 	};
 
 	useEffect(() => {
@@ -174,27 +187,26 @@ const DashboardFeedBoardApp = () => {
 
         setHasMore(res.data.has_more);
         setPage(pageNumber);
-    } finally {
+    } catch(error){
+        console.log(error);
+    }	finally {
         setLoadingArticles(false);
     }
 	};
 
 
 	useEffect(() => {
-		setLoading(true);
 
 		const getFeeds = async () => {
+			setLoading(true);
 			try {
 				const response = await axios.get(`/api/board-feeds/`);
 
-				const feedsWithState = response.data.map(feed => ({
-					...feed,
-					page: feed.page || 1,
-					hasMore: feed.has_more,
-					loadingMore: false,
-				}));
-
-				setFeeds(feedsWithState);
+				setFeeds(response.data);
+				if (response.data.length) {
+						handleSelectedFeed(response.data[0]);
+						
+				}
 			} catch (error) {
 				console.error("Failed to fetch feeds");
 			} finally {
@@ -206,48 +218,28 @@ const DashboardFeedBoardApp = () => {
 	}, []);
 
 
-	const loadMoreArticles = async (feedId) => {
-		setFeeds(prevFeeds =>
-			prevFeeds.map(feed =>
-				feed.id === feedId ? { ...feed, loadingMore: true } : feed
-			)
-		);
-
-		const feed = feeds.find(f => f.id === feedId);
-		if (!feed || !feed.hasMore) return;
-
-		try {
-			const nextPage = feed.page + 1;
-			const response = await axios.get(`/api/board-feeds-single/?feed_id=${feedId}&page=${nextPage}`);
-			const newArticles = response.data.articles;
-
-			setFeeds(prevFeeds =>
-				prevFeeds.map(f =>
-					f.id === feedId
-						? {
-								...f,
-								articles: [...f.articles, ...newArticles],
-								page: nextPage,
-								hasMore: response.data.has_more,
-								loadingMore: false
-							}
-						: f
-				)
-			);
-		} catch (error) {
-			console.error(`Failed to load more articles for feed`);
-			setFeeds(prevFeeds =>
-				prevFeeds.map(f =>
-					f.id === feedId && f.id === feedId ? { ...f, loadingMore: false } : f
-				)
-			);
-		}
-	};
+	const loadMoreArticles = async () => {
+			const nextPage = page + 1;
+			try {
+					const response = await axios.get(
+							`/api/board-feeds-single/?feed_id=${selectedFeed.id}&page=${nextPage}`
+					);
+					setArticles(prev => [
+							...prev,
+							...response.data.articles
+					]);
+					setPage(nextPage);
+					setHasMore(response.data.has_more);
+			}
+			catch(err){
+					console.log(err);
+			}
+	}
 
 
 	return (
 		<>
-		<Layout>
+		<Layout className="dashboard-feed-board-layout" style={{ height: "100%", flex: 1, minHeight: 0, }}>
 		<Card
 			style={{ borderColor: '#FFF', }}
 			bodyStyle={{ paddingTop: 10, paddingLeft: 10, }}
@@ -272,40 +264,58 @@ const DashboardFeedBoardApp = () => {
 					minHeight: 0
 				}}>
 
-				<Col span={4}>
+				<Col span={4}
+					style={{
+							height: '100%',
+							display: 'flex'
+					}}
+				>
+
+					<div className="dashboard-feeds-container">
 
 					{feeds.map(feed => (
-								<div
-									key={feed.id}
-									onClick={() => handleSelectFeed(feed.id)}
-									className={`feed-item ${selectedFeedId === feed.id ? "active" : ""}`}
-								>
-									<div className="dashboard-feed-board-title">
-									{feed.title}
-									
-									</div>
-								</div>
-						))}
+						<div
+							key={feed.id}
+							onClick={() => handleSelectedFeed(feed)}
+							className={`feed-item ${selectedFeed.id === feed.id ? "active" : ""}`}
+						>
+						<div className="dashboard-feed-board-title">
+						{feed.title}
+						</div>
+						</div>
+					))}
+
+						</div>
 				
 				</Col>
 						
-				<Col span={18}>
-						<div className="article-panel">
-							<Card className="scrollable-menu" style={{ flex: 1, minHeight: 0, overflowY: 'auto', overflowX: 'auto', }}>
+				<Col span={15}
+					style={{
+							height: '100%',
+							display: 'flex'
+					}}>
+						<div className="article-panel"
+							
+							style={{ display: "flex", flexDirection: "column", minHeight: 0, width: "100%", }}
+						>
+							<Card className="scrollable-menu" style={{ flex: 1, minHeight: 0, overflowY: 'auto' }}>
 								
 								{articles.length > 0 ? (
 									articles.map((article, i) => (
+										<>
 										<div className="dashboard-feed-board-article" key={i} style={{ marginBottom: '12px' }}>
 											<div className="briefing-source-row">
+
+												<div className="dashboard-source-title-left">
 												
-													<span
+													<div 
 														onClick={() => navigate(`/dashboard/source/${encodeURIComponent(article.source_name)}?scrollToTop=true`)}
 														className="dashboard-source"
 													>
 													{article.source_name}
-													</span>
+													</div>
 
-													<span>
+													<div>
 														<Tooltip
 															title={
 																!isauthenticated
@@ -334,40 +344,78 @@ const DashboardFeedBoardApp = () => {
 															}
 														/>
 														</Tooltip>
-														</span>
+														</div>
 														
-														<span 
+														<div
 															className="dashboard-title"
 															onClick={() => createClick(article)}
 														>
 														<a href={article.source_url} target="_blank">
 														<strong>{article.title}</strong>
 														</a>
-														</span>
-												
+														</div>
+														
+														</div>
+														<div className="dashboard-bookmark-stats-right">
+														<Popover 
+															placement="right"
+															content={<DashboardBookmarkFeedPopover
+																article={article}
+																setUserBookmarks={setUserBookmarks}
+																/>}
+															trigger='click'
+															color="rgba(26, 26, 26, 0.9)"
+														>
+														<StarOutlined
+															className="antd-home-icon"
+															style={{
+																marginLeft: 10,
+																marginRight: 10,
+																cursor: 'pointer',
+																color: !isauthenticated
+																	? "#868686"
+																	: userbookmarks.includes(article.id)
+																		? "#ffac00"
+																		: "#868686",
+															}}
+														/>
+														</Popover>
+														
+														<Popover
+															placement="right"
+															content={<ArticleStatsPopOverContent record={article} />} 
+															trigger='click'
+															color="rgba(26, 26, 26, 0.9)"
+														>	
+														<StockOutlined
+															className="antd-home-icon"
+															style={{ marginLeft: 10, color: "#868686" }} 
+														/>	
+														</Popover>
+													</div>
 												</div>
 												
 												<div style={{
-														marginTop: 10,
-														display: "flex",
-														justifyContent: "space-between",
-														alignItems: "center",
+													marginTop: 10,
+													display: "flex",
+													justifyContent: "space-between",
+													alignItems: "center",
 												}}>
 
-													<div style={{
-														display: "flex",
-														alignItems: "center",
-														flexWrap: "wrap",
-													}}>
-													{ usersettings.show_article_timestamp && (
-															<>
-															<span className="dashboard-feed-board-date">
-																{moment(article.date_posted).fromNow()}
-															</span>
-															</>
-														)}
+												<div style={{
+													display: "flex",
+													alignItems: "center",
+													flexWrap: "wrap",
+												}}>
+												{ usersettings.show_article_timestamp && (
+														<>
+														<span className="dashboard-feed-board-date">
+															{moment(article.date_posted).fromNow()}
+														</span>
+														</>
+													)}
 
-													{ usersettings.show_article_tags && (
+													{usersettings.show_article_tags && (
 														<>
 														<span 
 															onClick={(e) => {
@@ -395,59 +443,88 @@ const DashboardFeedBoardApp = () => {
 												}
 
 												</div>
-
-												<div className="dashboard-bookmark-stats-right">
-														<Popover 
-															placement="right"
-															content={<DashboardBookmarkFeedPopover
-																article={article}
-																setUserBookmarks={setUserBookmarks}
-																/>}
-															trigger='click'
-															color="rgba(26, 26, 26, 0.9)"
-														>
-														<StarOutlined
-															className="antd-home-icon"
-															style={{
-																marginLeft: 10,
-																cursor: 'pointer',
-																color: !isauthenticated
-																	? "#868686"
-																	: userbookmarks.includes(article.id)
-																		? "#ffac00"
-																		: "#868686",
-															}}
-														/>
-														</Popover>
-														
-														<Popover
-															placement="right"
-															content={<ArticleStatsPopOverContent record={article} />} 
-															trigger='click'
-															color="rgba(26, 26, 26, 0.9)"
-														>	
-														<StockOutlined
-															className="antd-home-icon"
-															style={{ marginLeft: 10, color: "#868686" }} 
-														/>	
-														</Popover>
-													</div>
 													
 												</div>
 												
 											<Divider />	
-	
+
 											</div>
+									</>
 										
-										)
+									)
 									)
 									) : (
-										<p>No articles found</p>
+										<>
+										<CompNoArticles />
+										</>
 									)}
 									
+										<div style={{ textAlign: "center", }}>
+											{hasMore && (
+												<Button
+														loading={loadingArticles}
+														onClick={loadMoreArticles}
+												>
+														Load More
+												</Button>
+
+												)}
+										</div>
 									</Card>
+
+									
 						</div>
 				
+				</Col>
+
+				<Col span={1}>
+				{selectedFeed.feed_type === "personal_feed" ? (
+					<>
+						
+							<div 
+								onClick={() => navigate(`/dashboard/briefing/editfeed/${selectedFeed.id}`)}
+							>
+								<ToolOutlined
+									style={{
+										marginTop: 5,
+										fontSize: 16,
+										color: "#969696",
+										cursor: 'pointer',
+									}}
+								/>
+							</div>
+
+						<div 
+							onClick={() => navigate(`/dashboard/briefing/editfeed/${selectedFeed.id}/delete-feed`)}
+						>
+						<DeleteOutlined 
+							style={{
+								marginTop: 10,
+								fontSize: 16,
+								color: "#969696",
+								cursor: 'pointer',
+							}}
+						/>
+						</div>
+
+					</>
+				) : (
+					<Tooltip title="Edit feed" placement="top">
+						<span
+							onClick={() => navigate(`/dashboard/settings`)}
+						>
+							<ToolOutlined
+								style={{
+									marginTop: 5,
+									fontSize: 16,
+									color: "#969696",
+									cursor: 'pointer',
+								}}
+							/>
+						</span>
+					</Tooltip>
+				)
+				}
 				</Col>
 
 				</Row>
