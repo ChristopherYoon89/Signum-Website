@@ -113,7 +113,6 @@ const DashboardBookmarkFeedAddApp = () => {
 	const [showalert, setShowAlert] = useState(false);
 	const [alertmessage, setAlertMessage] = useState('');
 	const [alerttype, setAlertType] = useState('');
-	const [alertdescription, setAlertDescription] = useState('');
 
 
 	const onChangeTitle = (value) => {
@@ -126,9 +125,8 @@ const DashboardBookmarkFeedAddApp = () => {
 	};
 
 
-	const onShowAlert = (message, description, type, show) => {
+	const onShowAlert = (message, type, show) => {
 		setAlertMessage(message);
-		setAlertDescription(description);
 		setAlertType(type)
 		setShowAlert(show);
 	};
@@ -147,13 +145,13 @@ const DashboardBookmarkFeedAddApp = () => {
 
 		if (!isTitleValid) {
 			window.scrollTo({top: 0,behavior: "smooth"});
-			onShowAlert('Error', 'Please provide a title for your feed', 'error', true);
+			onShowAlert('Please provide a title for your feed', 'error', true);
 			return;
 		};
 
 
 		if (isTitleValid) {
-			onShowAlert('', '', 'success', false);
+			onShowAlert('', 'success', false);
 		};
 		
 		try {
@@ -169,13 +167,13 @@ const DashboardBookmarkFeedAddApp = () => {
 			});
 			if (response.status === 201) {
 				window.scrollTo({top: 0,behavior: "smooth"});
-				onShowAlert('Success', 'Feed saved', 'success', true);
+				onShowAlert('Feed saved', 'success', true);
 				handleClearFields();
 			}
 		} catch(error) {
 			window.scrollTo({top: 0,behavior: "smooth"});
 			console.error('Failed to save feed');
-			onShowAlert('Error', 'Failed to save bookmark feed. Please try again later!', 'error', true);
+			onShowAlert('Failed to save bookmark feed. Please try again later!', 'error', true);
 		};
 	};
 
@@ -192,7 +190,6 @@ const DashboardBookmarkFeedAddApp = () => {
 						<div className='sig-form-alert'>
 						<Alert
 							message={alertmessage}
-							description={alertdescription}
 							type={alerttype}
 							showIcon
 						/>

@@ -117,6 +117,14 @@ const SidebarApp = () => {
 
 				<div
 					className="navigation-item"
+					onClick={() => handleClick("/dashboard/mysources/?scrollToTop=true")}
+				>
+					<NotificationOutlined className="navigation-item-icon" />
+					<span>My Sources</span>
+				</div>
+
+				<div
+					className="navigation-item"
 					onClick={() => handleClick('/?scrollToTop=true')}
 				>
 					<HomeOutlined className="navigation-item-icon" />

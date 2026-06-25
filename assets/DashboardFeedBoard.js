@@ -448,7 +448,7 @@ const DashboardFeedBoardApp = () => {
 												
 											<Divider />	
 
-											</div>
+										</div>
 									</>
 										
 									)
@@ -458,55 +458,44 @@ const DashboardFeedBoardApp = () => {
 										<CompNoArticles />
 										</>
 									)}
-									
-										<div style={{ textAlign: "center", }}>
-											{hasMore && (
+									{hasMore && (
+										<div style={{ textAlign: "center" }}>
 												<Button
 														loading={loadingArticles}
 														onClick={loadMoreArticles}
 												>
-														Load More
+												Load More
 												</Button>
-
-												)}
 										</div>
+									)}
 									</Card>
-
-									
 						</div>
-				
 				</Col>
 
 				<Col span={1}>
 				{selectedFeed.feed_type === "personal_feed" ? (
 					<>
-						
-							<div 
-								onClick={() => navigate(`/dashboard/briefing/editfeed/${selectedFeed.id}`)}
-							>
-								<ToolOutlined
-									style={{
-										marginTop: 5,
-										fontSize: 16,
-										color: "#969696",
-										cursor: 'pointer',
-									}}
-								/>
-							</div>
-
-						<div 
-							onClick={() => navigate(`/dashboard/briefing/editfeed/${selectedFeed.id}/delete-feed`)}
-						>
-						<DeleteOutlined 
-							style={{
-								marginTop: 10,
-								fontSize: 16,
-								color: "#969696",
-								cursor: 'pointer',
-							}}
-						/>
+						<div onClick={() => navigate(`/dashboard/briefing/editfeed/${selectedFeed.id}`)} >
+							<ToolOutlined
+								style={{
+									marginTop: 5,
+									fontSize: 16,
+									color: "#969696",
+									cursor: 'pointer',
+								}}
+							/>
 						</div>
 
+						<div onClick={() => navigate(`/dashboard/briefing/editfeed/${selectedFeed.id}/delete-feed`)} >
+							<DeleteOutlined 
+								style={{
+									marginTop: 12,
+									fontSize: 16,
+									color: "#969696",
+									cursor: 'pointer',
+								}}
+							/>
+						</div>
 					</>
 				) : (
 					<Tooltip title="Edit feed" placement="top">

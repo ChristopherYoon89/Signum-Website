@@ -439,6 +439,12 @@ legend {
 }
 
 
+.navbar-logout-form {
+	padding-bottom: 10;
+	margin-bottom: 0;
+}
+
+
 /* RESPONSIVE NAVBAR */
 
 @media (max-width: 768px) {
@@ -1134,7 +1140,7 @@ form label {
 
 
 .category-grid-container:hover {
-	transform: scale(1.05);
+	transform: scale(1.03);
 }
   
   

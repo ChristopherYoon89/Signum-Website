@@ -430,7 +430,6 @@ const DashboardFeedAddApp = () => {
 	const [showalert, setShowAlert] = useState(false);
 	const [alertmessage, setAlertMessage] = useState('');
 	const [alerttype, setAlertType] = useState('');
-	const [alertdescription, setAlertDescription] = useState('');
 	const [showmoretext, setShowMoreText] = useState('Show more filters');
 	const [showfilters, setShowFilters] = useState(false);
 
@@ -549,9 +548,8 @@ const DashboardFeedAddApp = () => {
 	};
 
 
-	const onShowAlert = (message, description, type, show) => {
+	const onShowAlert = (message, type, show) => {
 		setAlertMessage(message);
-		setAlertDescription(description);
 		setAlertType(type)
 		setShowAlert(show);
 	};
@@ -609,18 +607,18 @@ const DashboardFeedAddApp = () => {
 
 		if (!isTitleValid) {
 			window.scrollTo({top: 0,behavior: "smooth"});
-			onShowAlert('Error', 'Please provide a title for your feed', 'error', true);
+			onShowAlert('Please provide a title for your feed', 'error', true);
 			return;
 		};
 
 		if (!isFeedValid) {
 			window.scrollTo({top: 0,behavior: "smooth"});
-			onShowAlert('Error', 'Please apply at least one filter', 'error', true);
+			onShowAlert('Please apply at least one filter', 'error', true);
 			return;
 		};
 
 		if (isFeedValid && isTitleValid) {
-			onShowAlert('', '', 'success', false);
+			onShowAlert('', 'success', false);
 		};
 		
 		try {
@@ -650,13 +648,13 @@ const DashboardFeedAddApp = () => {
 			});
 			if (response.status === 201) {
 				window.scrollTo({top: 0,behavior: "smooth"});
-				onShowAlert('Success', 'Feed saved', 'success', true);
+				onShowAlert('Feed saved', 'success', true);
 				handleClearFields();
 			}
 		} catch(error) {
 			window.scrollTo({top: 0,behavior: "smooth"});
 			console.error('Failed to save feed');
-			onShowAlert('Error', 'Failed to save feed. Please try again later!', 'error', true);
+			onShowAlert('Failed to save feed. Please try again later!', 'error', true);
 		};
 	};
 
@@ -673,7 +671,6 @@ const DashboardFeedAddApp = () => {
 						<div className='sig-form-alert'>
 						<Alert
 							message={alertmessage}
-							description={alertdescription}
 							type={alerttype}
 							showIcon
 						/>

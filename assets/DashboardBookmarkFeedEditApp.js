@@ -133,7 +133,6 @@ const DashboardBookmarkFeedEditApp = () => {
 	const [showalert, setShowAlert] = useState(false);
 	const [alertmessage, setAlertMessage] = useState('');
 	const [alerttype, setAlertType] = useState('');
-	const [alertdescription, setAlertDescription] = useState('');
 	
 	const navigate = useNavigate();
 	const { feed_id } = useParams();
@@ -182,9 +181,8 @@ const DashboardBookmarkFeedEditApp = () => {
 	};
 
 
-	const onShowAlert = (message, description, type, show) => {
+	const onShowAlert = (message, type, show) => {
 		setAlertMessage(message);
-		setAlertDescription(description);
 		setAlertType(type)
 		setShowAlert(show);
 	};
@@ -202,12 +200,12 @@ const DashboardBookmarkFeedEditApp = () => {
 
 		if (!isTitleValid) {
 			window.scrollTo({top: 0,behavior: "smooth"});
-			onShowAlert('Error', 'Please provide a title for your feed', 'error', true);
+			onShowAlert('Please provide a title for your feed', 'error', true);
 			return;
 		};
 
 		if (isTitleValid) {
-			onShowAlert('', '', '', false);
+			onShowAlert('', '', false);
 		};
 		
 		try {
@@ -224,11 +222,11 @@ const DashboardBookmarkFeedEditApp = () => {
 		);
 		if (response.status === 200) {
 			window.scrollTo({top: 0,behavior: "smooth"});
-			onShowAlert('Success', 'Update saved', 'success', true);
+			onShowAlert('Update saved', 'success', true);
 		}
 		} catch (error) {
 			window.scrollTo({top: 0,behavior: "smooth"});
-			onShowAlert('Error', 'Failed to update feed', 'error', true);
+			onShowAlert('Failed to update feed', 'error', true);
 		}
 	};
 
@@ -245,7 +243,6 @@ const DashboardBookmarkFeedEditApp = () => {
 						<div className='sig-form-alert'>
 						<Alert
 							message={alertmessage}
-							description={alertdescription}
 							type={alerttype}
 							showIcon
 						/>

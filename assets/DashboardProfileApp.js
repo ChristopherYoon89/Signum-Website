@@ -146,6 +146,8 @@ const CompMore = ({
 				newpassword,
 				oldpassword,
 				passworddelete,
+				newpasswordconfirm,
+				onChangeInputNewPasswordConfirm
 			}) => {
 	return(
 		<>
@@ -196,6 +198,9 @@ const CompMore = ({
 						/>
 					</div>
 				</Col>
+				</Row>
+
+				<Row style={{ marginTop: 25, }}>
 				<Col span={12}>
 					<>
 						<div className="sig-form-header">
@@ -222,6 +227,40 @@ const CompMore = ({
 						</div>
 					</>
 				</Col>
+				</Row> 
+
+				<Row style={{ marginTop: 25, }}>
+				<Col span={12}>
+					<>
+						<div className="sig-form-header">
+							Confirm new password
+							<span>
+								<Tooltip
+									placement='right'
+									title='Your password cannot be too similar to your other personal information.
+												Your password must contain at least 8 characters.
+												Your password cannot be a commonly used password.
+												Your password cannot be entirely numeric.'
+								>
+								<QuestionCircleOutlined className="sig-form-info-icon"	/>
+								</Tooltip>
+							</span>
+						</div>
+						<div className="sig-form-input">
+							<Input.Password
+								placeholder="Confirm new password" 
+								style={{ width: 400, }}
+								value={newpasswordconfirm}
+								onChange={onChangeInputNewPasswordConfirm}
+							/>
+						</div>
+					</>
+				</Col>
+
+				</Row>
+
+				<Row>
+
 				<Button 
 					type="primary"
 					style={{ marginTop: 35, }}
@@ -322,6 +361,7 @@ const DashboardProfileApp = () => {
 	const [profileimageurl, setProfileImageUrl] = useState(user.profile_image_url);
 	const [email, setEmail] = useState(user.email);
 	const [newpassword, setNewPassword] = useState('');
+	const [newpasswordconfirm, setNewPasswordConfirm] = useState('');
 	const [oldpassword, setOldPassword] = useState('');
 	const [passworddelete, setPasswordDelete] = useState('');
 	const [passworduserupdate, setPasswordUserUpdate] = useState('');
@@ -332,7 +372,6 @@ const DashboardProfileApp = () => {
 	const [showalert, setShowAlert] = useState(false);
 	const [alertmessage, setAlertMessage] = useState('');
 	const [alerttype, setAlertType] = useState('');
-	const [alertdescription, setAlertDescription] = useState('');
 
 
 	const onChangeInputUserName = (input) => {
@@ -359,6 +398,11 @@ const DashboardProfileApp = () => {
 	};
 
 
+	const onChangeInputNewPasswordConfirm = (e) => {
+		setNewPasswordConfirm(e.target.value);
+	};
+
+
 	const onClickShowPassword = () => {
 		setIsPasswordContainerVisible(!ispasswordcontainervisible);
 	};
@@ -379,9 +423,8 @@ const DashboardProfileApp = () => {
 	};
 
 
-	const onShowAlert = (message, description, type, show) => {
+	const onShowAlert = (message, type, show) => {
 		setAlertMessage(message);
-		setAlertDescription(description);
 		setAlertType(type)
 		setShowAlert(show);
 	};
@@ -400,6 +443,12 @@ const DashboardProfileApp = () => {
 	};
 
 
+	const isPasswordMatchPasswordConfirm = (password, passwordconfirm) => {
+		if (password === passwordconfirm) return true;
+		return false 
+	}
+
+
 	const onChangeUserPassword = async (e) => {
 		if (!isauthenticated) return; 
 
@@ -407,10 +456,17 @@ const DashboardProfileApp = () => {
 		onShowAlert('', '', '', false);
 
 		const isnewpasswordvalid = isPasswordValid(newpassword);
+		const isnewpasswordconfirmed = isPasswordMatchPasswordConfirm(newpassword, newpasswordconfirm);
 
 		if (!isnewpasswordvalid) {
 			window.scrollTo({top: 0,behavior: "smooth"});
-			onShowAlert("Error", "Provide a valid password", "error", true);
+			onShowAlert("Provide a valid password", "error", true);
+			return;
+		};
+
+		if (!isnewpasswordconfirmed) {
+			window.scrollTo({top: 0, behavior: 'smooth'});
+			onShowAlert("Password and confirmed password don't match", "error", true);
 			return;
 		};
 
@@ -429,15 +485,17 @@ const DashboardProfileApp = () => {
 				window.scrollTo({top: 0, behavior: 'smooth'});
 				setOldPassword('');
 				setNewPassword('');
-				onShowAlert("Success", "Password successfully updated", "success", true);
+				setNewPasswordConfirm('');
+				onShowAlert("Password successfully updated", "success", true);
 			};
 		} catch (e) {
 			console.error(e);
 			if (e.response?.data?.error) {
 				window.scrollTo({top: 0, behavior: 'smooth'});
-      	onShowAlert("Error", `${e.response.data.error}`, "error", true);
+      	onShowAlert(`${e.response.data.error}`, "error", true);
 				setOldPassword('');
 				setNewPassword('');
+				setNewPasswordConfirm('');
 			};
 		};
 	};
@@ -454,7 +512,7 @@ const DashboardProfileApp = () => {
 		const isValidType = allowedTypes.includes(file.type);
 
 		if (!isValidType) {
-			onShowAlert('Error', `${file.name} is not a valid image file.`, 'error', true);
+			onShowAlert(`${file.name} is not a valid image file.`, 'error', true);
 			return;
 		}
 
@@ -474,10 +532,10 @@ const DashboardProfileApp = () => {
 			);
 			if (response.status === 200) {
 			setProfileImageUrl(response.data.image_url);
-			onShowAlert('Success', 'Profile image successfully updated', 'success', true);
+			onShowAlert('Profile image successfully updated', 'success', true);
 			}
 		} catch (error) {
-			onShowAlert('Error', 'Profile image update failed', 'error', true);
+			onShowAlert('Profile image update failed', 'error', true);
 		}
 	};
 
@@ -490,23 +548,23 @@ const DashboardProfileApp = () => {
 
 		if (!isusernamevalid) {
 			window.scrollTo({top: 0,behavior: "smooth"});
-			onShowAlert("Error", "Provide a valid username", "error", true);
+			onShowAlert("Provide a valid username", "error", true);
 			return;
 		};
 
 		if (!isemailvalid) {
 			window.scrollTo({top: 0, behavior: "smooth"});
-			onShowAlert("Error", "Provide a valid email", "error", true);
+			onShowAlert("Provide a valid email", "error", true);
 			return;
 		};
 
 		if (!passworduserupdate || passworduserupdate.length === 0) {
-			onShowAlert("Error", "Please confirm with your password", "error", true);
+			onShowAlert("Please confirm with your password", "error", true);
 			return;
 		};
 
 		if (isusernamevalid && isemailvalid) {
-			onShowAlert('', '', '', false);
+			onShowAlert('', '', false);
 		};
 
     try{
@@ -525,7 +583,7 @@ const DashboardProfileApp = () => {
       if (response.status === 200) {
 				window.scrollTo({top: 0, behavior: 'smooth'});
 				setPasswordUserUpdate('');
-				onShowAlert("Success", "User data successfully updated", "success", true);
+				onShowAlert("User data successfully updated", "success", true);
       };
 			
     } catch (e) {
@@ -533,7 +591,7 @@ const DashboardProfileApp = () => {
 			if (e.response?.data?.error) {
 				window.scrollTo({top: 0, behavior: 'smooth'});
 				setPasswordUserUpdate('');
-      	onShowAlert("Error", `${e.response.data.error}`, "error", true);
+      	onShowAlert(`${e.response.data.error}`, "error", true);
 			};
     };
   };
@@ -565,12 +623,12 @@ const DashboardProfileApp = () => {
 				window.URL.revokeObjectURL(url);
 
 				window.scrollTo({top: 0, behavior: 'smooth'});
-				onShowAlert('Success', 'User data successfully downloaded', 'success', true);
+				onShowAlert('User data successfully downloaded', 'success', true);
 			}
 		} catch (e) {
 			if (e.response?.data?.error) {
 				window.scrollTo({top: 0, behavior: 'smooth'});
-      	onShowAlert("Error", `${e.response.data.error}`, "error", true);
+      	onShowAlert(`${e.response.data.error}`, "error", true);
 			};
 		};
 	};
@@ -598,7 +656,7 @@ const DashboardProfileApp = () => {
 				e.response?.data?.error ||
 				"Failed to deactivate account";
 			window.scrollTo({top: 0, behavior: 'smooth'});
-			onShowAlert("Error", `${message}`, "error", true);
+			onShowAlert(`${message}`, "error", true);
 			setPasswordDelete('');
 		};
 	};
@@ -611,17 +669,16 @@ const DashboardProfileApp = () => {
 					style={{ borderColor: '#FFF', }}
 					bodyStyle={{ paddingTop: 10, paddingLeft: 10, }}
 				>
-				
-				{showalert && (
+
+					{showalert && (
 						<div className='sig-form-alert'>
-						<Alert
-							message={alertmessage}
-							description={alertdescription}
-							type={alerttype}
-							showIcon
-						/>
-						</div>
-					)}
+							<Alert
+								message={alertmessage}
+								type={alerttype}
+								showIcon
+							/>
+							</div>
+						)}
 
 				<Row>
 					<Col span={22}>
@@ -636,12 +693,10 @@ const DashboardProfileApp = () => {
 
 				<Row>
 					<Col span={12}>
-
 						<CompInputUserName 
 							username={username}
 							onChangeInputUserName={onChangeInputUserName}
 						/>
-
 					</Col>
 					<Col span={12}>
 						<CompInputEmail 
@@ -662,37 +717,44 @@ const DashboardProfileApp = () => {
 				
 				<Row style={{ marginTop: 35, }}>
 					<Col span={12}>
+					<div
+						style={{
+								display: 'flex',
+								alignItems: 'center',
+								gap: 10,
+						}}
+					>
 						<Button 
-							type="primary"
+							type="primary" 
 							onClick={UpdateUserData}
 						>
 						Save Changes
 						</Button>
+
+						</div>
 					</Col>		
 				</Row>
 
 				<Divider />
 
-				<Row style={{ marginTop: 35, }}>
-					<Col span={24}>
-						<CompMore 
-							ispasswordcontainervisible={ispasswordcontainervisible}
-							onClickShowPassword={onClickShowPassword}
-							onChangeInputOldPassword={onChangeInputOldPassword}
-							onChangeInputNewPassword={onChangeInputNewPassword}
-							newpassword={newpassword}
-							oldpassword={oldpassword}
-							onChangeUserPassword={onChangeUserPassword}
-							onClickShowDeleteAccount={onClickShowDeleteAccount}
-							isdeleteaccountvisible={isdeleteaccountvisible}
-							onClickDonateBitcoin={onClickDonateBitcoin}
-							onDownloadUserData={onDownloadUserData}
-							onChangeInputPasswordDeleteAccount={onChangeInputPasswordDeleteAccount}
-							onChangeDeactivateAccount={onChangeDeactivateAccount}
-							passworddelete={passworddelete}
-						/>
-					</Col>	
-				</Row>				
+				<CompMore 
+					ispasswordcontainervisible={ispasswordcontainervisible}
+					onClickShowPassword={onClickShowPassword}
+					onChangeInputOldPassword={onChangeInputOldPassword}
+					onChangeInputNewPassword={onChangeInputNewPassword}
+					newpassword={newpassword}
+					oldpassword={oldpassword}
+					onChangeUserPassword={onChangeUserPassword}
+					onClickShowDeleteAccount={onClickShowDeleteAccount}
+					isdeleteaccountvisible={isdeleteaccountvisible}
+					onClickDonateBitcoin={onClickDonateBitcoin}
+					onDownloadUserData={onDownloadUserData}
+					onChangeInputPasswordDeleteAccount={onChangeInputPasswordDeleteAccount}
+					onChangeDeactivateAccount={onChangeDeactivateAccount}
+					passworddelete={passworddelete}
+					newpasswordconfirm={newpasswordconfirm}
+					onChangeInputNewPasswordConfirm={onChangeInputNewPasswordConfirm}
+				/>
 				</Card>
 			</Layout>
 		</>

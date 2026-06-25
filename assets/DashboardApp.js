@@ -36,7 +36,7 @@ function getCookie(name) {
   
 var csrftoken = getCookie('csrftoken');
 
-function getItem(label, key, icon, children, type, url, title) {
+function getItem(label, key, icon, children, type, url, pageTitle) {
 	return {
 		key,
 		icon,
@@ -44,7 +44,7 @@ function getItem(label, key, icon, children, type, url, title) {
 		label, 
 		type,
 		url,
-		title,
+		pageTitle,
 	};
 }
 
@@ -161,7 +161,7 @@ const DashboardApp = () => {
 		if (decodedPath.startsWith('/dashboard/search')) return setTitle('Search');
 
 		if (item) {
-			setTitle(item.title);
+			setTitle(item.pageTitle);
 			return;
 		}
 

@@ -52,7 +52,6 @@ const SettingsApp = () => {
 	const [showalert, setShowAlert] = useState(false);
 	const [alertmessage, setAlertMessage] = useState('');
 	const [alerttype, setAlertType] = useState('');
-	const [alertdescription, setAlertDescription] = useState('');
 
 	const { isauthenticated, user, usersettings, setUserSettings } = useAuth();
 
@@ -215,8 +214,7 @@ const SettingsApp = () => {
 			if (response.status === 200) {
 				window.scrollTo({top: 0,behavior: "smooth"});
 				setAlertType("success");
-				setAlertMessage("Success");
-				setAlertDescription("Settings successfully updated");
+				setAlertMessage("Settings successfully updated");
 				setShowAlert(true);
 				}
 				setUserSettings(prev => ({
@@ -231,8 +229,7 @@ const SettingsApp = () => {
 		} catch (error) {
 			window.scrollTo({top: 0,behavior: "smooth"});
 			setAlertType("error");
-			setAlertMessage("Error");
-			setAlertDescription("Update of settings failed");
+			setAlertMessage("Update of settings failed");
 			setShowAlert(true);
 			console.log("Failed to save settings");
 		};
@@ -249,7 +246,6 @@ const SettingsApp = () => {
 					<div className='sig-form-alert'>
 					<Alert
 						message={alertmessage}
-						description={alertdescription}
 						type={alerttype}
 						showIcon
 					/>

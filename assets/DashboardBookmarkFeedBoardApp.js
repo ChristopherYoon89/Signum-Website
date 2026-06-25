@@ -266,7 +266,6 @@ const DashboardBookmarkFeedBoardApp = () => {
 	};
 
 
-
 	const onNavigateAddBookmarkFeed = () => {
 		navigate('/dashboard/bookmarks/addfeed/');
 	};
@@ -326,9 +325,7 @@ const DashboardBookmarkFeedBoardApp = () => {
 							</>
 						)
 						}
-				</div>
-
-				 
+				</div>				 
 				
 				</Col>
 
@@ -349,7 +346,6 @@ const DashboardBookmarkFeedBoardApp = () => {
 									<>
 										<div className="dashboard-feed-board-article" key={i} style={{ marginBottom: '12px' }}>
 											<div className="briefing-source-row" >
-
 												<div className="dashboard-source-title-left">
 												
 													<div 
@@ -390,10 +386,7 @@ const DashboardBookmarkFeedBoardApp = () => {
 														</Tooltip>
 														</div>
 
-														<div  
-															className="dashboard-title"
-															onClick={() => countClick(article)} 
-														>
+														<div className="dashboard-title" onClick={() => countClick(article)} >
 														<a href={article.source_url} target="_blank">
 														<strong>{article.title}</strong>
 														</a>
@@ -511,17 +504,17 @@ const DashboardBookmarkFeedBoardApp = () => {
 								</>
 							)}
 
-									<div style={{ textAlign: "center", }}>
-										{hasMore && (
-											<Button
-												loading={loadingArticles}
-												onClick={loadMoreArticles}
-											>
-											Load More
-											</Button>
+							<div style={{ textAlign: "center", }}>
+								{hasMore && (
+									<Button
+										loading={loadingArticles}
+										onClick={loadMoreArticles}
+									>
+									Load More
+									</Button>
+								)}
+							</div>
 
-											)}
-									</div>
 					</Card>
 
 					</div>
@@ -530,9 +523,7 @@ const DashboardBookmarkFeedBoardApp = () => {
 
 				<Col span={1}>
 					<>
-						<div 
-							onClick={() => navigate(`/dashboard/bookmarks/editfeed/${selectedFeed.id}`)}
-						>
+						<div onClick={() => navigate(`/dashboard/bookmarks/editfeed/${selectedFeed.id}`)} >
 							<ToolOutlined
 								style={{
 									marginTop: 5,
@@ -543,21 +534,18 @@ const DashboardBookmarkFeedBoardApp = () => {
 							/>
 						</div>
 
-						<div 
-							onClick={() => navigate(`/dashboard/bookmarks/editfeed/${selectedFeed.id}/delete-feed`)}
-						>
-						<DeleteOutlined 
-							style={{
-								marginTop: 10,
-								fontSize: 16,
-								color: "#969696",
-								cursor: 'pointer',
-							}}
-						/>
+						<div onClick={() => navigate(`/dashboard/bookmarks/editfeed/${selectedFeed.id}/delete-feed`)} >
+							<DeleteOutlined 
+								style={{
+									marginTop: 12,
+									fontSize: 16,
+									color: "#969696",
+									cursor: 'pointer',
+								}}
+							/>
 						</div>
 					</>
 				</Col>
-
 				</Row>
 				</Layout>	
 				)}

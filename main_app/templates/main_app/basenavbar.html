@@ -51,7 +51,7 @@
 				<a class="dd-item" href="/dashboard/briefing">
 					Dashboard
 				</a>
-				<form method="post" action="{% url 'logout-page' %}">
+				<form method="post" action="{% url 'logout-page' %}" class="navbar-logout-form">
 					{% csrf_token %}
 					<button type="submit" class="dd-item">
 						Logout
