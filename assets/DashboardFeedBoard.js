@@ -21,9 +21,8 @@ import {
 	DeleteOutlined,
 	ControlOutlined,
 } from '@ant-design/icons';
-import Axios from "axios";
 import axios from 'axios';
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useAuth } from "./AuthProvider.js";
 import ArticleStatsPopOverContent from './StatsNewsArticle.js';
 import moment from 'moment';
@@ -70,14 +69,12 @@ const DashboardFeedBoardApp = () => {
 	const { isauthenticated, user, usersettings } = useAuth();
 
 	const [feeds, setFeeds] = useState([]);
-	const [selectedFeedId, setSelectedFeedId] = useState(null);
 	const [selectedFeed, setSelectedFeed] = useState(null);
 	const [articles, setArticles] = useState([]);
 	const [page, setPage] = useState(1);
 	const [hasMore, setHasMore] = useState(false);
 	const [loadingArticles, setLoadingArticles] = useState(false);
 
-	const navigate = useNavigate();
 
 	const handleSelectedFeed = async (feed) => {
     setSelectedFeed(feed);
@@ -94,11 +91,11 @@ const DashboardFeedBoardApp = () => {
 		
 		const fetchUserBookmarks = async () => {
 			try {
-				const response = await Axios.get(`/api/UserBookmarks/`);
+				const response = await axios.get(`/api/UserBookmarks/`);
 				const bookmarks = response.data.map(row => row.newsarticle_bookmarked);
 				setUserBookmarks(bookmarks);
 			} catch (error) {
-				console.error("Failed to fetch user bookmarks");
+				console.error("Failed to fetch user bookmarks", error);
 			}
 		};
 		fetchUserBookmarks();
@@ -112,7 +109,7 @@ const DashboardFeedBoardApp = () => {
 		}
 		const fetchUserFollows = async () => {
 			try {
-				const response = await Axios.get(`/api/SourceUserFollowsAll/`);
+				const response = await axios.get(`/api/SourceUserFollowsAll/`);
 				const follows = response.data.map(row => row.source);
 				setUserFollows(follows);
 			} catch(error) {
@@ -135,7 +132,7 @@ const DashboardFeedBoardApp = () => {
 				: [...prev, source_id]
 		);
 		try {
-			const response = await Axios.post(`/api/SourceUserFollowToggle/`,
+			const response = await axios.post(`/api/SourceUserFollowToggle/`,
 				{ source: source_id,	},
 				{ headers: { 'X-CSRFToken': csrftoken } }
 			);
@@ -158,7 +155,7 @@ const DashboardFeedBoardApp = () => {
 
 	const createClick = async (record) => {
 		try {
-			const response = await Axios.post(`/api/UserClick/`,
+			const response = await axios.post(`/api/UserClick/`,
 				{ newsarticle: Number(record.id) },
 				{ 
 					withCredentials: true,
@@ -272,20 +269,25 @@ const DashboardFeedBoardApp = () => {
 				>
 
 					<div className="dashboard-feeds-container">
-
-					{feeds.map(feed => (
-						<div
-							key={feed.id}
-							onClick={() => handleSelectedFeed(feed)}
-							className={`feed-item ${selectedFeed.id === feed.id ? "active" : ""}`}
-						>
-						<div className="dashboard-feed-board-title">
-						{feed.title}
-						</div>
-						</div>
-					))}
-
-						</div>
+						{ feeds.length > 0 ? (						
+							feeds.map(feed => (
+							<div
+								key={feed.id}
+								onClick={() => handleSelectedFeed(feed)}
+								className={`feed-item ${selectedFeed.id === feed.id ? "active" : ""}`}
+							>
+							<div className="dashboard-feed-board-title">
+							{feed.title}
+							</div>
+							</div>
+						))) : (
+							<>
+								<div className="dashboard-feed-board-title">
+								No feed displayed
+								</div>
+							</>
+						)}
+					</div>
 				
 				</Col>
 						
@@ -295,7 +297,6 @@ const DashboardFeedBoardApp = () => {
 							display: 'flex'
 					}}>
 						<div className="article-panel"
-							
 							style={{ display: "flex", flexDirection: "column", minHeight: 0, width: "100%", }}
 						>
 							<Card className="scrollable-menu" style={{ flex: 1, minHeight: 0, overflowY: 'auto' }}>
@@ -307,13 +308,12 @@ const DashboardFeedBoardApp = () => {
 											<div className="briefing-source-row">
 
 												<div className="dashboard-source-title-left">
-												
-													<div 
-														onClick={() => navigate(`/dashboard/source/${encodeURIComponent(article.source_name)}?scrollToTop=true`)}
-														className="dashboard-source"
-													>
+
+													<Link to={`/dashboard/source/${encodeURIComponent(article.source_name)}?scrollToTop=true`}>				
+													<div className="dashboard-source">
 													{article.source_name}
 													</div>
+													</Link>
 
 													<div>
 														<Tooltip
@@ -417,27 +417,17 @@ const DashboardFeedBoardApp = () => {
 
 													{usersettings.show_article_tags && (
 														<>
-														<span 
-															onClick={(e) => {
-																navigate(`/dashboard/tag/${encodeURIComponent(article.tag1)}?scrollToTop=true`);
-																}}
-															>
-														<Tag className="table-tag" color={"purple"}>{article.tag1}</Tag>
-														</span>
-														<span
-															onClick={(e) => {
-																navigate(`/dashboard/tag/${encodeURIComponent(article.tag2)}?scrollToTop=true`);
-																}}
-															>
+														<Link to={`/dashboard/tag/${encodeURIComponent(article.tag1)}?scrollToTop=true`}>	
+														<Tag className="table-tag" color={"purple"}>{article.tag1}</Tag>													
+														</Link>
+
+														<Link to={`/dashboard/tag/${encodeURIComponent(article.tag2)}?scrollToTop=true`}>
 														<Tag className="table-tag" color={"green"}>{article.tag2}</Tag>
-														</span>
-														<span
-															onClick={(e) => {
-																navigate(`/dashboard/tag/${encodeURIComponent(article.tag3)}?scrollToTop=true`);
-																}}
-															>
+														</Link>
+
+														<Link to={`/dashboard/tag/${encodeURIComponent(article.tag3)}?scrollToTop=true`}>
 														<Tag className="table-tag" color={"blue"}>{article.tag3}</Tag>
-														</span>
+														</Link>
 														</>
 													)
 												}
@@ -473,9 +463,12 @@ const DashboardFeedBoardApp = () => {
 				</Col>
 
 				<Col span={1}>
-				{selectedFeed.feed_type === "personal_feed" ? (
+				{ feeds.length > 0 && (
+					
+					selectedFeed.feed_type === "personal_feed" ? (
 					<>
-						<div onClick={() => navigate(`/dashboard/briefing/editfeed/${selectedFeed.id}`)} >
+						<div>
+						<Link to={`/dashboard/briefing/editfeed/${selectedFeed.id}`}>
 							<ToolOutlined
 								style={{
 									marginTop: 5,
@@ -484,9 +477,12 @@ const DashboardFeedBoardApp = () => {
 									cursor: 'pointer',
 								}}
 							/>
+							
+						</Link>
 						</div>
-
-						<div onClick={() => navigate(`/dashboard/briefing/editfeed/${selectedFeed.id}/delete-feed`)} >
+						
+						<div>
+						<Link to={`/dashboard/briefing/editfeed/${selectedFeed.id}/delete-feed`}>
 							<DeleteOutlined 
 								style={{
 									marginTop: 12,
@@ -495,13 +491,11 @@ const DashboardFeedBoardApp = () => {
 									cursor: 'pointer',
 								}}
 							/>
+						</Link>
 						</div>
 					</>
 				) : (
-					<Tooltip title="Edit feed" placement="top">
-						<span
-							onClick={() => navigate(`/dashboard/settings`)}
-						>
+						<Link to={`/dashboard/settings`}>
 							<ToolOutlined
 								style={{
 									marginTop: 5,
@@ -510,9 +504,8 @@ const DashboardFeedBoardApp = () => {
 									cursor: 'pointer',
 								}}
 							/>
-						</span>
-					</Tooltip>
-				)
+						</Link>
+				))
 				}
 				</Col>
 

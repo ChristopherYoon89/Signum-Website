@@ -10,7 +10,7 @@ import {
 	UserOutlined,
 	ReadOutlined,
 } from '@ant-design/icons';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useAuth } from "./AuthProvider.js";
 
 
@@ -37,26 +37,6 @@ var csrftoken = getCookie('csrftoken');
 const SidebarApp = () => {
 	const { isauthenticated, user } = useAuth();
 	const profileImage = user?.profile_image_url;
-
-
-	console.log("User:", user);
-	console.log("Profile image:", user?.profile_image_url);
-
-	const navigate = useNavigate();
-
-	const handleClick = (route) => {
-		navigate(route);
-  };
-
-
-	const handleDashboardClick = () => {
-		if (!isauthenticated) {
-			window.location.href = window.DJANGO_URLS.login;
-			return; 
-		}
-		navigate("/?scrollToTop=true")
-	};
-
 
 	const handleAuthClick = async () => {
 		if (isauthenticated) {
@@ -90,46 +70,41 @@ const SidebarApp = () => {
 					}}/>} />
 					<span>{isauthenticated ? "Logout" : "Login"}</span>
 				</div>
-
-				<div
-					className="navigation-item"
-					onClick={() => handleClick("/dashboard/briefing?scrollToTop=true")}
-				>
+				
+				<Link to={"/dashboard/briefing?scrollToTop=true"}>
+				<div className="navigation-item">
 					<AppstoreAddOutlined className="navigation-item-icon" />
 					<span class="side-nav-text">Briefing</span>
 				</div>
-
-				<div
-					className="navigation-item"
-					onClick={() => handleClick("/dashboard/bookmarks/?scrollToTop=true")}
-				>
-					<StarOutlined className="navigation-item-icon" />
-					<span>Bookmarks</span>
+				</Link>
+				
+				<Link to={"/dashboard/bookmarks/?scrollToTop=true"}>
+				<div className="navigation-item">
+				<StarOutlined className="navigation-item-icon" />
+				<span>Bookmarks</span>
 				</div>
-
-				<div
-					className="navigation-item"
-					onClick={() => handleClick("/dashboard/category/All-Articles?scrollToTop=true")}
-				>
-					<ReadOutlined className="navigation-item-icon" />
-					<span class="side-nav-text">Articles</span>
+				</Link>
+				
+				<Link to={"/dashboard/category/All-Articles?scrollToTop=true"}>
+				<div className="navigation-item">
+				<ReadOutlined className="navigation-item-icon" />
+				<span class="side-nav-text">Articles</span>
 				</div>
-
-				<div
-					className="navigation-item"
-					onClick={() => handleClick("/dashboard/mysources/?scrollToTop=true")}
-				>
-					<NotificationOutlined className="navigation-item-icon" />
-					<span>My Sources</span>
+				</Link>
+				
+				<Link to={"/dashboard/mysources/?scrollToTop=true"}>
+				<div className="navigation-item">
+				<NotificationOutlined className="navigation-item-icon" />
+				<span>My Sources</span>
 				</div>
-
-				<div
-					className="navigation-item"
-					onClick={() => handleClick('/?scrollToTop=true')}
-				>
-					<HomeOutlined className="navigation-item-icon" />
-					<span class="side-nav-text">Home</span>
+				</Link>
+				
+				<Link to={'/?scrollToTop=true'}>
+				<div className="navigation-item">
+				<HomeOutlined className="navigation-item-icon" />
+				<span class="side-nav-text">Home</span>
 				</div>
+				</Link>
 
 			</div>
 		</>

@@ -10,7 +10,7 @@ import {
 	Popover,
  } from 'antd';
 import Axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
 		RightOutlined,
 		LeftOutlined,
@@ -49,7 +49,6 @@ const PopArticles = ({
 		setUserBookmarks,
 		DashboardBookmarkFeedPopover,
 		ArticleStatsPopOverContent,
-		navigate
 	}) => {
 
 	return(
@@ -69,21 +68,23 @@ const PopArticles = ({
 						>
 
 						</span>
+						
+						<Link to={`/dashboard/source/${encodeURIComponent(article.source_name)}?scrollToTop=true`}>
 						<span 
 							className="home-indicators-article-sourcename"
-							onClick={() => navigate(`/dashboard/source/${encodeURIComponent(article.source_name)}?scrollToTop=true`)}
 						>
 						{article.source_name}
 						</span>
+						</Link>
 						<span className="home-indicators-article-title"> | <a href={article.source_url} target="_blank" rel="noopener noreferrer">{article.title}</a></span> 
 					
 						<p style={{ marginTop: 2, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
 
-							<span className="home-article-tags">
-								<span className="ant-home-date">
-								{moment(article.date_posted).fromNow()}
+							
+							<span className="ant-home-date">
+							{moment(article.date_posted).fromNow()}
 							</span>
-							</span>
+							
 							<span>
 								
 								<Popover 
@@ -112,7 +113,7 @@ const PopArticles = ({
 									placement="right"
 									content={<ArticleStatsPopOverContent record={article} />} 
 									trigger='click'
-									color="rgb(24, 24, 24)"
+									color="rgba(26, 26, 26, 0.9)"
 								>
 								<StockOutlined className="antd-home-icon" style={{ marginLeft: 25 }} />
 								</Popover>
@@ -131,7 +132,7 @@ const PopArticles = ({
 };
 
 	
-const StatsHomeTags = ({ tagstabledata, navigate }) => {
+const StatsHomeTags = ({ tagstabledata }) => {
 	
 	const colors = [
 		"#5e5e5e", 
@@ -146,16 +147,13 @@ const StatsHomeTags = ({ tagstabledata, navigate }) => {
 				>
 					<div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
 					{tagstabledata.map((tag, index) => (
-						<span
-							onClick={(e) => {
-								e.stopPropagation(); 
-								navigate(`/dashboard/tag/${encodeURIComponent(tag)}?scrollToTop=true`);
-								}}
-						>
+						<Link to={`/dashboard/tag/${encodeURIComponent(tag)}?scrollToTop=true`}>
+						
 						<Tag key={index} className="table-tag" color={colors[index % colors.length]}>
 							{tag}
 						</Tag>
-						</span>
+						
+						</Link>
 					))}
 				</div>		
 			</Card>
@@ -178,7 +176,6 @@ const StatsHomeIndicators = ({
 	const [tagstabledata, setTagsData] = useState([]);
 	const [poparticlesdata, setPopArticlesData] = useState([]);
 	const scrollContainerRef = useRef(null);
-	const navigate = useNavigate();
 
 
 	useEffect(() => {
@@ -193,19 +190,6 @@ const StatsHomeIndicators = ({
 			};
 			getOverallData();
 		}, []);
-
-
-	const scrollRight = () => {
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollBy({ left: 360, behavior: 'smooth' }); // scroll by column width + gutter
-    }
-  };
-
-  const scrollLeft = () => {
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollBy({ left: -360, behavior: 'smooth' });
-    }
-  };
 
 
 	return (
@@ -224,13 +208,11 @@ const StatsHomeIndicators = ({
 								setUserBookmarks={setUserBookmarks}
 								DashboardBookmarkFeedPopover={DashboardBookmarkFeedPopover}
 								ArticleStatsPopOverContent={ArticleStatsPopOverContent}
-								navigate={navigate}
 							/>
 						</Col>
 						<Col xs={24} sm={12} md={12}>
 							<StatsHomeTags 
 								tagstabledata={tagstabledata}
-								navigate={navigate}
 							/>
 						</Col>
 					</div>

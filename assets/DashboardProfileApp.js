@@ -57,7 +57,7 @@ const CompUploadImage = ({ onChangeProfilePic, profileImage }) => {
 					showUploadList={false}
 					onChange={onChangeProfilePic}
 				>
-				<Button icon={<UploadOutlined style={{ display: 'inline-flex' }}/>}>Click to Upload</Button>
+				<Button icon={<UploadOutlined style={{ display: 'inline-flex' }}/>}>Upload</Button>
 				</Upload>
 			</span>
 			</div>

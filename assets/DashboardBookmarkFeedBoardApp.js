@@ -23,7 +23,7 @@ DeleteOutlined,
 } from '@ant-design/icons';
 import axios from "axios";
 import moment from 'moment';
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { useAuth } from "./AuthProvider.js";
 import ArticleStatsPopOverContent from './StatsNewsArticle.js';
 import DashboardBookmarkFeedPopover from './DashboardBookmarkFeedPopover.js';
@@ -48,7 +48,7 @@ function getCookie(name) {
 var csrftoken = getCookie('csrftoken');
 
 
-const CompNoBookmarkedArticles = ({ onNavigateAddBookmarkFeed }) => {
+const CompNoBookmarkedArticles = () => {
 	return(
 		<>
 			<div className="nobookmark-icon-container">
@@ -62,7 +62,7 @@ const CompNoBookmarkedArticles = ({ onNavigateAddBookmarkFeed }) => {
 
 
 
-const CompNoBookmarkFeed = ({ onNavigateAddBookmarkFeed }) => {
+const CompNoBookmarkFeed = () => {
 	return(
 		<>
 			<div className="nobookmark-icon-container">
@@ -71,10 +71,7 @@ const CompNoBookmarkFeed = ({ onNavigateAddBookmarkFeed }) => {
 				</p>
 
 				<p style={{ marginTop: 0, }}>
-					<Button
-						type="primary"
-						onClick={() => onNavigateAddBookmarkFeed()}
-					>
+					<Button type="primary">
 					Create bookmark list
 					</Button>
 				</p>
@@ -97,24 +94,9 @@ const DashboardBookmarkFeedBoardApp = () => {
 	const [page, setPage] = useState(1); 
 	const [hasMore, setHasMore] = useState(false);
 	const [loadingArticles, setLoadingArticles] = useState(false);
-	
-	const navigate = useNavigate();
-	
-	const { pathname, search } = useLocation();
-	const params = new URLSearchParams(search);
-
-
-	useEffect(() => {
-		if (params.get('scrollToTop') === 'true') {
-			window.scrollTo(0, 0);
-			params.delete('scrollToTop');
-			navigate(`${pathname}?${params.toString()}`, { replace: true });
-		}
-	}, [pathname, search, navigate]);
 
 
 	const handleSelectedFeed = async (feed) => {
-		console.log(feed.id);
     setSelectedFeed(feed);
     setPage(1);
     setArticles([]);
@@ -134,7 +116,7 @@ const DashboardBookmarkFeedBoardApp = () => {
         const bookmarks = response.data.map(row => row.newsarticle_bookmarked);
         setUserBookmarks(bookmarks);
       } catch (error) {
-        console.error("Failed to fetch user bookmarks");
+        console.error("Failed to fetch user bookmarks", error);
       }
     };
     fetchUserBookmarks();
@@ -143,49 +125,49 @@ const DashboardBookmarkFeedBoardApp = () => {
 
 	useEffect(() => {
 		if (!isauthenticated) {
-			setUserFollows();
+			setUserFollows([]);
 			return;
 		};
 
 		const fetchUserFollows = async () => {
 			try {
-				const response = await Axios.get(`/api/SourceUserFollowsAll/`);
+				const response = await axios.get(`/api/SourceUserFollowsAll/`);
 				const follows = response.data.map(row => row.source);
 				setUserFollows(follows);
 			} catch(error) {
-				console.error("Failed to fetch user follows");
+				console.error("Failed to fetch user follows", error);
 			}
 		};
 		fetchUserFollows();
 	}, [isauthenticated]);
 
 
-	const toggleUserFollow = async (record) => {
+	const toggleUserFollow = async (source_id) => {
 		if (!isauthenticated) {
 			return;
 		};
-		const isFollowed = userfollows.includes(record.source_id)
+		const isFollowed = userfollows.includes(source_id)
 
 		setUserFollows(prev =>
 			isFollowed 
-				? prev.filter(id => id !== record.source_id)
-				: [...prev, record.source_id]
+				? prev.filter(id => id !== source_id)
+				: [...prev, source_id]
 		);
 
 		try {
 			const response = await axios.post(
 				`/api/SourceUserFollowToggle/`,
-				{ source: record.source_id },
+				{ source: source_id },
 				{ headers: { 'X-CSRFToken': csrftoken } }
 			);
 
 			if (response.data.message === 'Follow removed' && !isFollowed) {
-				setUserFollows(prev => [...prev, record.source_id]);
+				setUserFollows(prev => [...prev, source_id]);
 			} else if (response.data.message !== "Follow removed" && isFollowed) {
-				setUserFollows(prev => prev.filter(id => id !== record.source_id));
+				setUserFollows(prev => prev.filter(id => id !== source_id));
 			}
 		} catch (error) {
-			console.error("Failed to follow source");
+			console.error("Failed to follow source", error);
 		}
 	};
 
@@ -193,7 +175,7 @@ const DashboardBookmarkFeedBoardApp = () => {
 	const countClick = async (note) => {
 		window.open(note.source_url, "_blank");
 		try {
-			const response = await Axios.post(`/api/UserClick/`,
+			const response = await axios.post(`/api/UserClick/`,
 				{ newsarticle: parseInt(note.id) },
 				{ headers: { 'X-CSRFToken': csrftoken } }
 			);
@@ -227,12 +209,11 @@ const DashboardBookmarkFeedBoardApp = () => {
 	useEffect(() => {
 		const getFeeds = async () => {
 			setLoading(true);
-			setLoading(true)
+		
 			try {
 				const response = await axios.get(`/api/board-bookmark-feeds/`);
 
 				setFeeds(response.data);
-
 				if (response.data.length) {
 					handleSelectedFeed(response.data[0]);
 				}
@@ -347,13 +328,12 @@ const DashboardBookmarkFeedBoardApp = () => {
 										<div className="dashboard-feed-board-article" key={i} style={{ marginBottom: '12px' }}>
 											<div className="briefing-source-row" >
 												<div className="dashboard-source-title-left">
-												
-													<div 
-														onClick={() => navigate(`/dashboard/source/${encodeURIComponent(article.source_name)}?scrollToTop=true`)}
-														className="home-source"
-													>
+
+													<Link to={`/dashboard/source/${encodeURIComponent(article.source_name)}?scrollToTop=true`}>
+													<div className="home-source" >
 													{article.source_name}
 													</div>
+													</Link>
 
 													<div>
 														<Tooltip
@@ -458,27 +438,19 @@ const DashboardBookmarkFeedBoardApp = () => {
 
 													{usersettings.show_article_tags && (
 															<>
-															<span 
-																onClick={(e) => {
-																	navigate(`/dashboard/tag/${encodeURIComponent(article.tag1)}?scrollToTop=true`);
-																	}}
-															>
+															
+															<Link to={`/dashboard/tag/${encodeURIComponent(article.tag1)}?scrollToTop=true`}>
 															<Tag className="table-tag" color={"purple"}>{article.tag1}</Tag>
-															</span>
-															<span
-																onClick={(e) => {
-																	navigate(`/dashboard/tag/${encodeURIComponent(article.tag2)}?scrollToTop=true`);
-																	}}
-															>
+															</Link>
+															
+															<Link to={`/dashboard/tag/${encodeURIComponent(article.tag2)}?scrollToTop=true`}>
 															<Tag className="table-tag" color={"green"}>{article.tag2}</Tag>
-															</span>
-															<span
-																onClick={(e) => {
-																	navigate(`/dashboard/tag/${encodeURIComponent(article.tag3)}?scrollToTop=true`);
-																	}}
-															>
+															</Link>
+															
+															<Link to={`/dashboard/tag/${encodeURIComponent(article.tag3)}?scrollToTop=true`}>
 															<Tag className="table-tag" color={"blue"}>{article.tag3}</Tag>
-															</span>
+															</Link>
+															
 															</>
 														)
 													}
@@ -498,9 +470,9 @@ const DashboardBookmarkFeedBoardApp = () => {
 								</>
 							)) : (
 								<>
-									<CompNoBookmarkFeed 
-									onNavigateAddBookmarkFeed={onNavigateAddBookmarkFeed}
-									/>
+									<Link to={'/dashboard/bookmarks/addfeed/'}>
+									<CompNoBookmarkFeed />
+									</Link>
 								</>
 							)}
 
@@ -522,8 +494,10 @@ const DashboardBookmarkFeedBoardApp = () => {
 				</Col>
 
 				<Col span={1}>
-					<>
-						<div onClick={() => navigate(`/dashboard/bookmarks/editfeed/${selectedFeed.id}`)} >
+						{ feeds.length > 0 && (
+						<>
+						<div>
+							<Link to={`/dashboard/bookmarks/editfeed/${selectedFeed.id}`}>
 							<ToolOutlined
 								style={{
 									marginTop: 5,
@@ -532,9 +506,11 @@ const DashboardBookmarkFeedBoardApp = () => {
 									cursor: 'pointer',
 								}}
 							/>
+							</Link>
 						</div>
-
-						<div onClick={() => navigate(`/dashboard/bookmarks/editfeed/${selectedFeed.id}/delete-feed`)} >
+						
+						<div>
+							<Link to={`/dashboard/bookmarks/editfeed/${selectedFeed.id}/delete-feed`}>
 							<DeleteOutlined 
 								style={{
 									marginTop: 12,
@@ -543,8 +519,11 @@ const DashboardBookmarkFeedBoardApp = () => {
 									cursor: 'pointer',
 								}}
 							/>
+							</Link>
 						</div>
-					</>
+						</>
+					)}
+					
 				</Col>
 				</Row>
 				</Layout>	

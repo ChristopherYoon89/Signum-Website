@@ -18,7 +18,7 @@ import {
 	QuestionCircleOutlined,
 } from '@ant-design/icons';
 import axios from 'axios';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "./AuthProvider.js";
 import moment from 'moment-timezone';
 
@@ -156,12 +156,6 @@ const HomeSearchApp = () => {
 	};
 
 
-	const navigateAdvancedSearch = () => {
-		navigate(`/dashboard/search`);
-		window.scrollTo({top: 0,behavior: "smooth"});
-	};
-
-
 	const handleOpenChange = (open) => {
   	setOpenDropdown(open);
 	};
@@ -199,13 +193,22 @@ const HomeSearchApp = () => {
 				
 					<div className="home-search-info-container">
 						<p>
+						<Link
+							to="/dashboard/search"
+							onClick={() => {
+									window.scrollTo({
+											top: 0,
+											behavior: 'smooth'
+									});
+							}}
+						>
 						<span
 							className='sig-form-more-filters'
-							onClick={navigateAdvancedSearch}
 							style={{ textAlign: "left", flex: 1}}
 						>
 						Advanced search
 						</span>
+						</Link>
 						</p>	
 					</div>
 					

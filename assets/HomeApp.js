@@ -20,7 +20,7 @@ import axios from 'axios';
 import ArticleStatsPopOverContent from './StatsNewsArticle.js';
 import SidebarApp from './SidebarApp.js';
 import HomeBanner from './HomeBanner.js';
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import moment from 'moment';
 import StatsHomeIndicators from './StatsHomeIndicators.js';
 import HomeCategories from './HomeCategories.js';
@@ -100,7 +100,6 @@ const CompNoArticles = () => {
 
 const CategoryArticles = ({ 
 		articles, 
-		navigate, 
 		isauthenticated, 
 		userfollows, 
 		createClick, 
@@ -119,13 +118,14 @@ const CategoryArticles = ({
 					bordered={false}
 					bodyStyle={{ padding: 0, marginTop: 0 }}
 					>
-					<p>	
+					<p>
+						<Link to={`/dashboard/source/${encodeURIComponent(article.source_name)}?scrollToTop=true`}>	
 						<span
-							onClick={() => navigate(`/dashboard/source/${encodeURIComponent(article.source_name)}?scrollToTop=true`)}
 							className="home-source"
 						>
 							{article.source_name}
 						</span>
+						</Link>
 						<span className="home-source-plus-icon">
 							<Tooltip
 								title={
@@ -171,29 +171,26 @@ const CategoryArticles = ({
 						 <span className="ant-home-date">
 							{moment(article.date_posted).fromNow()}
 						</span>
-						<span
-							onClick={(e) => {
-								navigate(`/dashboard/tag/${encodeURIComponent(article.tag1)}?scrollToTop=true`);
-								}}  
+						<Link to={`/dashboard/tag/${encodeURIComponent(article.tag1)}?scrollToTop=true`}>
+						<span  
 							style={{ marginRight: 5}}
 						>
 						<Tag className="table-tag" color={"purple"}>{article.tag1}</Tag>
 						</span>
+						</Link>
+						
+						<Link to={`/dashboard/tag/${encodeURIComponent(article.tag2)}?scrollToTop=true`}>
 						<span
-							onClick={(e) => {
-								navigate(`/dashboard/tag/${encodeURIComponent(article.tag2)}?scrollToTop=true`);
-								}}
 							style={{ marginRight: 5, }}
 						>
 						<Tag className="table-tag" color={"green"}>{article.tag2}</Tag>
 						</span>
-						<span 
-							onClick={(e) => {
-								navigate(`/dashboard/tag/${encodeURIComponent(article.tag3)}?scrollToTop=true`);
-								}}
-						>
+						</Link>
+						<Link to={`/dashboard/tag/${encodeURIComponent(article.tag3)}?scrollToTop=true`}>
+						<span>
 						<Tag className="table-tag" color={"blue"}>{article.tag3}</Tag>
 						</span>
+						</Link>
 					</span>
 						<span>
 							<Popover 
@@ -489,7 +486,7 @@ const HomeApp = () => {
 											});
 										}}
 									>
-									⬆ 
+									⬆
 									</button> 
 									</Tooltip>
 								</div>
@@ -497,7 +494,6 @@ const HomeApp = () => {
 								<Divider style={{ borderColor: "#e0e7e7" }} />
 								<CategoryArticles 
 									articles={groupedArticles[category] || []}
-									navigate={navigate}
 									isauthenticated={isauthenticated}
 									userfollows={userfollows}
 									createClick={createClick}
@@ -505,12 +501,14 @@ const HomeApp = () => {
 									toggleUserFollow={toggleUserFollow} 
 									setUserBookmarks={setUserBookmarks}
 								/>
+
+								<Link to={`/dashboard/category/${category}?scrollToTop=true`}>
 								<span 
 									className="home-read-more"
-									onClick={() => navigate(`/dashboard/category/${category}?scrollToTop=true`)}
 									>
-									read more
+									Read more
 								</span>
+								</Link>
 							</div>
 							</ScrollReveal>
 						))}
@@ -586,7 +584,6 @@ const HomeApp = () => {
 								<Divider style={{ borderColor: "#e0e7e7" }} />
 								<CategoryArticles 
 									articles={groupedArticles[category] || []}
-									navigate={navigate}
 									isauthenticated={isauthenticated}
 									userfollows={userfollows}
 									createClick={createClick}
@@ -594,11 +591,14 @@ const HomeApp = () => {
 									toggleUserFollow={toggleUserFollow} 
 									setUserBookmarks={setUserBookmarks}
 								/>
+
+								<Link to={`/dashboard/category/${category}?scrollToTop=true`}>
 								<span 
 									className="home-read-more"
-									onClick={() => navigate(`/dashboard/category/${category}?scrollToTop=true`)}
-									>read more
+								>
+								Read more
 								</span>
+								</Link>
 							</div>
 							</ScrollReveal>
 						))}
@@ -673,7 +673,6 @@ const HomeApp = () => {
 								<Divider style={{ borderColor: "#e0e7e7" }} />
 								<CategoryArticles 
 									articles={groupedArticles[category] || []}
-									navigate={navigate}
 									isauthenticated={isauthenticated}
 									userfollows={userfollows}
 									createClick={createClick}									
@@ -682,12 +681,14 @@ const HomeApp = () => {
 									setUserBookmarks={setUserBookmarks}
 									ArticleStatsPopOverContent={ArticleStatsPopOverContent}
 								/>
+
+								<Link to={`/dashboard/category/${category}?scrollToTop=true`}>
 								<span 
 									className="home-read-more"
-									onClick={() => navigate(`/dashboard/category/${category}?scrollToTop=true`)}
-									>
-									read more
+								>
+								Read more
 								</span>
+								</Link>
 							</div>
 							</ScrollReveal>
 						))}

@@ -43,18 +43,10 @@ const InputTitle = ({ feedtitle, onChangeTitle }) => {
 		<>
 			<div className="sig-form-header">
 				Title
-				<span>
-					<Tooltip
-						placement='right'
-						title='Define a name to identify the feed in your briefing'
-					>
-					<QuestionCircleOutlined className="sig-form-info-icon"	/>
-					</Tooltip>
-				</span>
 			</div>
 			<div className='sig-form-input'>
 				<Input 
-					placeholder="Enter title of your feed"
+					placeholder="Define title"
 					onChange={(e) => onChangeTitle(e.target.value)}
 					style={{	width: 400,	}}	
 					value={feedtitle}
@@ -88,7 +80,7 @@ const InputOrderBy = ({ feedorderby, onChangeOrderBy }) => {
 					options={[
 						{
 							value: 'by_date',
-							label: 'Chronologically by date',
+							label: 'Chronologically by date (newest first)',
 						},
 						{
 							value: 'by_alphabet_source',
@@ -115,7 +107,7 @@ const SelectInclCategory = ({ feedinclcategory, categoryoptions, onChangeInclCat
 					<Tooltip
 						placement='right'
 						title='Select one or more categories to include categories into your feed. 
-						If no categories are selected, articles from all categories will be included'
+						If none are selected, articles from all categories will be included'
 					>
 					<QuestionCircleOutlined className="sig-form-info-icon"	/>
 					</Tooltip>
@@ -147,8 +139,8 @@ const SelectInclKeywords = ({ feedinclkeywordsdisabled, feedinclkeywords, onChan
 					<Tooltip
 						placement='right'
 						title='Enter keywords to include articles. For multiple keywords, separate 
-						them with spaces (e.g. Keyword1 Keyword2 Keyword3). Note that you cannot 
-						exclude keywords when defining included keywords.'
+						them with spaces (e.g. Keyword1 Keyword2 Keyword3). Note that you can either
+						include or exclude keywords, but not both.'
 					>
 					<QuestionCircleOutlined className="sig-form-info-icon"	/>
 					</Tooltip>
@@ -156,7 +148,7 @@ const SelectInclKeywords = ({ feedinclkeywordsdisabled, feedinclkeywords, onChan
 			</div>
 			<div className='sig-form-input'>
 				<Input 
-					placeholder="Enter keywords with a comma separated"
+					placeholder="Enter keywords separated by spaces"
 					disabled={feedinclkeywordsdisabled}
 					onChange={(e) => onChangeInclKeywords(e.target.value)}
 					style={{	width: 400,	}}
@@ -177,8 +169,8 @@ const SelectExclKeywords = ({ feedexclkeywordsdisabled, feedexclkeywords, onChan
 					<Tooltip
 						placement='right'
 						title='Enter keywords to exclude articles. For multiple keywords, separate 
-						them with spaces (e.g. Keyword1 Keyword2 Keyword3). When excluding keywords, 
-						you cannot define included keywords.'
+						them with spaces (e.g. Keyword1 Keyword2 Keyword3). Note that you can either 
+						include or exclude keywords, but not both.'
 					>
 					<QuestionCircleOutlined className="sig-form-info-icon"	/>
 					</Tooltip>
@@ -186,7 +178,7 @@ const SelectExclKeywords = ({ feedexclkeywordsdisabled, feedexclkeywords, onChan
 			</div>
 			<div className='sig-form-input'>
 				<Input 
-					placeholder="Enter keywords with a comma separated"
+					placeholder="Enter keywords separated by spaces"
 					disabled={feedexclkeywordsdisabled}
 					onChange={(e) => onChangeExclKeywords(e.target.value)}
 					style={{ width: 400, }}
@@ -206,9 +198,9 @@ const SelectInclSource = ({ feedinclsourcesdisabled, sourcesoptions, feedinclsou
 				<span>
 					<Tooltip
 						placement='right'
-						title='Select one or more sources that should be included into your feed. If no sources are 
-						selected, articles from all sources will be included. You can either include 
-						specific sources or exclude them, but not both.'
+						title='Select one or more sources that should be included into your feed. If none
+						are selected, articles from all sources will be included. You can either include 
+						or exclude sources, but not both.'
 					>
 					<QuestionCircleOutlined className="sig-form-info-icon"	/>
 					</Tooltip>
@@ -243,8 +235,8 @@ const SelectExclSource = ({ feedexclsourcesdisabled, sourcesoptions, feedexclsou
 				<span>
 					<Tooltip
 						placement='right'
-						title='Select sources to exclude from your feed. If no sources are excluded, articles 
-						from all sources will be included. You can either include sources or exclude 
+						title='Select sources to exclude from your feed. If none are excluded, articles 
+						from all sources will be searched. You can either include sources or exclude 
 						them, but not both.'
 					>
 					<QuestionCircleOutlined className="sig-form-info-icon"	/>
@@ -277,14 +269,6 @@ const SelectMinClicks = ({ feedminclicks, onChangeMinClicks }) => {
 		<>
 			<div className="sig-form-header">
 				Minimum number of clicks
-				<span>
-					<Tooltip
-						placement='right'
-						title='Filter articles to show only those with a higher number of selected clicks'
-					>
-					<QuestionCircleOutlined className="sig-form-info-icon"	/>
-					</Tooltip>
-				</span>
 			</div>
 			<div className='sig-form-input'>
 				<Select
@@ -313,14 +297,6 @@ const SelectMinUserRating = ({ feedminuserrating, onChangeMinUserRating }) => {
 		<>
 			<div className="sig-form-header">
 				Minimum average user rating
-				<span>
-					<Tooltip
-						placement='right'
-						title='Filter articles to show only those with a higher average user rating'
-					>
-					<QuestionCircleOutlined className="sig-form-info-icon"	/>
-					</Tooltip>
-				</span>
 			</div>
 			<div className='sig-form-input'>
 			<Select
@@ -345,17 +321,6 @@ const SelectMinAlgoRating = ({ feedminalgorating, onChangeMinAlgoRating }) => {
 		<>
 			<div className="sig-form-header">
 				Minimum algorithm rating
-				<span>
-					<Tooltip
-						placement='right'
-						title='Filter articles to show only those with an algorithmic rating 
-						above the selected value. The algorithmic rating evaluates articles based 
-						on objective criteria, including information density, article length and 
-						other factors.'
-					>
-					<QuestionCircleOutlined className="sig-form-info-icon"	/>
-					</Tooltip>
-				</span>
 			</div>
 			<div className='sig-form-input'>
 				<Select
@@ -380,16 +345,6 @@ const SelectMinSourceRating = ({ feedminsourcerating, onChangeMinSourceRating })
 		<>
 			<div className="sig-form-header">
 				Minimum source rating
-				<span>
-					<Tooltip
-						placement='right'
-						title='Filter articles to show only those from sources with an average user 
-							rating above the selected value. The source rating reflects the overall 
-							rating of all articles published by that source.'
-					>
-					<QuestionCircleOutlined className="sig-form-info-icon"	/>
-					</Tooltip>
-				</span>
 			</div>
 			<div className='sig-form-input'>
 				<Select

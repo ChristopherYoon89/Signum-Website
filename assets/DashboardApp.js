@@ -150,8 +150,8 @@ const DashboardApp = () => {
 		if (decodedPath === '/dashboard/briefing/addfeed') return setTitle('Add Feed');
 		if (decodedPath.includes('delete-feed')) return setTitle('Delete Feed')
 		if (decodedPath.startsWith('/dashboard/briefing/editfeed')) return setTitle('Edit Feed');
-		if (decodedPath === '/dashboard/bookmarks/addfeed') return setTitle('Add Bookmark Feed');
-		if (decodedPath === '/dashboard/bookmarks/editfeed') return setTitle('Edit Bookmark Feed');
+		if (decodedPath === '/dashboard/bookmarks/addfeed') return setTitle('Add Bookmark List');
+		if (decodedPath === '/dashboard/bookmarks/editfeed') return setTitle('Edit Bookmark List');
 		if (decodedPath === '/dashboard/export') return setTitle('Export Data');
 		if (decodedPath.startsWith('/dashboard/source')) return setTitle('Source');
 		if (decodedPath.startsWith('/dashboard/tag')) return setTitle('Tag');
@@ -211,7 +211,7 @@ const DashboardApp = () => {
             return [...prev, parent];
         });
     }
-}, [pathname]);
+	}, [pathname]);
 
 
 	return (

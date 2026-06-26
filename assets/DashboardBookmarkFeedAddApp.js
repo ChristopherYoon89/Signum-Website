@@ -41,21 +41,11 @@ const InputTitle = ({ feedtitle, onChangeTitle }) => {
 	return(
 		<>
 			<div className="sig-form-header">
-				Title*
-				<span>
-					<Tooltip
-						placement='right'
-						title='Define a name to identify this bookmark feed'
-					>
-					<QuestionCircleOutlined 
-						className="sig-form-info-icon"
-					/>
-					</Tooltip>
-				</span>
+				Title
 			</div>
 			<div className='sig-form-input'>
 				<Input 
-					placeholder="Enter title of your bookmark feed"
+					placeholder="Enter title"
 					onChange={(e) => onChangeTitle(e.target.value)}
 					style={{ width: 400, }}	
 					value={feedtitle}
@@ -91,11 +81,11 @@ const InputOrderBy = ({ feedorderby, onChangeOrderBy }) => {
 					options={[
 						{
 							value: 'by_date_of_upload',
-							label: 'By date of upload',
+							label: 'By date of upload (newest first)',
 						},
 						{
 							value: 'by_date_of_bookmark_added',
-							label: 'By date when bookmark was added',
+							label: 'By date when bookmark was added (newest first)',
 						},
 					]}
 				/>

@@ -44,17 +44,7 @@ const InputSearch = ({ searchinput, onChangeSearchInput, handleSearch }) => {
 	return(
 		<>
 			<div className="sig-form-header">
-				Search keywords*
-				<span>
-					<Tooltip
-						placement='right'
-						title='Search article titles and tags using one or more keywords. Separate multiple keywords with spaces.'
-					>
-					<QuestionCircleOutlined 
-						className="sig-form-info-icon"
-					/>
-					</Tooltip>
-				</span>
+				Search keywords
 			</div>
 
 			<div className='sig-form-input'>
@@ -82,16 +72,6 @@ const DatePickerStart = ({ startdate, onChangeStartDate }) => {
 		<>
 			<div className="sig-form-header">
 				From startdate
-				<span>
-					<Tooltip
-						placement='right'
-						title='Filter articles by publication date. Select a start and/or end date to define the time range.'
-					>
-					<QuestionCircleOutlined 
-						className="sig-form-info-icon"
-					/>
-					</Tooltip>
-				</span>
 			</div>
 			<div className='sig-form-input'>
 				<DatePicker 
@@ -165,7 +145,8 @@ const SelectExclKeywords = ({ onChangeExclKeywords, feedexclkeywords }) => {
 				<span>
 						<Tooltip
 							placement='right'
-							title='Exclude articles containing these keywords. Separate multiple keywords with spaces.'
+							title='Exclude articles containing these keywords. Separate multiple 
+							keywords with spaces.'
 						>
 						<QuestionCircleOutlined 
 							className="sig-form-info-icon"
@@ -195,8 +176,8 @@ const SelectInclSource = ({ sourcesoptions, feedinclsource, feedinclsourcesdisab
 				<Tooltip
 					placement='right'
 					title='Select one or more sources to include in your search. If none 
-					are selected, articles from all sources will be shown. You can either include 
-					sources or exclude them, but not both.'
+					are selected, articles from all sources will be searched. You can either include 
+					or exclude sources, but not both.'
 				>
 				<QuestionCircleOutlined 
 					className="sig-form-info-icon"
@@ -216,7 +197,7 @@ const SelectInclSource = ({ sourcesoptions, feedinclsource, feedinclsourcesdisab
 					style={{
 						width: 400,
 					}}
-					placeholder="Select"
+					placeholder="Please select"
 					onChange={onChangeInclSource}
 					options={sourcesoptions}
 					value={feedinclsource}
@@ -237,8 +218,8 @@ const SelectExclSource = ({ feedexclsourcesdisabled, onChangeExclSource, sources
 				<Tooltip
 					placement='right'
 					title='Select one or more sources to exclude in your search. If none 
-					are selected, articles from all sources will be shown. You can either include 
-					sources or exclude them, but not both.'
+					are selected, articles from all sources will be searched. You can either include 
+					or exclude sources, but not both.'
 				>
 				<QuestionCircleOutlined 
 					className="sig-form-info-icon"
@@ -256,7 +237,7 @@ const SelectExclSource = ({ feedexclsourcesdisabled, onChangeExclSource, sources
 					mode="multiple"
 					allowClear
 					style={{ width: 400, }}
-					placeholder="Select sources"
+					placeholder="Please select"
 					onChange={onChangeExclSource}
 					options={sourcesoptions}
 					value={feedexclsource}
@@ -272,16 +253,6 @@ const SelectMinClicks = ({ feedminclicks, onChangeMinClicks}) => {
 		<>
 			<div className="sig-form-header">
 				Minimum number of clicks
-				<span>
-				<Tooltip
-					placement='right'
-					title='Show only articles that have at least the selected number of clicks.'
-				>
-				<QuestionCircleOutlined 
-					className="sig-form-info-icon"
-				/>
-				</Tooltip>
-				</span>
 			</div>
 			<div className='sig-form-input'>
 			<Select
@@ -312,16 +283,6 @@ const SelectMinUserRating = ({ feedminuserrating, onChangeMinUserRating }) => {
 		<>
 			<div className="sig-form-header">
 				Minimum average user rating
-				<span>
-				<Tooltip
-					placement='right'
-					title="Filter articles to show only those with a higher average user rating."
-				>
-				<QuestionCircleOutlined 
-					className="sig-form-info-icon"
-				/>
-				</Tooltip>
-				</span>
 			</div>
 			<div className='sig-form-input'>
 			<Select
@@ -349,17 +310,6 @@ const SelectMinAlgoRating = ({ feedminalgorating, onChangeMinAlgoRating }) => {
 		<>
 			<div className="sig-form-header">
 				Minimum algorithm rating
-				<span>
-				<Tooltip
-					placement='right'
-					title='Filter articles by minimum algorithmic rating. Ratings are calculated 
-					using objective indicators such as information density and article length.'
-				>
-				<QuestionCircleOutlined 
-					className="sig-form-info-icon"
-				/>
-				</Tooltip>
-				</span>
 			</div>
 			<div className='sig-form-input'>
 			<Select
@@ -384,17 +334,6 @@ const SelectMinSourceRating = ({ feedminsourcerating, onChangeMinSourceRating })
 		<>
 			<div className="sig-form-header">
 				Minimum source rating
-				<span>
-				<Tooltip
-					placement='right'
-					title='Filter articles by minimum source rating. The source rating reflects 
-					the average user rating of all articles from that source.'
-				>
-				<QuestionCircleOutlined 
-					className="sig-form-info-icon"
-				/>
-				</Tooltip>
-				</span>
 			</div>
 			<div className='sig-form-input'>
 			<Select
@@ -430,7 +369,6 @@ const DashboardSearchApp = () => {
 	const [showalert, setShowAlert] = useState(false);
 	const [alertmessage, setAlertMessage] = useState('');
 	const [alerttype, setAlertType] = useState('');
-	const [alertdescription, setAlertDescription] = useState('');
 	
 	const [showmoretext, setShowMoreText] = useState('Show more filters');
 	const [showfilters, setShowFilters] = useState(false);
@@ -584,8 +522,7 @@ const DashboardSearchApp = () => {
 		const isSearchInputValid = searchinput.trim().length > 0;
 		
 		if (!isSearchInputValid) {
-			setAlertMessage('Error');
-			setAlertDescription('Please provide at least one keyword for your search');
+			setAlertMessage('Please provide at least one keyword for your search');
 			setAlertType('error')
 			setShowAlert(true);
 			return;
@@ -593,7 +530,6 @@ const DashboardSearchApp = () => {
 
 		if (isSearchInputValid) {
 			setAlertMessage('');
-			setAlertDescription('');
 			setShowAlert(false);
 		};
 		
@@ -638,7 +574,6 @@ const DashboardSearchApp = () => {
 						<div className='sig-form-alert'>
 						<Alert
 							message={alertmessage}
-							description={alertdescription}
 							type={alerttype}
 							showIcon
 						/>

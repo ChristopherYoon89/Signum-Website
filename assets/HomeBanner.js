@@ -10,7 +10,7 @@ import {
 	WifiOutlined,
 	AppstoreAddOutlined,
 } from '@ant-design/icons';
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 
 function getCookie(name) {
@@ -34,23 +34,6 @@ var csrftoken = getCookie('csrftoken');
 
 
 const HomeBanner = () => {
-	const navigate = useNavigate();
-
-	
-	const navigateProductPage = () => {
-		window.location.href = window.DJANGO_URLS.product;
-	};
-
-
-	const navigateDonatePage = () => {
-		window.location.href = window.DJANGO_URLS.donate;
-	};
-
-
-	const navigateAPIPage = () => {
-		window.location.href = window.DJANGO_URLS.apipage;
-	};
-	
 
 	return(
 		<>
@@ -58,11 +41,10 @@ const HomeBanner = () => {
 				<Col span={1}>
 				
 				</Col>
+				
 				<Col span={4}>
-					<Card 
-						className="banner-container"
-						onClick={() => navigateProductPage()}
-						>
+					<a href={window.DJANGO_URLS.product}>
+					<Card className="banner-container">
 					<WifiOutlined style={{ fontSize: "26pt", marginBottom: 10, marginTop: 5, color: "#215f14" }}/>
 					<p className='banner-header'>High-Signal Content</p>
 
@@ -71,24 +53,26 @@ const HomeBanner = () => {
 					content from thousands of sources about current events and general topics.
 					</p>
 					</Card>
+					</a>
 				</Col>
+				
 				<Col span={4} >
-				<Card 
-						onClick={() => navigateProductPage()}
-						className="banner-container">
+				<a href={window.DJANGO_URLS.product}>
+				<Card className="banner-container">
 					<AppstoreAddOutlined style={{ fontSize: "26pt", marginBottom: 10, marginTop: 5, color: "#ffbb00" }}/>
 					<p className='banner-header'>Personal Feeds</p>
 
 					<p class="banner-text">
 					Create your own news feeds by customizing your algorithm and filtering categories,
 					sources and keywords.
-				</p>
+					</p>
 					</Card>
+					</a>
 				</Col>
+				
 				<Col span={4} >
-				<Card
-						onClick={() => navigateProductPage()} 
-						className="banner-container">
+				<a href={window.DJANGO_URLS.product}>
+				<Card className="banner-container">
 					<ApartmentOutlined style={{ fontSize: "26pt", marginBottom: 10, marginTop: 5, color: "#781c8f" }} />
 					<p className='banner-header'>News Analysis</p>
 
@@ -97,13 +81,12 @@ const HomeBanner = () => {
 					relevant topics, keywords and user signals.
 					</p>
 					</Card>
+					</a>
 				</Col>
 				
 				<Col span={4} >
-				<Card
-					onClick={() => navigateAPIPage()} 
-					className="banner-container"
-				>	
+				<a href={window.DJANGO_URLS.apipage}>
+				<Card	className="banner-container" >	
 				<ApiOutlined style={{ fontSize: "26pt", marginBottom: 10, marginTop: 5, color: "#41d3d8" }}/>
 				
 				<p className='banner-header'>Public API</p>
@@ -113,11 +96,12 @@ const HomeBanner = () => {
 				own systems and software.  
 				</p>
 				</Card>
+				</a>
 				</Col>
+				
 				<Col span={4}>
-				<Card
-					onClick={() => navigateDonatePage()} 
-					className="banner-container">
+				<a href={window.DJANGO_URLS.donate}>
+				<Card className="banner-container">
 				<img className="banner-icon-donate" src="/static/main_app/media/bitcoin.webp" />
 				<p className='banner-header'>Donate!</p>
 
@@ -126,9 +110,9 @@ const HomeBanner = () => {
 				for free. Please, help us keep this platform running! You can buy us a 
 				coffee or donate in Bitcoin.
 				</p>
-					</Card>
-				</Col>
-				<Col span={4} />
+				</Card>
+				</a>
+				</Col>				
 			</Row>
 		</>
 	);

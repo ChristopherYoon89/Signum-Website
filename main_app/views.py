@@ -927,7 +927,6 @@ class GetBookmarkFeedBoardView(APIView):
         return Response({
             "feed_id": bookmark_feed.id,
             "title": bookmark_feed.title,
-			""
             "articles": NewsArticleSerializer(articles, many=True).data,
             "hasmore": page.has_next()
         })

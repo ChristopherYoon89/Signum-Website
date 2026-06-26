@@ -40,15 +40,7 @@ const SelectDataModels = ({ selectexportmodel, onChangeSelectExportModel }) => {
 	return(
 		<>
 			<div className="sig-form-header">
-				Select feed
-				<span>
-					<Tooltip
-						placement='right'
-						title='Select the database model that should be exported'
-					>
-					<QuestionCircleOutlined className="sig-form-info-icon"/>
-					</Tooltip>
-				</span> 
+				Feed
 			</div>
 			<div className='sig-form-input'>
 				<Select
@@ -78,17 +70,7 @@ const SelectFileFormat = ({ selectfileformat, onChangeSelectFileFormat }) => {
 	return (
 		<>
 			<div className="sig-form-header">
-				Select file format
-				<span>
-					<Tooltip
-						placement='right'
-						title='Specify the order in which articles appear in your feed'
-					>
-					<QuestionCircleOutlined 
-						className="sig-form-info-icon"
-					/>
-					</Tooltip>
-				</span>
+				File format
 			</div>
 			<div className='sig-form-input'>
 				<Select
@@ -120,7 +102,7 @@ const SelectLimit = ({ selectlimit, onChangeSelectLimit }) => {
 	return (
 		<>
 			<div className="sig-form-header">
-				Select number of articles per feed
+				Number of articles per feed
 				<span>
 					<Tooltip
 						placement='right'
@@ -169,7 +151,6 @@ const DashboardExportDataApp = () => {
 	const [showalert, setShowAlert] = useState(false);
 	const [alertmessage, setAlertMessage] = useState('');
 	const [alerttype, setAlertType] = useState('');
-	const [alertdescription, setAlertDescription] = useState('');
 
 
 	const onChangeSelectExportModel = (value) => {
@@ -187,9 +168,8 @@ const DashboardExportDataApp = () => {
 	}
 
 
-	const onShowAlert = (message, description, type, show) => {
+	const onShowAlert = (message, type, show) => {
 		setAlertMessage(message);
-		setAlertDescription(description);
 		setAlertType(type)
 		setShowAlert(show);
 	};
@@ -222,7 +202,7 @@ const DashboardExportDataApp = () => {
 
 		if (!isFilterFeedApplied) {
 			window.scrollTo({top: 0,behavior: "smooth"});
-			onShowAlert('Error', 'Please select data model you want to export', 'error', true);
+			onShowAlert('Please select data model you want to export', 'error', true);
 			return;
 		};
 
@@ -230,12 +210,12 @@ const DashboardExportDataApp = () => {
 
 		if (!isFilterFileFormatApplied) {
 			window.scrollTo({top: 0,behavior: "smooth"});
-			onShowAlert('Error', 'Please select a file format', 'error', true);
+			onShowAlert('Please select a file format', 'error', true);
 			return;
 		};
 
 		if (isFilterFeedApplied && isFilterFileFormatApplied) {
-			onShowAlert('', '', 'success', false);
+			onShowAlert('', 'success', false);
 		};
 		
 		try {
@@ -261,13 +241,13 @@ const DashboardExportDataApp = () => {
 				link.download = filename;
 				link.click()
 				window.scrollTo({top: 0,behavior: "smooth"});
-				onShowAlert('Success', 'Your download started. Check your Downloads folder', 'success', true);
+				onShowAlert('Your download started. Check your Downloads folder', 'success', true);
 				handleClearFields();
 			
 		} catch(error) {
 			window.scrollTo({top: 0,behavior: "smooth"});
 			console.error('Failed to save feed');
-			onShowAlert('Error', 'Failed to download data. Please try again later!', 'error', true);
+			onShowAlert('Failed to download data. Please try again later!', 'error', true);
 		};
 	};
 
@@ -284,7 +264,6 @@ const DashboardExportDataApp = () => {
 						<div className='sig-form-alert'>
 						<Alert
 							message={alertmessage}
-							description={alertdescription}
 							type={alerttype}
 							showIcon
 						/>

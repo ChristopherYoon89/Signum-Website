@@ -136,6 +136,7 @@ const SourcesApp = () => {
       dataIndex: "name",
 			key: 'name',
 			align: 'left',
+			width: 50,
 			defaultSortOrder: 'descend',
       sorter: (a, b) => a.name - b.name,
       render: (name, record) => (
@@ -154,7 +155,7 @@ const SourcesApp = () => {
 		{
       title: "No. of Articles",
       dataIndex: "article_count",
-      width: 200,
+      width: 30,
 			align: "center",
 			key: 'article_count', 
       sorter: (a, b) => a.article_count - b.article_count,
@@ -166,7 +167,7 @@ const SourcesApp = () => {
 		{
       title: "Avg. User Rating",
       dataIndex: "average_rating",
-      width: 200,
+      width: 30,
 			align: "left",
 			key: 'average_rating', 
       sorter: (a, b) => a.average_rating - b.average_rating,
@@ -178,7 +179,7 @@ const SourcesApp = () => {
 		{
       title: "Avg. Algo Rating",
       dataIndex: "average_algo_rating",
-      width: 200,
+      width: 30,
 			align: "left",
 			key: 'average_algo_rating', 
       sorter: (a, b) => a.average_algo_rating - b.average_algo_rating,
@@ -191,7 +192,7 @@ const SourcesApp = () => {
 			title: 'Actions',
 			key: 'operation',
 			align: 'center',
-			width: 200,
+			width: 15,
 			render: (record) => (
 				<div>
 				<span onClick={(e) => {

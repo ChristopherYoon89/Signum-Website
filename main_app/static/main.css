@@ -722,7 +722,7 @@ footer {
 
 
 .btn-home-back-to-top {
-	background-color: rgba(99, 99, 99, 0.9);
+	background-color: #818181;
 	color: #fff;
 	border: none;
 	width: 18px;
@@ -795,7 +795,7 @@ footer {
 
 
 .sig-required {
-	margin-top: 8px;
+	margin-top: 15px;
 }
 
 
@@ -1243,6 +1243,7 @@ form label {
 	padding-bottom: 10px;
 	scroll-behavior: smooth;
 	background: 'transparent';
+	width: 100%;
 }
 
 
@@ -1325,11 +1326,6 @@ form label {
 	color: #868686;
 	font-size: 0.85rem;
 	margin-right: 15px;
-}
-
-
-.antd-home-icon:hover {
-	color: #4d4d4d;
 }
 
 
@@ -2066,7 +2062,7 @@ form label {
   
 
 .right-vertical-navigation:hover {
-	transform: translateY(-50%) scale(1.05);
+	transform: translateY(-50%) scale(1.03);
 	box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
 }
   
@@ -2338,4 +2334,35 @@ form label {
 	justify-content: center;
 	margin: auto;
 	margin-top: 20px;
+}
+
+
+/* Release Notes */
+
+.release-notes-article {
+	margin-top: 35px;
+	line-height: 1.5;
+}
+
+
+.release-notes-snippet {
+	margin-top: 15px;
+}
+
+
+.release-notes-read-more {
+	margin-top: 15px;
+	color: #3b3b3b;
+}
+
+
+.release-notes-title {
+	margin-bottom: 5px;
+	display: inline-block;
+}
+
+
+.release-notes-title:hover {
+	text-decoration: none;
+	color: #696969;
 }
