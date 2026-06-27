@@ -11,7 +11,6 @@ import {
 	Tag,
 	Empty,
   } from 'antd';
-import 'antd/dist/antd.min.css';
 import {
 	SyncOutlined,
 	PlusOutlined,
@@ -27,22 +26,8 @@ import { useAuth } from "./AuthProvider.js";
 import ArticleStatsPopOverContent from './StatsNewsArticle.js';
 import moment from 'moment';
 import DashboardBookmarkFeedPopover from './DashboardBookmarkFeedPopover.js';
-
-
-function getCookie(name) {
-  var cookieValue = null;
-  if (document.cookie && document.cookie !== '') {
-      var cookies = document.cookie.split(';');
-      for (var i = 0; i < cookies.length; i++) {
-          var cookie = cookies[i].toString().replace(/^([\s]*)|([\s]*)$/g, ""); 
-          if (cookie.substring(0, name.length + 1) === (name + '=')) {
-              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-              break;
-          }
-      }
-  }
-  return cookieValue;
-}
+import { useBookmarks, useSourceFollow } from './ManagerHooks.js';
+import { countClick, getCookie } from './ManagerUtility.js';
 
 
 var csrftoken = getCookie('csrftoken');
@@ -64,8 +49,6 @@ const CompNoArticles = () => {
 const DashboardFeedBoardApp = () => {
 	const [loading, setLoading] = useState(true);
 	const scrollContainerRef = useRef(null);
-	const [userbookmarks, setUserBookmarks] = useState([]); 
-	const [userfollows, setUserFollows] = useState([]);
 	const { isauthenticated, user, usersettings } = useAuth();
 
 	const [feeds, setFeeds] = useState([]);
@@ -75,96 +58,23 @@ const DashboardFeedBoardApp = () => {
 	const [hasMore, setHasMore] = useState(false);
 	const [loadingArticles, setLoadingArticles] = useState(false);
 
+	const {
+		userbookmarks,
+		setUserBookmarks
+	} = useBookmarks();
+
+
+	const {
+		userfollows,
+		toggleUserFollow
+	} = useSourceFollow();
+
 
 	const handleSelectedFeed = async (feed) => {
     setSelectedFeed(feed);
     setPage(1);
     setArticles([]);
     fetchArticles(feed.id, 1);
-	};
-
-	useEffect(() => {
-		if (!isauthenticated) {
-			setUserBookmarks([]);
-			return;
-		};
-		
-		const fetchUserBookmarks = async () => {
-			try {
-				const response = await axios.get(`/api/UserBookmarks/`);
-				const bookmarks = response.data.map(row => row.newsarticle_bookmarked);
-				setUserBookmarks(bookmarks);
-			} catch (error) {
-				console.error("Failed to fetch user bookmarks", error);
-			}
-		};
-		fetchUserBookmarks();
-	}, [isauthenticated]);
-
-
-	useEffect(() => {
-		if (!isauthenticated) {
-			setUserFollows([]);
-			return;
-		}
-		const fetchUserFollows = async () => {
-			try {
-				const response = await axios.get(`/api/SourceUserFollowsAll/`);
-				const follows = response.data.map(row => row.source);
-				setUserFollows(follows);
-			} catch(error) {
-				console.error("Failed to fetch user follows");
-			}
-		};
-		fetchUserFollows();
-	}, [isauthenticated]);
-
-
-	const toggleUserFollow = async (source_id) => {
-		if (!isauthenticated) {
-			return;
-		};
-
-		const isFollowed = userfollows.includes(source_id)
-		setUserFollows(prev =>
-			isFollowed 
-				? prev.filter(id => id !== source_id)
-				: [...prev, source_id]
-		);
-		try {
-			const response = await axios.post(`/api/SourceUserFollowToggle/`,
-				{ source: source_id,	},
-				{ headers: { 'X-CSRFToken': csrftoken } }
-			);
-			if (response.data.message === 'Follow removed' && !isFollowed) {
-				setUserFollows(prev => [...prev, source_id]);
-			} else if (response.data.message !== "Follow removed" && isFollowed) {
-				setUserFollows(prev => prev.filter(id => id !== source_id));
-			}
-		} catch (error) {
-			const status = error.response?.status;
-			if (status === 401 || status === 403) {
-			message.info("Please log in to follow sources");
-		} else {
-			console.error("Failed to follow source");
-			message.error("Something went wrong");
-		}
-		}
-	};
-
-
-	const createClick = async (record) => {
-		try {
-			const response = await axios.post(`/api/UserClick/`,
-				{ newsarticle: Number(record.id) },
-				{ 
-					withCredentials: true,
-					headers: { 'X-CSRFToken': csrftoken } 
-				}
-			);
-		} catch (error) {
-			console.error("Failed to post click");
-		}
 	};
 
 
@@ -188,12 +98,11 @@ const DashboardFeedBoardApp = () => {
         console.log(error);
     }	finally {
         setLoadingArticles(false);
-    }
+    } 
 	};
 
 
 	useEffect(() => {
-
 		const getFeeds = async () => {
 			setLoading(true);
 			try {
@@ -210,7 +119,6 @@ const DashboardFeedBoardApp = () => {
 				setLoading(false);
 			}
 		};
-
 		getFeeds();
 	}, []);
 
@@ -231,7 +139,7 @@ const DashboardFeedBoardApp = () => {
 			catch(err){
 					console.log(err);
 			}
-	}
+	};
 
 
 	return (
@@ -347,12 +255,10 @@ const DashboardFeedBoardApp = () => {
 														</div>
 														
 														<div
-															className="dashboard-title"
-															onClick={() => createClick(article)}
+															className="dashboard-title" 
+															onClick={() => countClick(article)}
 														>
-														<a href={article.source_url} target="_blank">
-														<strong>{article.title}</strong>
-														</a>
+														{article.title}
 														</div>
 														
 														</div>

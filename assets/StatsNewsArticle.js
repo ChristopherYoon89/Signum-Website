@@ -3,25 +3,9 @@ import {
 	Tag,
 	Rate,
  } from 'antd';
-import Axios from "axios";
 import axios from 'axios';
 import { useAuth } from './AuthProvider.js';
-
-
-function getCookie(name) {
-  var cookieValue = null;
-  if (document.cookie && document.cookie !== '') {
-      var cookies = document.cookie.split(';');
-      for (var i = 0; i < cookies.length; i++) {
-          var cookie = cookies[i].toString().replace(/^([\s]*)|([\s]*)$/g, ""); 
-          if (cookie.substring(0, name.length + 1) === (name + '=')) {
-              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-              break;
-          }
-      }
-  }
-  return cookieValue;
-}
+import { getCookie } from './ManagerUtility.js';
 
 
 var csrftoken = getCookie('csrftoken');
@@ -34,7 +18,6 @@ const ArticleStatsPopOverContent = ({record}) => {
 	const average_user_value = record.average_rating ? Math.min(Math.ceil(record.average_rating), 5) : 0;
 	const algo_rating_value = record.algo_rating ? Math.min(Math.ceil(record.algo_rating), 5) : 0;
 	const { isauthenticated, user } = useAuth();
-
 
 
 	useEffect(() => {
@@ -69,7 +52,7 @@ const ArticleStatsPopOverContent = ({record}) => {
 		if (!value || value < 1 || value > 5) return;
 
 		try {
-			const response = await Axios.post(
+			const response = await axios.post(
 				`/api/UserRating/`,
 				{ 
 					newsarticle: parseInt(article_id),

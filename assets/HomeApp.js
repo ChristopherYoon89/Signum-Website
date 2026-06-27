@@ -15,7 +15,6 @@ import {
 	StockOutlined,
 	PlusOutlined,
 } from '@ant-design/icons';
-import Axios from "axios";
 import axios from 'axios';
 import ArticleStatsPopOverContent from './StatsNewsArticle.js';
 import SidebarApp from './SidebarApp.js';
@@ -27,22 +26,8 @@ import HomeCategories from './HomeCategories.js';
 import DashboardBookmarkFeedPopover from './DashboardBookmarkFeedPopover.js';
 import { useAuth } from "./AuthProvider.js";
 import HomeSearchApp from './HomeSearchApp.js';
-
-
-function getCookie(name) {
-  var cookieValue = null;
-  if (document.cookie && document.cookie !== '') {
-      var cookies = document.cookie.split(';');
-      for (var i = 0; i < cookies.length; i++) {
-          var cookie = cookies[i].toString().replace(/^([\s]*)|([\s]*)$/g, ""); 
-          if (cookie.substring(0, name.length + 1) === (name + '=')) {
-              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-              break;
-          }
-      }
-  }
-  return cookieValue;
-}
+import { useBookmarks, useSourceFollow } from './ManagerHooks.js';
+import { countClick, getCookie } from './ManagerUtility.js';
 
 
 var csrftoken = getCookie('csrftoken');
@@ -97,12 +82,11 @@ const CompNoArticles = () => {
 };
 
 
-
 const CategoryArticles = ({ 
 		articles, 
 		isauthenticated, 
 		userfollows, 
-		createClick, 
+		countClick, 
 		userbookmarks, 
 		toggleUserFollow,
 		setUserBookmarks,
@@ -123,7 +107,7 @@ const CategoryArticles = ({
 						<span
 							className="home-source"
 						>
-							{article.source_name}
+						{article.source_name}
 						</span>
 						</Link>
 						<span className="home-source-plus-icon">
@@ -156,12 +140,10 @@ const CategoryArticles = ({
 							/> 
 							</Tooltip>
 						</span>
-						
-						<a href={article.source_url} target="_blank" rel="noopener noreferrer">
-							<span className={"home-article-title"} onClick={() => createClick(article)}>
-								{article.title} 
-							</span>
-						</a>
+					
+						<span className={"home-article-title"} onClick={() => countClick(article)}>
+							{article.title} 
+						</span>
 						
 					</p>			
 
@@ -241,8 +223,6 @@ const CategoryArticles = ({
 
 
 const HomeApp = () => {
-	const [userbookmarks, setUserBookmarks] = useState([]); 
-	const [userfollows, setUserFollows] = useState([]);
 	const [groupedArticles, setGroupedArticles] = useState({});
 	const [loading, setLoading] = useState(true);
 	const topSectionRef = useRef(null);
@@ -253,76 +233,16 @@ const HomeApp = () => {
 	const { location, pathname, search } = useLocation();
 	const params = new URLSearchParams(search);
 
-
-	useEffect(() => {
-		if (!isauthenticated) {
-			setUserBookmarks([]);
-			return;
-		};
-		const fetchUserBookmarks = async () => {
-		try {
-			const response = await Axios.get(`/api/UserBookmarks/`);
-			const bookmarks = response.data.map(row => row.newsarticle_bookmarked);
-			setUserBookmarks(bookmarks);
-		} catch (error) {
-			console.error("Failed to fetch user bookmarks");
-		}
-	};  
-		fetchUserBookmarks();
-  }, [isauthenticated]);
+	const {
+		userbookmarks,
+		setUserBookmarks
+	} = useBookmarks();
 
 
-	const toggleUserFollow = async (source_id) => {
-		if (!isauthenticated) {
-			return;
-		};
-
-		const isFollowed = userfollows.includes(source_id)
-
-		setUserFollows(prev =>
-			isFollowed 
-				? prev.filter(id => id !== source_id)
-				: [...prev, source_id]
-		);
-		try {
-			const response = await Axios.post(`/api/SourceUserFollowToggle/`,
-				{ source: source_id,	},
-				{ headers: { 'X-CSRFToken': csrftoken } }
-			);
-			if (response.data.message === 'Follow removed' && !isFollowed) {
-				setUserFollows(prev => [...prev, source_id]);
-			} else if (response.data.message !== "Follow removed" && isFollowed) {
-				setUserFollows(prev => prev.filter(id => id !== source_id));
-			}
-		} catch (error) {
-			const status = error.response?.status;
-			if (status === 401 || status === 403) {
-      message.info("Please log in to follow sources");
-    } else {
-      console.error("Failed to follow source");
-      message.error("Something went wrong");
-    }
-		}
-	};
-
-
-	useEffect(() => {
-		if (!isauthenticated) {
-			setUserFollows([]);
-			return;
-		}
-
-		const fetchUserFollows = async () => {
-			try {
-				const response = await Axios.get(`/api/SourceUserFollowsAll/`);
-				const follows = response.data.map(row => row.source);
-				setUserFollows(follows);
-			} catch(error) {
-				console.error("Failed to fetch user follows");
-			}
-		};
-		fetchUserFollows();
-	}, [isauthenticated]);
+	const {
+		userfollows,
+		toggleUserFollow
+	} = useSourceFollow();
 
 
 	useEffect(() => {
@@ -337,21 +257,6 @@ const HomeApp = () => {
 		};
 		fetchArticles();
 	}, []);
-
-
-	const createClick = async (record) => {
-			try {
-				const response = await Axios.post(`/api/UserClick/`,
-					{ newsarticle: Number(record.id) },
-					{ 
-						withCredentials: true,
-						headers: { 'X-CSRFToken': csrftoken } 
-					}
-				);
-			} catch (error) {
-				console.error("Failed to post click");
-			}
-		};
 
 
 	useEffect(() => {
@@ -404,7 +309,7 @@ const HomeApp = () => {
 					<StatsHomeIndicators 
 						isauthenticated={isauthenticated}
 						userfollows={userfollows}
-						createClick={createClick}
+						countClick={countClick}
 						userbookmarks={userbookmarks}
 						toggleUserFollow={toggleUserFollow} 
 						setUserBookmarks={setUserBookmarks}
@@ -496,7 +401,7 @@ const HomeApp = () => {
 									articles={groupedArticles[category] || []}
 									isauthenticated={isauthenticated}
 									userfollows={userfollows}
-									createClick={createClick}
+									countClick={countClick}
 									userbookmarks={userbookmarks}
 									toggleUserFollow={toggleUserFollow} 
 									setUserBookmarks={setUserBookmarks}
@@ -586,7 +491,7 @@ const HomeApp = () => {
 									articles={groupedArticles[category] || []}
 									isauthenticated={isauthenticated}
 									userfollows={userfollows}
-									createClick={createClick}
+									countClick={countClick}
 									userbookmarks={userbookmarks}
 									toggleUserFollow={toggleUserFollow} 
 									setUserBookmarks={setUserBookmarks}
@@ -675,7 +580,7 @@ const HomeApp = () => {
 									articles={groupedArticles[category] || []}
 									isauthenticated={isauthenticated}
 									userfollows={userfollows}
-									createClick={createClick}									
+									countClick={countClick}									
 									userbookmarks={userbookmarks} 
 									toggleUserFollow={toggleUserFollow}
 									setUserBookmarks={setUserBookmarks}

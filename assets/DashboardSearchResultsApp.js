@@ -1,58 +1,63 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import { 
 	Layout,
-	Table,
-	Rate,
-	Popover,
-	Tooltip,
-	Tag,
 	Button,
  } from 'antd';
 import { 
-SyncOutlined,
-StockOutlined,
-StarOutlined,
-PlusOutlined,
+	SyncOutlined,
 } from '@ant-design/icons';
-import Axios from "axios";
-import moment from 'moment';
-import PopOverContent from './StatsNewsArticle.js';
-import { useNavigate, useSearchParams } from "react-router-dom";
+import axios from "axios";
+import { useSearchParams, useParams, useLocation } from "react-router-dom";
 import { useAuth } from "./AuthProvider.js";
-import DashboardBookmarkFeedPopover from './DashboardBookmarkFeedPopover.js';
-
-
-function getCookie(name) {
-  var cookieValue = null;
-  if (document.cookie && document.cookie !== '') {
-      var cookies = document.cookie.split(';');
-      for (var i = 0; i < cookies.length; i++) {
-          var cookie = cookies[i].toString().replace(/^([\s]*)|([\s]*)$/g, ""); 
-          if (cookie.substring(0, name.length + 1) === (name + '=')) {
-              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-              break;
-          }
-      }
-  }
-  return cookieValue;
-}
+import { useBookmarks, useSourceFollow } from './ManagerHooks.js';
+import { getCookie } from './ManagerUtility.js';
+import TableArticles from './TableArticles.js';
 
 
 var csrftoken = getCookie('csrftoken');
 
 
 const DashboardSearchResultsApp = () => {
+	const { isauthenticated, user } = useAuth();
 	const [tabledata, setstate] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [userbookmarks, setUserBookmarks] = useState([]);
-	const [userfollows, setUserFollows] = useState([]);
-	const { isauthenticated, user } = useAuth();
-	const navigate = useNavigate();
-	const [searchParams] = useSearchParams();
 
 	const [page, setPage] = useState(1);
 	const [hasMore, setHasMore] = useState(true);
 	const [loadingMore, setLoadingMore] = useState(false);
+
+	const [searchParams] = useSearchParams();
+
+	const { pathname, search } = useLocation();
+	const params = new URLSearchParams(search);
+
+	const tableContainerRef = useRef(null);
+
+
+	useEffect(() => {
+		if (params.get('scrollToTop') === 'true') {
+			window.scrollTo(0, 0);
+		}
+	}, [pathname, search]);
+
+
+	useEffect(() => {
+		if (tableContainerRef.current) {
+				tableContainerRef.current.scrollTop = 0;
+		}
+	}, [searchParams]);
+
+
+	const {
+			userbookmarks,
+			setUserBookmarks
+		} = useBookmarks();
+
+	
+	const {
+		userfollows,
+		toggleUserFollow
+	} = useSourceFollow();
 
 
 	useEffect(() => {
@@ -74,12 +79,14 @@ const DashboardSearchResultsApp = () => {
 		const paramsObject = Object.fromEntries(searchParams.entries());
 
 		try {
-			const response = await Axios.get(`/api/search-results`, 
-				{ params: {
-					...paramsObject,
-				page: pageNumber 
-				}
-			});
+			const response = await axios.get(`/api/search-results`, 
+				{ 
+					params: 
+					{
+						...paramsObject,
+						page: pageNumber 
+					}
+				});
 
 			const newData = response.data.results.map(row => ({
 				id: row.id,
@@ -89,10 +96,6 @@ const DashboardSearchResultsApp = () => {
 				source_url: row.source_url,
 				title: row.title,
 				date_posted: row.date_posted,
-				language: row.language,
-				category_primary: row.category_primary,
-				category_primary_name: row.category_primary_name,
-				category_primary_id: row.category_primary_id,
 				tag1: row.tag1,
 				tag2: row.tag2,
 				tag3: row.tag3,
@@ -102,6 +105,7 @@ const DashboardSearchResultsApp = () => {
 				average_sourcerating: parseFloat(row.average_sourcerating),
 				average_algo_sourcerating: parseFloat(row.average_algo_sourcerating),
 			}));
+
 			if (pageNumber === 1) {
 				setstate(newData);
 			} else {
@@ -109,6 +113,7 @@ const DashboardSearchResultsApp = () => {
 			}
 			setHasMore(response.data.next !== null);
 			setPage(pageNumber);
+
 		} catch (error) {
 			console.error("Failed to fetch article data");
 		} finally {
@@ -116,301 +121,43 @@ const DashboardSearchResultsApp = () => {
 			setLoadingMore(false);
 		};
 	};
-	
-
-	const countClick = async (record) => {
-		window.open(record.source_url, "_blank");
-		try {
-			const response = await Axios.post(`/api/UserClick/`,
-				{ newsarticle: Number(record.id) },
-				{ 
-					withCredentials: true,
-					headers: { 'X-CSRFToken': csrftoken } 
-				}
-			);
-		} catch (error) {
-      console.error("Failed to post click");
-    }
-	};
-
-
-	useEffect(() => {
-    const fetchUserBookmarks = async () => {
-      try {
-        const response = await Axios.get(`/api/UserBookmarks/`);
-        const bookmarks = response.data.map(row => row.newsarticle_bookmarked);
-        setUserBookmarks(bookmarks);
-      } catch (error) {
-        console.error("Failed to fetch user bookmarks");
-      }
-    };
-    fetchUserBookmarks();
-  }, []);
-
-
-	const toggleUserFollow = async (record) => {
-		if (!isauthenticated) {
-			return;
-		};
-
-		const isFollowed = userfollows.includes(record.source_id)
-
-		setUserFollows(prev =>
-			isFollowed 
-				? prev.filter(id => id !== record.source_id)
-				: [...prev, record.source_id]
-		);
-
-		try {
-			const response = await Axios.post(`/api/SourceUserFollowToggle/`,
-				{ source: record.source_id },
-				{ headers: { 'X-CSRFToken': csrftoken } }
-			);
-
-			if (response.data.message === 'Follow removed' && !isFollowed) {
-				setUserFollows(prev => [...prev, record.source_id]);
-			} else if (response.data.message !== "Follow removed" && isFollowed) {
-				setUserFollows(prev => prev.filter(id => id !== record.source_id));
-			}
-		} catch (error) {
-			console.error("Failed to follow source");
-		}
-	};
-
-
-	useEffect(() => {
-		const fetchUserFollows = async () => {
-			try {
-				const response = await Axios.get(`/api/SourceUserFollowsAll/`);
-				const follows = response.data.map(row => row.source);
-				setUserFollows(follows);
-			} catch(error) {
-				console.error("Failed to fetch user follows");
-			}
-		};
-		fetchUserFollows();
-	}, []);
-
-
-	const columns = [
-		{
-      title: "Uploaded",
-      dataIndex: "date_posted",
-			key: 'date_posted',
-      width: 15,
-			align: 'left',
-			defaultSortOrder: 'descend',
-      sorter: (a, b) => moment(a.date_posted) - moment(b.date_posted),
-      render: (date_posted) => (
-        <span className="ant-table-date" >{moment(date_posted).fromNow()}</span>
-      ),
-    },
-    {
-      title: "Source",
-      dataIndex: "source_name",
-      width: 25,
-      key: 'source_name',
-      align: "left",
-      render: (source_name, record) => (
-				<div>
-        <span
-					className="table-source"
-					onClick={(e) => {
-						e.stopPropagation(); 
-						navigate(`/dashboard/source/${encodeURIComponent(source_name)}`);
-					}}
-				>
-				{source_name}
-				</span>
-				<Tooltip
-					title={
-						!isauthenticated
-							? "Log in to follow source"
-							: userfollows.includes(record.source_id)
-								? "Unfollow source"
-								: "Follow source"
-					}
-				>
-				<span 
-					onClick={(e) => {
-						e.stopPropagation();
-						toggleUserFollow(record);
-					}}>
-				<PlusOutlined
-					style={{
-						fontSize: 12,
-						marginLeft: 5,
-						color: userfollows.includes(record.source_id) ? "#ff0000" : "#868686",
-					}}
-				/>
-				</span>
-				</Tooltip>
-				</div>
-			),
-    },
-    {
-      title: "Title",
-      dataIndex: "title",
-      width: 70,
-			align: "left",
-			key: 'title',
-			// ellipsis: true,
-      sorter: (a, b) => a.title - b.title,
-      render: (_, record) => (
-				<div>
-        <span 
-					className={"table-title"}
-					onClick={() => countClick(record)}
-					>
-				{record.title}
-				</span>
-				
-				<div style={{marginTop: 10, }}>
-					<span 
-						onClick={(e) => {
-							navigate(`/dashboard/tag/${encodeURIComponent(record.tag1)}?scrollToTop=true`);
-							}}
-						>
-					<Tag className="table-tag" color={"purple"}>{record.tag1}</Tag>
-					</span>
-					<span
-						onClick={(e) => {
-							navigate(`/dashboard/tag/${encodeURIComponent(record.tag2)}?scrollToTop=true`);
-							}}
-						>
-					<Tag className="table-tag" color={"green"}>{record.tag2}</Tag>
-					</span>
-					<span
-						onClick={(e) => {
-							navigate(`/dashboard/tag/${encodeURIComponent(record.tag3)}?scrollToTop=true`);
-							}}
-						>
-					<Tag className="table-tag" color={"blue"}>{record.tag3}</Tag>
-					</span>
-				</div>
-				</div>	
-      ),
-    },
-    {
-      title: "User rating",
-      dataIndex: "average_rating",
-			key: 'average_rating',
-      width: 20,
-			align: "center",
-      sorter: (a, b) => a.average_rating - b.average_rating,
-      render: (average_rating) => {
-				const value = average_rating ? Math.min(Math.ceil(average_rating), 5) : 0;
-    		return (
-					<span>
-					<Rate value={value} disabled style={{ fontSize: 9 }} />
-					</span>
-				);
-			},
-    },
-		{
-			title: 'Actions',
-			key: 'operation',
-			align: 'center',
-			width: 15,
-			render: (record) => (
-			<div>
-
-			<Popover 
-				placement="right"
-				content={<DashboardBookmarkFeedPopover
-					article={record}
-					setUserBookmarks={setUserBookmarks}
-					/>}
-				trigger='click'
-				color="rgba(26, 26, 26, 0.9)"
-			>
-			<StarOutlined
-				style={{
-					marginRight: 20,
-					fontSize: 15,
-					color: !isauthenticated 
-					? "#868686" 
-					: userbookmarks.includes(record.id) 
-					? "#ffac00" 
-					: "#868686",
-				}}
-			/>
-			</Popover>
-			
-				<span 
-					style={{ marginRight: 20}}
-					onClick={(e) => {
-					e.stopPropagation();
-				}}>
-
-			<Popover 
-				placement="right"
-				content={<PopOverContent record={record}/>}
-				trigger='click'
-				color="rgba(26, 26, 26, 0.9)"
-				>
-
-			<StockOutlined 
-				style={{ 
-					color: "#868686", 
-					fontSize: 15, }}	/>
-
-			</Popover>
-			</span>
-			</div>
-			),
-		},
-  ];
-
-
-	const onChangeSorter = (sorter) => {
-    console.log(sorter);
-  };
 
 
 	return (
 		<>
 			<Layout>
 					<div className="div-data-manager">
-					{loading ? (
-						<div style={{ 
-							display: 'flex', 
-							justifyContent: 'center', 
-							alignItems: 'center', 
-							height: '100%', 
-							width: '100%', 
-							textAlign: 'center'
-							}}>
-					<SyncOutlined spin style={{color: "#5e5e5e", fontSize: 24,}}/>
-					</div>
-					) : (
-						<>
-						<div style={{ flex: 1, minHeight: 0, overflowY: "auto", }}>
-						<Table
-							className={"custom-scrollbar"}
-							columns={columns}
-							dataSource={tabledata}
-							pagination={false}
-							onChange={onChangeSorter}
-							onRow={() => ({
-								style: { cursor: "pointer", marginTop: 0, },
-								})} 
-							size="large"
-							rowKey="id"
-							sticky={true}
-						/>
+						{loading ? (
+						<div className="table-sync-container">
+						<SyncOutlined spin style={{color: "#5e5e5e", fontSize: 24,}}/>
+						</div>
+						) : (
+							<>
+							<div 
+								ref={tableContainerRef}
+								style={{ flex: 1, minHeight: 0, overflowY: "auto", }}
+							>
 
-						{!loading && hasMore && (
-							<div style={{ textAlign: "center", marginTop: 16, flexShrink: 0, height: 70, }}>
-								<Button
-									type="secondary"
-									loading={loadingMore}
-									onClick={() => getData(page + 1)}
-								>
-									{loadingMore ? "Loading..." : "Load more"}
-								</Button>
-							</div>
-						)}
+							<TableArticles
+								tabledata={tabledata}
+								userfollows={userfollows}
+								toggleUserFollow={toggleUserFollow}
+								isauthenticated={isauthenticated}
+								userbookmarks={userbookmarks}
+								setUserBookmarks={setUserBookmarks}
+							/>
+
+							{!loading && hasMore && (
+								<div className='table-load-button-container'>
+									<Button
+										type="secondary"
+										loading={loadingMore}
+										onClick={() => getData(page + 1)}
+									>
+										{loadingMore ? "Loading..." : "Load more"}
+									</Button>
+								</div>
+							)}
 						</div>
 					</>
 					)}

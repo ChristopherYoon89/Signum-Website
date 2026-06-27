@@ -16,34 +16,19 @@ import {
 	PlusOutlined,
 	SyncOutlined,
 } from '@ant-design/icons';
-import Axios from "axios";
 import axios from 'axios';
 import ArticleStatsPopOverContent from './StatsNewsArticle.js';
 import SidebarApp from './SidebarApp.js';
 import HomeBanner from './HomeBanner.js';
-import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
+import { useNavigate, useLocation, useSearchParams, Link } from "react-router-dom";
 import moment from 'moment';
 import StatsHomeIndicators from './StatsHomeIndicators.js';
 import HomeCategories from './HomeCategories.js';
 import DashboardBookmarkFeedPopover from './DashboardBookmarkFeedPopover.js';
 import { useAuth } from "./AuthProvider.js";
 import HomeSearchApp from './HomeSearchApp.js';
-
-
-function getCookie(name) {
-  var cookieValue = null;
-  if (document.cookie && document.cookie !== '') {
-      var cookies = document.cookie.split(';');
-      for (var i = 0; i < cookies.length; i++) {
-          var cookie = cookies[i].toString().replace(/^([\s]*)|([\s]*)$/g, ""); 
-          if (cookie.substring(0, name.length + 1) === (name + '=')) {
-              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-              break;
-          }
-      }
-  }
-  return cookieValue;
-}
+import { useBookmarks, useSourceFollow } from './ManagerHooks.js';
+import { countClick, getCookie } from './ManagerUtility.js';
 
 
 var csrftoken = getCookie('csrftoken');
@@ -91,7 +76,7 @@ const CategoryArticles = ({
 		navigate, 
 		isauthenticated, 
 		userfollows, 
-		createClick, 
+		countClick, 
 		userbookmarks, 
 		toggleUserFollow,
 		setUserBookmarks,
@@ -105,12 +90,12 @@ const CategoryArticles = ({
 					bodyStyle={{ padding: 0, marginTop: 0 }}
 					>
 					<p>	
-						<span
-							onClick={() => navigate(`/dashboard/source/${encodeURIComponent(article.source_name)}?scrollToTop=true`)}
-							className="home-source"
-						>
-							{article.source_name}
+						<span	className="home-source"	>
+						<Link to={`/dashboard/source/${encodeURIComponent(article.source_name)}?scrollToTop=true`}>
+						{article.source_name}
+						</Link>	
 						</span>
+						
 						<span className="home-source-plus-icon">
 							<Tooltip
 								title={
@@ -124,7 +109,6 @@ const CategoryArticles = ({
 							<PlusOutlined
 								style={{
 									marginLeft: 5,
-							
 									fontSize: "0.85em",
 									cursor: 'pointer', 
 									color: !isauthenticated
@@ -142,11 +126,9 @@ const CategoryArticles = ({
 							</Tooltip>
 						</span>
 						
-						<a href={article.source_url} target="_blank" rel="noopener noreferrer">
-							<span className={"home-article-title"} onClick={() => createClick(article)}>
+							<span className={"home-article-title"} onClick={() => countClick(article)}>
 								{article.title} 
 							</span>
-						</a>
 						
 					</p>			
 
@@ -156,29 +138,19 @@ const CategoryArticles = ({
 						 <span className="ant-home-date">
 							{moment(article.date_posted).fromNow()}
 						</span>
-						<span
-							onClick={(e) => {
-								navigate(`/dashboard/tag/${encodeURIComponent(article.tag1)}?scrollToTop=true`);
-								}}  
-							style={{ marginRight: 5}}
-						>
+						
+						<Link to={`/dashboard/tag/${encodeURIComponent(article.tag1)}?scrollToTop=true`}>
 						<Tag className="table-tag" color={"purple"}>{article.tag1}</Tag>
-						</span>
-						<span
-							onClick={(e) => {
-								navigate(`/dashboard/tag/${encodeURIComponent(article.tag2)}?scrollToTop=true`);
-								}}
-							style={{ marginRight: 5, }}
-						>
+						</Link>
+							
+						<Link to={`/dashboard/tag/${encodeURIComponent(article.tag2)}?scrollToTop=true`}>
 						<Tag className="table-tag" color={"green"}>{article.tag2}</Tag>
-						</span>
-						<span 
-							onClick={(e) => {
-								navigate(`/dashboard/tag/${encodeURIComponent(article.tag3)}?scrollToTop=true`);
-								}}
-						>
+						</Link>
+
+						<Link to={`/dashboard/tag/${encodeURIComponent(article.tag3)}?scrollToTop=true`}>
 						<Tag className="table-tag" color={"blue"}>{article.tag3}</Tag>
-						</span>
+						</Link>
+						
 					</span>
 						<span>
 							<Popover 
@@ -224,8 +196,6 @@ const CategoryArticles = ({
 
 
 const HomeSearchResultsApp = () => {
-	const [userbookmarks, setUserBookmarks] = useState([]); 
-	const [userfollows, setUserFollows] = useState([]);
 	const [tabledata, setstate] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const { isauthenticated, user } = useAuth();
@@ -240,6 +210,18 @@ const HomeSearchResultsApp = () => {
 
 	const { location, pathname, search } = useLocation();
 	const params = new URLSearchParams(search);
+
+	
+	const {
+		userbookmarks,
+		setUserBookmarks
+	} = useBookmarks();
+
+
+	const {
+		userfollows,
+		toggleUserFollow
+	} = useSourceFollow();
 
 
 	useEffect(() => {
@@ -310,98 +292,13 @@ const HomeSearchResultsApp = () => {
 
 
 	useEffect(() => {
-		if (!isauthenticated) {
-			setUserBookmarks([]);
-			return;
-		};
-		const fetchUserBookmarks = async () => {
-		try {
-			const response = await Axios.get(`/api/UserBookmarks/`);
-			const bookmarks = response.data.map(row => row.newsarticle_bookmarked);
-			setUserBookmarks(bookmarks);
-		} catch (error) {
-			console.error("Failed to fetch user bookmarks");
-		}
-	};  
-		fetchUserBookmarks();
-  }, [isauthenticated]);
-
-
-	const toggleUserFollow = async (source_id) => {
-		if (!isauthenticated) {
-			return;
-		};
-
-		const isFollowed = userfollows.includes(source_id)
-
-		setUserFollows(prev =>
-			isFollowed 
-				? prev.filter(id => id !== source_id)
-				: [...prev, source_id]
-		);
-		try {
-			const response = await Axios.post(`/api/SourceUserFollowToggle/`,
-				{ source: source_id,	},
-				{ headers: { 'X-CSRFToken': csrftoken } }
-			);
-			if (response.data.message === 'Follow removed' && !isFollowed) {
-				setUserFollows(prev => [...prev, source_id]);
-			} else if (response.data.message !== "Follow removed" && isFollowed) {
-				setUserFollows(prev => prev.filter(id => id !== source_id));
-			}
-		} catch (error) {
-			const status = error.response?.status;
-			if (status === 401 || status === 403) {
-      message.info("Please log in to follow sources");
-    } else {
-      console.error("Failed to follow source");
-      message.error("Something went wrong");
-    }
-		}
-	};
-
-
-	useEffect(() => {
-		if (!isauthenticated) {
-			setUserFollows([]);
-			return;
-		}
-
-		const fetchUserFollows = async () => {
-			try {
-				const response = await Axios.get(`/api/SourceUserFollowsAll/`);
-				const follows = response.data.map(row => row.source);
-				setUserFollows(follows);
-			} catch(error) {
-				console.error("Failed to fetch user follows");
-			}
-		};
-		fetchUserFollows();
-	}, [isauthenticated]);
-
-
-	const createClick = async (record) => {
-			try {
-				const response = await Axios.post(`/api/UserClick/`,
-					{ newsarticle: Number(record.id) },
-					{ 
-						withCredentials: true,
-						headers: { 'X-CSRFToken': csrftoken } 
-					}
-				);
-			} catch (error) {
-				console.error("Failed to post click");
-			}
-		};
-
-
-	useEffect(() => {
 			if (params.get('scrollToTop') === 'true') {
 				window.scrollTo(0, 0);
 				params.delete('scrollToTop');
 				navigate(`${pathname}?${params.toString()}`, { replace: true });
 			}
 		}, [pathname, search, navigate]);
+
 
 	return (
 		<>
@@ -491,7 +388,7 @@ const HomeSearchResultsApp = () => {
 																navigate={navigate}
 																isauthenticated={isauthenticated}
 																userfollows={userfollows}
-																createClick={createClick}
+																countClick={countClick}
 																userbookmarks={userbookmarks}
 																toggleUserFollow={toggleUserFollow}
 																setUserBookmarks={setUserBookmarks}

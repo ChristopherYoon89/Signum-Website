@@ -27,22 +27,8 @@ import { useNavigate, useLocation, Link } from "react-router-dom";
 import { useAuth } from "./AuthProvider.js";
 import ArticleStatsPopOverContent from './StatsNewsArticle.js';
 import DashboardBookmarkFeedPopover from './DashboardBookmarkFeedPopover.js';
-
-
-function getCookie(name) {
-  var cookieValue = null;
-  if (document.cookie && document.cookie !== '') {
-      var cookies = document.cookie.split(';');
-      for (var i = 0; i < cookies.length; i++) {
-          var cookie = cookies[i].toString().replace(/^([\s]*)|([\s]*)$/g, ""); 
-          if (cookie.substring(0, name.length + 1) === (name + '=')) {
-              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-              break;
-          }
-      }
-  }
-  return cookieValue;
-}
+import { useBookmarks, useSourceFollow } from './ManagerHooks.js';
+import { countClick, getCookie } from './ManagerUtility.js';
 
 
 var csrftoken = getCookie('csrftoken');
@@ -59,7 +45,6 @@ const CompNoBookmarkedArticles = () => {
 		</>
 	);
 };
-
 
 
 const CompNoBookmarkFeed = () => {
@@ -84,8 +69,6 @@ const CompNoBookmarkFeed = () => {
 const DashboardBookmarkFeedBoardApp = () => {
   const [loading, setLoading] = useState(true);
 	const scrollContainerRef = useRef(null);
-	const [userbookmarks, setUserBookmarks] = useState([]); 
-	const [userfollows, setUserFollows] = useState([]);	
 	const { isauthenticated, user, usersettings } = useAuth();
 
 	const [feeds, setFeeds] = useState([]);
@@ -95,93 +78,23 @@ const DashboardBookmarkFeedBoardApp = () => {
 	const [hasMore, setHasMore] = useState(false);
 	const [loadingArticles, setLoadingArticles] = useState(false);
 
+	const {
+		userbookmarks,
+		setUserBookmarks
+	} = useBookmarks();
+
+	
+	const {
+		userfollows,
+		toggleUserFollow
+	} = useSourceFollow();
+
 
 	const handleSelectedFeed = async (feed) => {
     setSelectedFeed(feed);
     setPage(1);
     setArticles([]);
     fetchArticles(feed.id, 1);
-	};
-
-
-	useEffect(() => {
-		if (!isauthenticated) {
-			setUserBookmarks([]);
-			return;
-		};
-
-    const fetchUserBookmarks = async () => {
-      try {
-        const response = await axios.get(`/api/UserBookmarks/`);
-        const bookmarks = response.data.map(row => row.newsarticle_bookmarked);
-        setUserBookmarks(bookmarks);
-      } catch (error) {
-        console.error("Failed to fetch user bookmarks", error);
-      }
-    };
-    fetchUserBookmarks();
-  }, [isauthenticated]);
-
-
-	useEffect(() => {
-		if (!isauthenticated) {
-			setUserFollows([]);
-			return;
-		};
-
-		const fetchUserFollows = async () => {
-			try {
-				const response = await axios.get(`/api/SourceUserFollowsAll/`);
-				const follows = response.data.map(row => row.source);
-				setUserFollows(follows);
-			} catch(error) {
-				console.error("Failed to fetch user follows", error);
-			}
-		};
-		fetchUserFollows();
-	}, [isauthenticated]);
-
-
-	const toggleUserFollow = async (source_id) => {
-		if (!isauthenticated) {
-			return;
-		};
-		const isFollowed = userfollows.includes(source_id)
-
-		setUserFollows(prev =>
-			isFollowed 
-				? prev.filter(id => id !== source_id)
-				: [...prev, source_id]
-		);
-
-		try {
-			const response = await axios.post(
-				`/api/SourceUserFollowToggle/`,
-				{ source: source_id },
-				{ headers: { 'X-CSRFToken': csrftoken } }
-			);
-
-			if (response.data.message === 'Follow removed' && !isFollowed) {
-				setUserFollows(prev => [...prev, source_id]);
-			} else if (response.data.message !== "Follow removed" && isFollowed) {
-				setUserFollows(prev => prev.filter(id => id !== source_id));
-			}
-		} catch (error) {
-			console.error("Failed to follow source", error);
-		}
-	};
-
-
-	const countClick = async (note) => {
-		window.open(note.source_url, "_blank");
-		try {
-			const response = await axios.post(`/api/UserClick/`,
-				{ newsarticle: parseInt(note.id) },
-				{ headers: { 'X-CSRFToken': csrftoken } }
-			);
-		} catch (error) {
-      console.error("Failed to post click");
-    }
 	};
 
 
@@ -367,9 +280,9 @@ const DashboardBookmarkFeedBoardApp = () => {
 														</div>
 
 														<div className="dashboard-title" onClick={() => countClick(article)} >
-														<a href={article.source_url} target="_blank">
-														<strong>{article.title}</strong>
-														</a>
+														
+														{article.title}
+														
 														</div>
 
 														</div>

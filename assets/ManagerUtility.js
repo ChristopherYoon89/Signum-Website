@@ -1,10 +1,9 @@
-import React from 'react';
-import { 
-	Rate,
- } from 'antd';
+import axios from 'axios';
 
 
-function getCookie(name) {
+// Function to create CSRF Token
+
+export function getCookie(name) {
   var cookieValue = null;
   if (document.cookie && document.cookie !== '') {
       var cookies = document.cookie.split(';');
@@ -19,22 +18,26 @@ function getCookie(name) {
   return cookieValue;
 }
 
-
 var csrftoken = getCookie('csrftoken');
 
 
-const PopOverContent = ({record}) => {
-	const average_user_value = record.average_sourcerating ? Math.min(Math.ceil(record.average_sourcerating), 5) : 0;
+// Function to open link of article and count click
 
-	return (
-		<>
-			<div style={{ marginTop: 15, }}>
-				<p>
-					<span className="antd-home-rating">Average user rating:</span> 
-					<Rate style={{fontSize: "small", }} disabled value={average_user_value}/>
-				</p>
-		</div>
-	</>
-	)
-}
-export default PopOverContent; 
+export const countClick = async (record) => {
+		window.open(record.source_url, "_blank");
+		try {
+			const response = await axios.post(`/api/UserClick/`,
+				{ 
+					newsarticle: Number(record.id) 
+				},
+				{ 
+					withCredentials: true,
+					headers: { 'X-CSRFToken': csrftoken } 
+				}
+			);
+		} catch (error) {
+			console.error("Failed to post click");
+		}
+	};
+
+

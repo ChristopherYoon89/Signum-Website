@@ -13,22 +13,8 @@ PlusOutlined,
 import Axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "./AuthProvider.js";
-
-
-function getCookie(name) {
-  var cookieValue = null;
-  if (document.cookie && document.cookie !== '') {
-      var cookies = document.cookie.split(';');
-      for (var i = 0; i < cookies.length; i++) {
-          var cookie = cookies[i].toString().replace(/^([\s]*)|([\s]*)$/g, ""); 
-          if (cookie.substring(0, name.length + 1) === (name + '=')) {
-              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-              break;
-          }
-      }
-  }
-  return cookieValue;
-}
+import { getCookie } from './ManagerUtility.js';
+import { useSourceFollow } from './ManagerHooks.js';
 
 
 var csrftoken = getCookie('csrftoken');
@@ -37,7 +23,6 @@ var csrftoken = getCookie('csrftoken');
 const ProfileSourcesApp = () => {
 	const [tabledata, setstate] = useState([]);
   const [loading, setloading] = useState(true);
-	const [userfollows, setUserFollows] = useState([]);
 	const { isauthenticated, user } = useAuth();
 	const navigate = useNavigate();
 
@@ -47,6 +32,11 @@ const ProfileSourcesApp = () => {
 	const [page, setPage] = useState(1);
 	const [hasMore, setHasMore] = useState(true);
 	const [loadingMore, setLoadingMore] = useState(false);
+
+	const {
+			userfollows,
+			toggleUserFollow
+		} = useSourceFollow();
 
 
 	useEffect(() => {
@@ -97,47 +87,6 @@ const ProfileSourcesApp = () => {
 		setHasMore(true);
 		getData(1);
 
-	}, []);
-
-
-	const toggleUserFollow = async (record) => {
-		const isFollowed = userfollows.includes(record.id)
-
-		setUserFollows(prev =>
-			isFollowed 
-				? prev.filter(id => id !== record.id)
-				: [...prev, record.id]
-		);
-
-		try {
-			const response = await Axios.post(
-				`/api/SourceUserFollowToggle/`,
-				{ source: record.id,	},
-				{ headers: { 'X-CSRFToken': csrftoken } }
-			);
-
-			if (response.data.message === 'Follow removed' && !isFollowed) {
-				setUserFollows(prev => [...prev, record.id]);
-			} else if (response.data.message !== "Follow removed" && isFollowed) {
-				setUserFollows(prev => prev.filter(id => id !== record.id));
-			}
-		} catch (error) {
-			console.error("Failed to follow source");
-		}
-	};
-
-
-	useEffect(() => {
-		const fetchUserFollows = async () => {
-			try {
-				const response = await Axios.get(`/api/SourceUserFollowsAll/`);
-				const follows = response.data.map(row => row.source);
-				setUserFollows(follows);
-			} catch(error) {
-				console.error("Failed to fetch user follows");
-			}
-		};
-		fetchUserFollows();
 	}, []);
 
 
@@ -208,7 +157,7 @@ const ProfileSourcesApp = () => {
 				<div>
 				<span onClick={(e) => {
 					e.stopPropagation();
-					toggleUserFollow(record);
+					toggleUserFollow(record.id);
 				}}>
 				<Tooltip
 					placement="top"

@@ -5,25 +5,9 @@ import {
 	Input,
 	Button,
  } from 'antd';
-import Axios from "axios";
 import axios from 'axios';
 import { useAuth } from './AuthProvider.js';
-
-
-function getCookie(name) {
-  var cookieValue = null;
-  if (document.cookie && document.cookie !== '') {
-      var cookies = document.cookie.split(';');
-      for (var i = 0; i < cookies.length; i++) {
-          var cookie = cookies[i].toString().replace(/^([\s]*)|([\s]*)$/g, ""); 
-          if (cookie.substring(0, name.length + 1) === (name + '=')) {
-              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-              break;
-          }
-      }
-  }
-  return cookieValue;
-}
+import { getCookie } from './ManagerUtility.js';
 
 
 var csrftoken = getCookie('csrftoken');
@@ -71,7 +55,7 @@ const DashboardBookmarkFeedPopover = ({ article, setUserBookmarks }) => {
 		if (!article.id) return;
 
 		const fetchArticleFeeds = async () => {
-			const res = await Axios.get(
+			const res = await axios.get(
 				`/api/BookmarkNews/?newsarticle=${article.id}`
 			);
 
@@ -128,7 +112,7 @@ const DashboardBookmarkFeedPopover = ({ article, setUserBookmarks }) => {
 		);
 
 		try {
-			const res = await Axios.post("/api/BookmarkNews/", {
+			const res = await axios.post("/api/BookmarkNews/", {
 				newsarticle_bookmarked: article.id,
 				feed_id: feedId
 			},{

@@ -1192,6 +1192,11 @@ form label {
 }
 
 
+.home-indicators-article-title:hover {
+	cursor: pointer;
+}
+
+
 .scrollable-indicator-card {
 	color: #fff;
 	margin-bottom: 20px;
@@ -1276,8 +1281,13 @@ form label {
 }
 
 
+.home-article-title {
+	cursor: pointer;
+}
+
+
 .home-source-plus-icon {
-	margin-right: 10px;
+	margin-right: 5px;
 }
 
 
@@ -1648,7 +1658,7 @@ form label {
 
 
 .table-title:hover {
-	text-decoration: underline;
+	cursor: pointer;
 }
 
 
@@ -2271,13 +2281,14 @@ form label {
 }
 
 
+.dashboard-title:hover {
+	cursor: pointer;
+}
+
+
 
 .dashboard-source-title-left {
     width: 100%;
-}
-
-.dashboard-title {
-    margin-left: 5px;
 }
 
 
@@ -2365,4 +2376,24 @@ form label {
 .release-notes-title:hover {
 	text-decoration: none;
 	color: #696969;
+}
+
+
+/* Table Articles */
+
+.table-sync-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+	width: 100%;
+	text-align: center;
+}
+
+
+.table-load-button-container {
+	text-align: center;
+	margin-top: 16px;
+	flex-shrink: 0; 
+	height: 70px;
 }

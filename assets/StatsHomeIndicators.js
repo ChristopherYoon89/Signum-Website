@@ -18,22 +18,7 @@ import {
 		StockOutlined,
 	} from '@ant-design/icons';
 import moment from 'moment';
-
-
-function getCookie(name) {
-  var cookieValue = null;
-  if (document.cookie && document.cookie !== '') {
-      var cookies = document.cookie.split(';');
-      for (var i = 0; i < cookies.length; i++) {
-          var cookie = cookies[i].toString().replace(/^([\s]*)|([\s]*)$/g, ""); 
-          if (cookie.substring(0, name.length + 1) === (name + '=')) {
-              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-              break;
-          }
-      }
-  }
-  return cookieValue;
-}
+import { getCookie } from './ManagerUtility';
 
 
 var csrftoken = getCookie('csrftoken');
@@ -43,7 +28,7 @@ const PopArticles = ({
 		poparticlesdata,
 		isauthenticated, 
 		userfollows, 
-		createClick, 
+		countClick, 
 		userbookmarks, 
 		toggleUserFollow,
 		setUserBookmarks,
@@ -76,7 +61,15 @@ const PopArticles = ({
 						{article.source_name}
 						</span>
 						</Link>
-						<span className="home-indicators-article-title"> | <a href={article.source_url} target="_blank" rel="noopener noreferrer">{article.title}</a></span> 
+						<span style={{ marginLeft: 5, marginRight: 5 }}>
+						|
+						</span> 
+						<span 
+							className="home-indicators-article-title"
+							onClick={() => countClick(article)}
+						> 
+						{article.title}
+						</span> 
 					
 						<p style={{ marginTop: 2, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
 
@@ -165,7 +158,7 @@ const StatsHomeTags = ({ tagstabledata }) => {
 const StatsHomeIndicators = ({
 			isauthenticated, 
 			userfollows, 
-			createClick, 
+			countClick, 
 			userbookmarks, 
 			toggleUserFollow,
 			setUserBookmarks,
@@ -202,7 +195,7 @@ const StatsHomeIndicators = ({
 								poparticlesdata={poparticlesdata}
 								isauthenticated={isauthenticated}
 								userfollows={userfollows}
-								createClick={createClick} 
+								countClick={countClick} 
 								userbookmarks={userbookmarks}
 								toggleUserFollow={toggleUserFollow}
 								setUserBookmarks={setUserBookmarks}

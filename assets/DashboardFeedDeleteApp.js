@@ -11,26 +11,10 @@ import {
 import axios from 'axios';
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "./AuthProvider.js";
-
-
-function getCookie(name) {
-  var cookieValue = null;
-  if (document.cookie && document.cookie !== '') {
-      var cookies = document.cookie.split(';');
-      for (var i = 0; i < cookies.length; i++) {
-          var cookie = cookies[i].toString().replace(/^([\s]*)|([\s]*)$/g, ""); 
-          if (cookie.substring(0, name.length + 1) === (name + '=')) {
-              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-              break;
-          }
-      }
-  }
-  return cookieValue;
-}
+import { getCookie } from './ManagerUtility.js';
 
 
 var csrftoken = getCookie('csrftoken');
-
 
 
 const DashboardFeedDeleteApp = () => {
@@ -66,8 +50,7 @@ const DashboardFeedDeleteApp = () => {
 		if (!isauthenticated) return;
 
 		try {
-			const response = await axios.delete(
-				`/api/FeedSingle/${feed_id}/`,
+			const response = await axios.delete(`/api/FeedSingle/${feed_id}/`,
 				{
 					withCredentials: true,
 					headers: { "X-CSRFToken": csrftoken }
