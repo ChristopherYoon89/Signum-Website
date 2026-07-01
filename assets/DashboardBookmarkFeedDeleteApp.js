@@ -22,14 +22,12 @@ const DashboardBookmarkFeedDeleteApp = () => {
 	const [showalert, setShowAlert] = useState(false);
 	const [alertmessage, setAlertMessage] = useState('');
 	const [alerttype, setAlertType] = useState('');
-	const [alertdescription, setAlertDescription] = useState('');
 	const navigate = useNavigate();
 	const { feed_id } = useParams();
 
 
-	const onShowAlert = (message, description, type, show) => {
+	const onShowAlert = (message, type, show) => {
 		setAlertMessage(message);
-		setAlertDescription(description);
 		setAlertType(type)
 		setShowAlert(show);
 	};
@@ -64,7 +62,7 @@ const DashboardBookmarkFeedDeleteApp = () => {
 
 		} catch (error) {
 			window.scrollTo({ top: 0, behavior: "smooth" });
-			onShowAlert('Error', 'Failed to delete feed', 'error', true);
+			onShowAlert('Failed to delete feed', 'error', true);
 		}
 	};
 
@@ -119,7 +117,7 @@ const DashboardBookmarkFeedDeleteApp = () => {
 							<Button 
 								type='secondary'
 								style={{ marginLeft: 20, }}
-								onClick={() => onNavigateBookmarkEdit() }
+								onClick={() => onNavigateBookmarkfeed() }
 							>
 							Cancel
 							</Button>

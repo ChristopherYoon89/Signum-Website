@@ -579,11 +579,6 @@ const DashboardFeedEditApp = () => {
 	};
 
 
-	const onNavigateFeedEdit = () => {
-		navigate(`/dashboard/briefing/editfeed/${feed_id}/delete-feed`);
-	};
-
-
 	const handleUpdateFeed = async () => {
 		if (!isauthenticated) return;
 
@@ -775,13 +770,6 @@ const DashboardFeedEditApp = () => {
 							Cancel
 							</Button>
 
-							<Button 
-								type='secondary'
-								style={{ marginLeft: 20, }}
-								onClick={() => onNavigateFeedEdit() }
-							>
-							Delete
-							</Button>
 						</Col>
 					</Row>	
 				</Card>

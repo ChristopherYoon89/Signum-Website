@@ -3,8 +3,9 @@ from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import (
-	APIClient,
-	APIKey,
+	PublicAPIClient,
+	PublicAPIKey,
+	PublicAPIUsage,
 )
 from django.contrib.auth.models import User
 from rest_framework.permissions import IsAuthenticated
@@ -20,8 +21,8 @@ from .apiserializer import (
 	PublicNewsArticleSerializer, 
 	PublicNewsSourceSerializer,
 	PublicCategorySerializer,
-	APIClientSerializer,
-	APIKeySerializer,
+	PublicAPIClientSerializer,
+	PublicAPIKeySerializer,
 )
 from main_app.models import (
 	NewsArticle, 
@@ -34,7 +35,8 @@ from .apifilter import (
 	NewsSourceFilter,
 	CategoryFilter,
 )
-from django.db.models import Q, Avg, Count
+from django.db.models import Q, Avg, Count, Sum
+from django.db.models.functions import Coalesce
 from .apipermission import PermissionHasAPIKey
 from .apipagination import (
 	PublicNewsArticlePagination,
@@ -54,13 +56,13 @@ class APIClientUserViewSet(viewsets.ModelViewSet):
 	'''
 	View that displays the API Client model of a user
 	'''
-	serializer_class = APIClientSerializer 
+	serializer_class = PublicAPIClientSerializer 
 	permission_classes = [IsAuthenticated]
 	
 	def get_queryset(self):
 		user = self.request.user
 		
-		queryset = APIClient.objects.filter(
+		queryset = PublicAPIClient.objects.filter(
 			user=user,
 			is_active=True
 			)
@@ -72,18 +74,21 @@ class APIKeyAllUserViewSet(viewsets.ModelViewSet):
 	'''
 	View that displays all API keys of a user
 	'''
-	serializer_class = APIKeySerializer
+	serializer_class = PublicAPIKeySerializer
 	permission_classes = [IsAuthenticated]
 
 	def get_queryset(self):
 		user = self.request.user 
-		client = APIClient.objects.get(
+		client = PublicAPIClient.objects.get(
 			user=user,
 			is_active=True,
 		)
-		queryset = APIKey.objects.filter(
-			client=client,
-		).order_by('-date_created')
+		queryset = PublicAPIKey.objects.filter(
+			client=client
+			).annotate(
+			total_tokens_used=Coalesce(Sum("usage__tokens_used"), 0), 
+			total_request_count=Coalesce(Sum("usage__request_count"), 0),
+			).order_by("-date_created")
 		return queryset
 
 
@@ -96,22 +101,33 @@ class APIKeyEditFetchView(APIView):
 
 	def get(self, request, *args, **kwargs):
 		user = request.user
-		client = get_object_or_404(APIClient, user=user, is_active=True)
+		api_client = get_object_or_404(PublicAPIClient, user=user, is_active=True)
 		api_key_id = request.query_params.get('id', None)
-		api_key = get_object_or_404(APIKey,	id=int(api_key_id),	client=client)
+		api_key = get_object_or_404(PublicAPIKey, pk=int(api_key_id), client=api_client)
 
-		monthly_usage = get_monthly_usage(api_key.client)
+		total_tokens = PublicAPIUsage.objects.filter(
+				public_api_key=api_key
+			).aggregate(
+				total=Sum("tokens_used")
+			)["total"] or 0
+		
+		total_requests = PublicAPIUsage.objects.filter(
+				public_api_key=api_key
+			).aggregate(
+				total=Sum("request_count")
+			)["total"] or 0
 
 		data = {
-				"client_id": client.id,
-				"client_username": client.user.username,
-				"date_activation": api_key.date_created,
-				"rate_limit": client.rate_limit,
-				"tokens_used": monthly_usage["tokens_used"],
-				"api_key_name": api_key.name_of_key,
-				"api_is_active": api_key.is_active,
-				"api_key": api_key.key,
-			}
+			"user_rate_limit": api_client.rate_limit,
+			"user_monthly_token_limit": api_client.monthly_token_limit,
+			"user_total_token_usage": api_client.total_token_usage,
+			"api_key_name": api_key.name_of_key,
+			"api_key_is_active": api_key.is_active,
+			"api_key_date_created": api_key.date_created, 
+			"api_key_tokens_limit": api_key.tokens_limit,
+			"api_key_tokens_used": total_tokens,  
+			"api_key_request_count": total_requests,
+		}
 		
 		return Response(data, status=status.HTTP_200_OK)
 
@@ -126,8 +142,8 @@ class APIKeyGenerateNew(APIView):
 	def post(self, request, *args, **kwargs):
 		user = request.user
 		api_id = request.query_params.get("id", None)
-		client_instance = get_object_or_404(APIClient, user=user, is_active=True)
-		api_key_instance = get_object_or_404(APIKey, id=api_id, client=client_instance)
+		client_instance = get_object_or_404(PublicAPIClient, user=user, is_active=True)
+		api_key_instance = get_object_or_404(PublicAPIKey, id=api_id, client=client_instance)
 		raw_key = generate_api_key()
 		hashed_key = hash_api_key(raw_key)
 
@@ -151,10 +167,13 @@ class APIKeySaveChanges(APIView):
 		user = request.user 
 		key_id = request.data.get("key_id", None)
 		name_of_key = request.data.get('name_of_key', None)
+		name_of_key = name_of_key.strip()
 		is_active = request.data.get('is_active', None)
+		token_limit = request.data.get('tokens_limit', None)
 
-		client_instance = get_object_or_404(APIClient, user=user, is_active=True)
-		api_key_instance = get_object_or_404(APIKey, id=key_id,	client=client_instance)
+		client_instance = get_object_or_404(PublicAPIClient, user=user, is_active=True)
+		api_key_instance = get_object_or_404(PublicAPIKey, pk=key_id,	client=client_instance)
+		
 
 		if name_of_key:
 			api_key_instance.name_of_key = name_of_key
@@ -162,28 +181,41 @@ class APIKeySaveChanges(APIView):
 		if is_active is not None:
 			api_key_instance.is_active = is_active
 
-		api_key_instance.save(update_fields=["name_of_key", "is_active"])
+		if token_limit: 
+			api_key_instance.tokens_limit = token_limit
+
+		api_key_instance.save(update_fields=["name_of_key", "is_active", "tokens_limit"])
 
 		return Response(
 			{"message": "API key successfully updated"},
 			status=status.HTTP_200_OK
-		)
+		) 
 	
 
 
 class APIKeySaveNewKey(APIView):
 	'''
-	View that creates 
+	View that creates new API key
 	'''
 	permission_classes = [IsAuthenticated]
 
 	def post(self, request, *args, **kwargs):
 		user = request.user
-		
-		api_client = get_object_or_404(APIClient, user=user, is_active=True)
-		
+		api_client = get_object_or_404(PublicAPIClient, user=user, is_active=True)
 		name_of_key = request.data.get("name_of_key", None)
+		name_of_key = name_of_key.strip()
+
+		try:
+			key_tokens_limit = int(request.data.get("tokens_limit", 0))
+		except (TypeError, ValueError):
+			return Response({"message": "Invalid token limit."}, status=status.HTTP_400_BAD_REQUEST,)
 		
+		if key_tokens_limit < 0:
+			return Response({"message": "Token limit must be non-negative."}, status=status.HTTP_400_BAD_REQUEST,)
+		
+		if key_tokens_limit > api_client.monthly_token_limit:
+			return Response({"message": "Key token limit cannot exceed the client's monthly token limit."},	status=status.HTTP_400_BAD_REQUEST,)
+
 		if not name_of_key:
 			date_created = timezone.now().strftime('%Y%m%d-%H%M%S')
 			name_of_key = f"API-Key-{date_created}"
@@ -193,11 +225,12 @@ class APIKeySaveNewKey(APIView):
 		raw_key = generate_api_key()
 		hashed_key = hash_api_key(raw_key)
 
-		api_key_instance = APIKey.objects.create(
+		PublicAPIKey.objects.create(
 			client=api_client,
 			name_of_key=name_of_key,
 			key=hashed_key, 
 			is_active=is_active,
+			tokens_limit=key_tokens_limit
 		)
 
 		return Response(
@@ -221,9 +254,9 @@ class TokenMeteredViewSet(viewsets.ReadOnlyModelViewSet):
 		else:
 			tokens_needed = queryset.count()
 
-		client = request.auth.client
+		api_key = request.auth
 
-		consume_tokens(client, tokens_needed)
+		consume_tokens(api_key, tokens_needed)
 
 		if page is not None:
 			serializer = self.get_serializer(page, many=True)
@@ -234,8 +267,8 @@ class TokenMeteredViewSet(viewsets.ReadOnlyModelViewSet):
 	
 
 	def retrieve(self, request, *args, **kwargs):
-		client = request.auth.client
-		consume_tokens(client, 1)
+		api_key = request.auth
+		consume_tokens(api_key, 1)
 		return super().retrieve(request, *args, **kwargs)
 
 

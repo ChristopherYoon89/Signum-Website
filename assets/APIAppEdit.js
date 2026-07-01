@@ -10,15 +10,19 @@ import {
   Tooltip,
   Select,
   Divider,
+  InputNumber,
   Alert, 
   } from 'antd';
+import {
+  useParams,
+} from 'react-router-dom';
 import {
 	QuestionCircleOutlined,
 } from '@ant-design/icons';
 import axios from 'axios';
 import { useAuth } from "./AuthProvider.js";
 import moment from 'moment-timezone';
-import APINoAccessApp from './APINoAccessApp.js';
+import APINoAccessApp from './APINoAccessApp.js'; 
 import { getCookie } from './ManagerUtility.js';
 
 
@@ -29,7 +33,16 @@ const CompClientUsername = ({ clientusername }) => {
   return (
     <>
       <div className="sig-form-header">
-        Client username
+        Username
+        <span>
+          <Tooltip
+            placement='right'
+            title='To change your username go to the profile section
+            of the dashboard side menu'
+          >
+          <QuestionCircleOutlined className="sig-form-info-icon"	/>
+          </Tooltip>
+        </span>
       </div>
       <div className='sig-form-input'>
         {clientusername}
@@ -39,35 +52,54 @@ const CompClientUsername = ({ clientusername }) => {
 };
 
 
-const SelectAPI = ({ selectedapi, allapis, onChangeSelectAPI }) => {
+const CompGlobalTokensLimit = ({ usermonthlytokenlimit }) => {
   return (
     <>
-      <div className="sig-form-header">
-        Select API key
+      <div className='sig-form-header'>
+        Monthly token limit
         <span>
-          <Tooltip
+        <Tooltip
             placement='right'
-            title='Select the API key you want to view or edit'
+            title='To change your monthly token limit contact customer 
+            support'
           >
           <QuestionCircleOutlined className="sig-form-info-icon"	/>
           </Tooltip>
         </span>
       </div>
+
       <div className='sig-form-input'>
-        <Select
-          className='sig-form-select'
-          value={selectedapi}
-          style={{ width: 400, }}
-          onChange={onChangeSelectAPI}
-          options={allapis}
-        />
+        {usermonthlytokenlimit}
       </div>
     </>
   );
 };
 
 
-const InputName = ({ apikeyname, onChangeKeyName }) => {
+const CompGlobalTokensUsage = ({ usertotaltokenusage }) => {
+  return (
+    <>
+      <div className='sig-form-header'>
+        Total token usage
+        <span>
+        <Tooltip
+            placement='right'
+            title='Total token usage '
+          >
+          <QuestionCircleOutlined className="sig-form-info-icon"	/>
+          </Tooltip>
+        </span>
+      </div>
+
+      <div className='sig-form-input'>
+        {usertotaltokenusage}
+      </div>
+    </>
+  );
+};
+
+
+const CompInputName = ({ apikeyname, onChangeKeyName }) => {
   return(
     <>
       <div className="sig-form-header">
@@ -87,18 +119,18 @@ const InputName = ({ apikeyname, onChangeKeyName }) => {
           onChange={(e) => onChangeKeyName(e.target.value)}
           style={{	width: 400,	}}	
           value={apikeyname}
-          />
+        />
       </div>
     </>
   );
 };
 
 
-const CompDateActivation = ({ dateofactivation }) => {
+const CompDateCreated = ({ apikeydatecreated }) => {
   return (
     <>
       <div className="sig-form-header">
-        Date of activation
+        Date created
         <span>
           <Tooltip
             placement='right'
@@ -109,58 +141,15 @@ const CompDateActivation = ({ dateofactivation }) => {
         </span>
       </div>
       <div className='sig-form-input'>
-        {String(dateofactivation)}
+        {String(apikeydatecreated)}
       </div>
     </>
   );
 };
 
 
-const CompRateLimit = ({ ratelimit }) => {
-  return (
-    <>
-      <div className="sig-form-header">
-        Client token limit
-        <span>
-          <Tooltip
-            placement='right'
-            title='Maximum token usage permitted under your contract'
-          >
-          <QuestionCircleOutlined className="sig-form-info-icon"	/>
-          </Tooltip>
-        </span>
-      </div>
-      <div className='sig-form-input'>
-        {ratelimit}
-      </div>
-    </>
-  );
-};
 
-
-const CompUsedTokens = ({ usedtokens }) => {
-  return (
-    <>
-      <div className="sig-form-header">
-        Token usage
-        <span>
-          <Tooltip
-            placement='right'
-            title='Number of tokens already used'
-          >
-          <QuestionCircleOutlined className="sig-form-info-icon"	/>
-          </Tooltip>
-        </span>
-      </div>
-      <div className='sig-form-input'>
-        {usedtokens}
-      </div>
-    </>
-  );
-};
-
-
-const CompKeyActive = ({ keyactive, onChangeKeyActive }) => {
+const CompKeyActive = ({ apikeyisactive, onChangeKeyActive }) => {
   return(
     <>
       <div className="sig-form-header">
@@ -177,12 +166,77 @@ const CompKeyActive = ({ keyactive, onChangeKeyActive }) => {
       <div className='sig-form-input'>
         <Checkbox
           onChange={(e) => onChangeKeyActive(e.target.value)}	
-          checked={keyactive}
+          checked={apikeyisactive}
         />
       </div>
     </>
   );
 };
+
+
+const CompTokensLimit = ({ apikeytokenslimit, handleKeyTokensLimit }) => {
+  return (
+    <>
+      <div className="sig-form-header">
+        Key's token limit
+        <span>
+          <Tooltip
+            placement='right'
+            title='Maximum number of tokens that can be used by this key'
+          >
+          <QuestionCircleOutlined className="sig-form-info-icon"	/>
+          </Tooltip>
+        </span>
+      </div>
+      <div className='sig-form-input'>
+        <InputNumber
+          min={0}
+          value={apikeytokenslimit}
+          onChange={handleKeyTokensLimit}
+          style={{ width: 400, }}
+        />
+      </div>
+    </>
+  );
+};
+
+
+
+const CompUsedTokens = ({ apikeytokensused }) => {
+  return (
+    <>
+      <div className="sig-form-header">
+        Key token usage
+        <span>
+          <Tooltip
+            placement='right'
+            title='Number of tokens already used with this key'
+          >
+          <QuestionCircleOutlined className="sig-form-info-icon"	/>
+          </Tooltip>
+        </span>
+      </div>
+      <div className='sig-form-input'>
+        {apikeytokensused}
+      </div>
+    </>
+  );
+};
+
+
+const CompAPIKeyRequestCount = ({ apikeyrequestcount }) => {
+  return(
+    <>
+      <div className='sig-form-header'>
+      Total request count  
+      </div>  
+      <div className='sig-form-input'>
+        {apikeyrequestcount}
+      </div>
+    </>
+  );
+};
+
 
 
 const CompKey = ({ keygenerated, handleUpdateKey }) => {
@@ -205,7 +259,7 @@ const CompKey = ({ keygenerated, handleUpdateKey }) => {
           <Button
             onClick={() => handleUpdateKey()}
           >
-            Generate New Key
+          Generate New Key
           </Button>
         </div>
         <div className="api-key-description">
@@ -219,25 +273,29 @@ const CompKey = ({ keygenerated, handleUpdateKey }) => {
 
 const APIAppEdit = () => {
   const { isauthenticated, user } = useAuth();
-  const [selectedapi, setSelectedAPI] = useState('');
-  const [clientusername, setAPIClientUsername] = useState(user.username);
-  const [dateofactivation, setDateOfActivation] = useState('');
-  const [ratelimit, setRateLimit] = useState('');
-  const [usedtokens, setUsedTokens] = useState('');
+  const [userratelimit, setUserRatelimit] = useState(0);
+  const [usermonthlytokenlimit, setUserMonthlyTokenLimit] = useState(0);
+  const [usertotaltokenusage, setUserTotalTokenUsage] = useState(0);
+
   const [apikeyname, setAPIKeyName] = useState('');
-  const [keyactive, setKeyActive] = useState(false);
+  const [apikeyisactive, setAPIKeyIsActive] = useState(false);
+  const [apikeydatecreated, setAPIKeyDateCreated] = useState('');
+  
+  const [apikeytokenslimit, setAPIKeyTokensLimit] = useState(0);
+  const [apikeytokensused, setAPIKeyTokensUsed] = useState(0);
+  const [apikeyrequestcount, setAPIKeyRequestCount] = useState(0);
+  
   const [keygenerated, setKey] = useState('');
+  
   const [showalert, setShowAlert] = useState(false);
   const [alertmessage, setAlertMessage] = useState('');
   const [alerttype, setAlertType] = useState('');
-  const [alertdescription, setAlertDescription] = useState('');
-  const [allapis, setAllAPIs] = useState([]);
-  const [showformapi, setShowFormAPI] = useState(false);
+
+  const { apikey_id } = useParams();
 
 
-  const onShowAlert = (message, description, type, show) => {
+  const onShowAlert = (message, type, show) => {
     setAlertMessage(message);
-    setAlertDescription(description);
     setAlertType(type);
     setShowAlert(show);
   };
@@ -245,18 +303,26 @@ const APIAppEdit = () => {
 
   const onSaveKey = async () => {
     const iskeynamevalid = apikeyname.trim().length > 0;
-
+    
     if (!iskeynamevalid) {
       window.scrollTo({top: 0, behavior: 'smooth'});
-      onShowAlert('Error', 'Provide a name for your key', 'error', true);
+      onShowAlert('Please provide a name for your key', 'error', true);
       return;
+    };
+
+    const isTokenLimitValid = Number(apikeytokenslimit) <= Number(usermonthlytokenlimit);
+
+    if (!isTokenLimitValid) {
+      window.scrollTo({top: 0, behavior: 'smooth'});
+      onShowAlert('Please specify a token limit lower than your monthly limit');
     };
 
     try {
       const response = await axios.patch(`/api/update-key/`, {
-        key_id: Number(selectedapi),
-        name_of_key: String(apikeyname), 
-        is_active: Boolean(keyactive),
+        key_id: Number(apikey_id),
+        name_of_key: String(apikeyname),
+        tokens_limit: Number(apikeytokenslimit), 
+        is_active: Boolean(apikeyisactive),
       }, 
       {
         withCredentials: true,
@@ -265,33 +331,17 @@ const APIAppEdit = () => {
     );
     if (response.status === 200) {
       window.scrollTo({top: 0, behavior: 'smooth'}); 
-      onShowAlert('Success', 'Changes saved', 'success', true);
+      onShowAlert('Changes saved', 'success', true);
     }
     } catch (error) {
+      console.log(`Error updating the key`, error);
       window.scrollTo({top: 0, behavior: 'smooth'});
-      onShowAlert('Error', 'Failed to update failed', 'error', true);
+      onShowAlert('Update failed', 'error', true);
     }
   };
 
-
   useEffect(() => {
-		const fetchAllAPIKeys = async () => {
-		try { 
-			const response = await axios.get(`/api/APIKeyAllUser`);
-			const mappedkeys = response.data.map((row) => ({
-							value: row.id,
-							label: row.name_of_key,
-						}));
-					setAllAPIs(mappedkeys);
-					} catch (error) {
-						console.error('Failed to fetch user api keys');
-					};
-		}
-		fetchAllAPIKeys();
-	}, []);
-
-
-  const fetchSingleAPI = async (apikey_id) => {
+  const fetchSingleAPI = async () => {
     try {
       const response = await axios.get(`/api/fetch-single-key/?id=${apikey_id}`, {
         withCredentials: true,
@@ -300,24 +350,25 @@ const APIAppEdit = () => {
 
       const api = response.data;
 
-      setDateOfActivation(moment(api.date_activation).format("YYYY-mm-DD") || '');
-      setRateLimit(api.rate_limit || '');
-      setUsedTokens(api.tokens_used || 0);
-      setAPIKeyName(api.api_key_name || '');
-      setKeyActive(Boolean(api.api_is_active) || false);
+      console.log(api);
+
+      setUserRatelimit(api.user_rate_limit || 0);
+      setUserMonthlyTokenLimit(api.user_monthly_token_limit || 0);
+      setUserTotalTokenUsage(api.user_total_token_usage || 0);
+      setAPIKeyName(api.api_key_name || '-');
+      setAPIKeyIsActive(Boolean(api.api_key_is_active) || false);
+      setAPIKeyDateCreated(moment(api.api_key_date_created).format("YYYY-MM-DD") || '-');
+      setAPIKeyTokensLimit(api.api_key_tokens_limit || 0);
+      setAPIKeyTokensUsed(api.api_key_tokens_used || 0);
+      setAPIKeyRequestCount(api.api_key_request_count || 0);      
       setKey('****************************************************************');
 
     } catch (error) {
-      console.error('Failed to fetch single API');
+      console.error('Failed to fetch single API', error);
     }
   };
-
-
-  const onChangeSelectAPI = (value) => {
-    setSelectedAPI(value);
-    fetchSingleAPI(value);
-    setShowFormAPI(true);
-  };
+  fetchSingleAPI();
+  }, []);
 
 
   const onChangeKeyName = (value) => {
@@ -326,13 +377,19 @@ const APIAppEdit = () => {
 
 
   const onChangeKeyActive = () => {
-    setKeyActive(!keyactive);
+    setAPIKeyIsActive(!apikeyisactive);
+  };
+
+
+  const handleKeyTokensLimit = (value) => {
+    console.log(value);
+    setAPIKeyTokensLimit(value ?? 0);
   };
 
 
   const handleUpdateKey = async () => {
     try {
-      const response = await axios.post(`/api/generate-new-apikey/?id=${selectedapi}`,
+      const response = await axios.post(`/api/generate-new-apikey/?id=${apikey_id}`,
       {},
       {
         withCredentials: true,
@@ -342,10 +399,10 @@ const APIAppEdit = () => {
       const apikey = response.data 
       setKey(apikey.raw_key);
 
-      onShowAlert('Success', 'New key successfully saved', 'success', true)
+      onShowAlert('New key successfully saved', 'success', true)
 
     } catch (error) {
-      onShowAlert('Error', 'Saving of the new key failed. Try again later.', 'error', true)
+      onShowAlert('Saving of the new key failed. Try again later.', 'error', true)
     }
   }
 
@@ -358,13 +415,11 @@ const APIAppEdit = () => {
         style={{ borderColor: '#FFF', }}
         bodyStyle={{ paddingTop: 10, paddingLeft: 10, }}
         >
-			  {(user?.subscription_type === "API") ? (
-        <> 
+			   
           {showalert && (
               <div className='sig-form-alert'>
               <Alert
                 message={alertmessage}
-                description={alertdescription}
                 type={alerttype}
                 showIcon
               />
@@ -374,73 +429,74 @@ const APIAppEdit = () => {
           <Row>
             <Col span={12}>
               <CompClientUsername
-                  clientusername={clientusername}
+                  clientusername={user.username}
                 />
             </Col>
-          </Row>
-
-          <Divider />
-
-          <Row>
             <Col span={12}>
-              <SelectAPI 
-                selectedapi={selectedapi}
-                allapis={allapis}
-                onChangeSelectAPI={onChangeSelectAPI}
+              <CompGlobalTokensLimit 
+                usermonthlytokenlimit={usermonthlytokenlimit}
               />
             </Col>
           </Row>
 
-          {showformapi && (
-          <div>
+          <Row style={{ marginTop: 35, }}>
+            <Col span={12}>
+              <CompGlobalTokensUsage 
+                usertotaltokenusage={usertotaltokenusage} 
+              />
+            </Col>
+          </Row>
 
           <Divider />
 
           <Row>
             <Col span={12}>
-              <InputName 
+              <CompInputName 
                 apikeyname={apikeyname}
                 onChangeKeyName={onChangeKeyName}
               />
               
             </Col>
             <Col span={12}>
-              <CompDateActivation 
-                dateofactivation={dateofactivation}
+              <CompTokensLimit 
+                apikeytokenslimit={apikeytokenslimit}
+                handleKeyTokensLimit={handleKeyTokensLimit}
               />
             </Col>
           </Row>
           
-          <Divider />
-          
-          <Row>
-            <Col span={12}>
-              <CompRateLimit 
-                ratelimit={ratelimit}
-              />
-            </Col>
-            <Col span={12}>
-              <CompUsedTokens
-                usedtokens={usedtokens}
-              />
-            </Col>  
-          </Row>
-
-          <Divider />
-            
-          <Row>
+          <Row style={{ marginTop: 35, }}>
             <Col span={12}>
               <CompKeyActive 
-                keyactive={keyactive}
+                apikeyisactive={apikeyisactive}
                 onChangeKeyActive={onChangeKeyActive}
               />
             </Col>
+            <Col span={12}>
+              <CompDateCreated 
+                apikeydatecreated={apikeydatecreated}
+              />
+            </Col>
+              
+          </Row>
+            
+          <Row style={{ marginTop: 35, }}>
+            <Col span={12}>
+              <CompUsedTokens
+                apikeytokensused={apikeytokensused}
+              />
+            </Col>    
+          </Row>
+
+          <Divider />
+
+          <Row>
             <Col span={12}>
               <CompKey 
                 keygenerated={keygenerated}
                 handleUpdateKey={handleUpdateKey}
               />
-            </Col>    
+            </Col>
           </Row>
           
           <Divider />
@@ -454,16 +510,7 @@ const APIAppEdit = () => {
               Save changes 
               </Button>
             </Col>
-          </Row>  
-          </div>
-          )}
-        </>
-        ) : (
-        <>
-          <APINoAccessApp />
-        </>
-      )
-      }
+          </Row>       
       </Card>
     </Layout>
 		</>

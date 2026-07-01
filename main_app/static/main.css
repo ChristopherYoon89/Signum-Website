@@ -1645,6 +1645,7 @@ form label {
 
 .table-source:hover {
 	text-decoration: underline;
+	cursor: pointer;
 }
 
 
@@ -2006,6 +2007,7 @@ form label {
 .api-icon-container {
 	text-align: center;
 	margin-top: 80px;
+	color: #272727;
 }
 
 
@@ -2030,6 +2032,19 @@ form label {
 
 .api-key-button {
 	margin-top: 10px;
+}
+
+
+.api-table-cell {
+	color: #474747;
+	font-size: 0.85rem;
+}
+
+
+.api-table-key-name {
+	color: #295bff;
+	font-size: 0.85rem;
+	font-weight: bold;
 }
 
 

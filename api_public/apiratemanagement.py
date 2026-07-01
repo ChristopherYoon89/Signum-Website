@@ -2,7 +2,7 @@ from django.utils import timezone
 from datetime import timedelta
 from rest_framework.exceptions import Throttled
 from .apirateredisclient import redis_client
-from .models import APIUsage
+from .models import PublicAPIUsage
 from django.db.models import Sum  
 
 
@@ -14,25 +14,32 @@ def get_today_expiry_seconds():
 
 
 
-def consume_tokens(client_id, tokens_needed, rate_limit):
-    key = f"api_client:{client_id}:tokens"
+def consume_tokens(api_key, tokens_needed):
+    key = f"public_api_key:{api_key.id}:tokens"
 
     # increment atomically
     tokens_used = redis_client.incrby(key, tokens_needed)
-
+     
     # set expiry only if first time
     if tokens_used == tokens_needed:
         redis_client.expire(key, get_today_expiry_seconds())
 
-    if tokens_used > rate_limit:
-        raise Throttled(detail="API rate limit exceeded")
+    if api_key.tokens_limit and tokens_used > api_key.tokens_limit:
+        raise Throttled(detail="API key limit exceeded")
+    
+    client = api_key.client 
+
+    monthly = get_monthly_usage(client)
+
+    if monthly["tokens_used"] + tokens_needed > client.monthly_token_limit:
+        raise Throttled(detail="Monthly limit exceeded")
 
 
 
 def get_monthly_usage(client):
     now = timezone.now()
     result = (
-        APIUsage.objects
+        PublicAPIUsage.objects
         .filter(
             client=client,
             date__year=now.year,

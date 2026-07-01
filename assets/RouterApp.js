@@ -24,6 +24,9 @@ import DashboardBookmarkFeedDeleteApp from './DashboardBookmarkFeedDeleteApp.js'
 import DashboardFeedDeleteApp from './DashboardFeedDeleteApp.js';
 import DashboardExportDataApp from './DashboardExportDataApp.js';
 import HomeSearchResultsApp from './HomeSearchResultsApp.js';
+import APIAppList from './APIAppList.js';
+import APINoAccessApp from './APINoAccessApp.js';
+import APIProtectedRoute from './APIProtectedRoute.js';
 
 
 const AppRouter = () => (
@@ -61,9 +64,23 @@ const AppRouter = () => (
 			</Route>
 			<Route path="mysources" element={<ProfileSourcesApp />} />
 			<Route path="profile" element={<DashboardProfileApp />} />
+			<Route path="api-no-access" element={<APINoAccessApp />} />
 			<Route path="api">
-				<Route index element={<APIAppAdd />} />
-				<Route path="edit" element={<APIAppEdit />} />
+				<Route index element={
+					<APIProtectedRoute>
+						<APIAppList />
+					</APIProtectedRoute>
+				} />
+				<Route path="add" element={
+					<APIProtectedRoute>	
+						<APIAppAdd />
+					</APIProtectedRoute>	
+				} />
+				<Route path="edit/:apikey_id" element={
+					<APIProtectedRoute>		
+						<APIAppEdit />
+					</APIProtectedRoute>		
+				} />
 			</Route>
 		</Route>
 	</Routes>

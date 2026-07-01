@@ -162,39 +162,18 @@ const ButtonsAPI = ({ navigate }) => {
 			<Tooltip
 				title={"Add key"}
 				placement="bottom"
-				>	
-			<span
-			onClick={() => navigate(`/dashboard/api`)}
-			>
+			>	
+				<span onClick={() => navigate(`/dashboard/api/add`)} >
 				<Avatar shape="circle" size={25} icon={<PlusOutlined style={{
 					fontSize: 16,
 					display: "flex",
 					alignItems: "center",
 					justifyContent: "center",
 					height: "100%",
-				}}/>} 
+					}}/>} 
 					style={{ backgroundColor: "#295bff", verticalAlign: 'left', cursor: "pointer", }} 
 					/>
-			</span>
-			</Tooltip>
-
-			<Tooltip
-				title={"Edit key"}
-				placement="bottom"
-				>	
-			<span 
-			onClick={() => navigate(`/dashboard/api/edit `)}
-			>
-				<Avatar shape="circle" size={25} icon={<ToolOutlined style={{
-					fontSize: 16,
-					display: "flex",
-					alignItems: "center",
-					justifyContent: "center",
-					height: "100%",
-				}}/>} 
-					style={{ backgroundColor: "#295bff", verticalAlign: 'left', cursor: "pointer", }} 
-					/>
-			</span>
+				</span>
 			</Tooltip>
 			</div>
 		</>
@@ -213,7 +192,7 @@ const DashboardTopMenu = ({title}) => {
 							{title}
 						</span>
 
-						{((title === "Add API Key") || (title === "Edit API Key")) ? (
+						{((title === "Add Key") || (title === "Edit Key") || (title === "API Keys")) ? (
 							<>
 								<ButtonsAPI 
 									navigate={navigate}

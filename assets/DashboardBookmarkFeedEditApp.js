@@ -173,11 +173,6 @@ const DashboardBookmarkFeedEditApp = () => {
 	};
 
 
-	const onNavigateDelete = (feed_id) => {
-		navigate(`./delete-feed`);
-	};
-
-
 	const handleUpdateFeed = async () => {
 		if (!isauthenticated) return;
 
@@ -223,8 +218,7 @@ const DashboardBookmarkFeedEditApp = () => {
 					bodyStyle={{ paddingTop: 10, paddingLeft: 10, }}
 				>
 					
-				{
-					showalert && (
+				{ showalert && (
 						<div className='sig-form-alert'>
 						<Alert
 							message={alertmessage}
@@ -232,8 +226,7 @@ const DashboardBookmarkFeedEditApp = () => {
 							showIcon
 						/>
 						</div>
-					)
-				}
+				)}
 					
 				<div>
 					<Row>
@@ -281,13 +274,6 @@ const DashboardBookmarkFeedEditApp = () => {
 							Cancel
 							</Button>
 
-							<Button 
-								type="secondary"
-								style={{ marginLeft: 20, }}
-								onClick={() => onNavigateDelete(feed_id)}
-							>
-							Delete
-							</Button>
 						</Col>
 					</Row>
 				</div>

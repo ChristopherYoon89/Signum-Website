@@ -137,7 +137,10 @@ const DashboardApp = () => {
 		if (decodedPath === '/dashboard/export') return setTitle('Export Data');
 		if (decodedPath.startsWith('/dashboard/source')) return setTitle('Source');
 		if (decodedPath.startsWith('/dashboard/tag')) return setTitle('Tag');
-		if (decodedPath === '/dashboard/api/edit') return setTitle('Edit API Key');
+		if (decodedPath === '/dashboard/api') return setTitle('API Keys');
+		if (decodedPath === '/dashboard/api-no-access') return setTitle('API Access');
+		if (decodedPath === '/dashboard/api/add') return setTitle('Add Key');
+		if (decodedPath.startsWith('/dashboard/api/edit')) return setTitle('Edit Key');
 		if (decodedPath.startsWith('/dashboard/bookmarks')) return setTitle('Bookmarks');
 		if (decodedPath.startsWith('/dashboard/mysources')) return setTitle('My Sources');
 		if (decodedPath.startsWith('/dashboard/search')) return setTitle('Search');

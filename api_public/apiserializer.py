@@ -3,12 +3,13 @@ from django.db import models
 from main_app.models import (
 	NewsArticle, 
 	NewsSource, 
-    Category, 
+	Category, 
 )
 from .models import (
-	APIClient,
-    APIKey,
-    APIUsage,
+	PublicAPIClient,
+	PublicAPIKey,
+	PublicAPIUsage,
+	PublicAPIKeyInternal,
 )
 from django.utils import timezone
 from django.db.models import Sum
@@ -17,50 +18,76 @@ from django.db.models import Sum
 
 ##### PUBLIC API SERIALIZER FOR DASHBOARD #####
 
-class APIClientSerializer(serializers.ModelSerializer):
+class PublicAPIClientSerializer(serializers.ModelSerializer):
 	user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 	username = serializers.CharField(source="user.username", read_only=True)
-	is_active = serializers.BooleanField()
-	rate_limit = serializers.IntegerField()
-	tokens_used_month = serializers.SerializerMethodField()
-	date_created = serializers.DateTimeField()
-
-	class Meta:
-		model = APIClient
-		fields = ('id', 'user', 'username', 'is_active', 'rate_limit', 
-			'tokens_used_month', 'date_created')
-
 	
-	def get_tokens_used_month(self, obj):
-		now = timezone.now()
-
-		result = (
-			APIUsage.objects
-			.filter(
-				client=obj,
-				date__year=now.year,
-				date__month=now.month
-			)
-			.aggregate(total=Sum("tokens_used"))
-		)
-
-		return result["total"] or 0
+	class Meta: 
+		model = PublicAPIClient
+		fields = (
+				'id', 
+				'user', 
+				'username', 
+				'is_active', 
+				'rate_limit', 
+				'monthly_token_limit', 
+				'total_token_usage'
+				)
 
 
 
-class APIKeySerializer(serializers.ModelSerializer):
-	client = serializers.PrimaryKeyRelatedField(queryset=APIClient.objects.all())
+class PublicAPIKeySerializer(serializers.ModelSerializer):
+	client = serializers.PrimaryKeyRelatedField(queryset=PublicAPIClient.objects.all())
 	client_username = serializers.CharField(source="client.user.username", read_only=True)
-	name_of_key = serializers.CharField()
-	key = serializers.CharField()
-	is_active = serializers.BooleanField()
-	date_created = serializers.DateTimeField()
+	total_tokens_used = serializers.IntegerField(read_only=True)
+	total_request_count = serializers.IntegerField(read_only=True)
 
 	class Meta:
-		model = APIKey 
-		fields = ('id', 'client', 'client_username', 'name_of_key', 
-				  'key', 'is_active', 'date_created')
-            
+		model = PublicAPIKey 
+		fields = (
+				'id', 
+				'client', 
+				'client_username', 
+				'name_of_key', 
+				'key', 
+				'is_active', 
+				'date_created',
+				'tokens_limit',
+				'total_tokens_used',
+				'total_request_count',
+				)
+
+
+
+class PublicAPIUsageSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = PublicAPIUsage
+		fields = (
+				'id', 
+				'api_key', 
+				'date',
+				'tokens_limit', 
+				'tokens_used', 
+				'request_count', 
+				)
+
+
+
+
+class PublicAPIKeyInternalSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = PublicAPIKeyInternal
+		fields = (
+				'id', 
+				'client', 
+				'name_of_key', 
+				'key_raw', 
+				'raw_hashed',
+				'is_active', 
+				'date_created'
+				)
+
+			
 
 
 #### API Serializer for public API #### 
@@ -87,70 +114,70 @@ class PublicNewsArticleSerializer(serializers.ModelSerializer):
 			'tag3',
 			'date_posted',
 			'algo_rating',
-            'rating_count',
+			'rating_count',
 			'average_rating',
 			'clicks_count',
-            'source_rating',
+			'source_rating',
 			'source_article_count',
 		)
 
 
 
 class APIClientSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = APIClient
-        fields = (
-            "id",
-            "rate_limit",
-            "is_active",
-            "date_created",
-        )
-        
+	class Meta:
+		model = PublicAPIClient
+		fields = (
+			"id",
+			"rate_limit",
+			"is_active",
+			"date_created",
+		)
+		
 
 
 class APIUsageSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = APIUsage
-        fields = (
-            "id",
-            "date",
-            "tokens_used",
-            "request_count",
-        )
-        
+	class Meta:
+		model = PublicAPIUsage
+		fields = (
+			"id",
+			"date",
+			"tokens_used",
+			"request_count",
+		)
+		
 
 
 class APIKeySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = APIKey
-        fields = (
-            "id",
-            "name_of_key",
-            "key",
-            "is_active",
-            "date_created",
-        )
+	class Meta:
+		model = PublicAPIKey
+		fields = (
+			"id",
+			"name_of_key",
+			"key",
+			"is_active",
+			"date_created",
+		)
 
 
 
 class PublicNewsSourceSerializer(serializers.ModelSerializer):
-     class Meta:
-          model = NewsSource
-          fields = (
-               "id",
-               "name", 
-               "viaplatform",
-               "average_rating",
-               "article_count",
-               "average_algo_rating",
-          )
+	class Meta:
+		model = NewsSource
+		fields = (
+			"id",
+			"name", 
+			"viaplatform",
+			"average_rating",
+			"article_count",
+			"average_algo_rating",
+		)
 
 
 
 class PublicCategorySerializer(serializers.ModelSerializer):
-     class Meta:
-          model = Category 
-          fields = (
-               "id",
-               "name",
-          )
+	class Meta:
+		model = Category 
+		fields = (
+			"id",
+			"name",
+		)

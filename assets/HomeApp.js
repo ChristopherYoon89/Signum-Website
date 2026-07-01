@@ -14,13 +14,14 @@ import {
 	StarOutlined,
 	StockOutlined,
 	PlusOutlined,
+	SyncOutlined,
 } from '@ant-design/icons';
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import axios from 'axios';
+import moment from 'moment';
 import ArticleStatsPopOverContent from './StatsNewsArticle.js';
 import SidebarApp from './SidebarApp.js';
 import HomeBanner from './HomeBanner.js';
-import { useNavigate, useLocation, Link } from "react-router-dom";
-import moment from 'moment';
 import StatsHomeIndicators from './StatsHomeIndicators.js';
 import HomeCategories from './HomeCategories.js';
 import DashboardBookmarkFeedPopover from './DashboardBookmarkFeedPopover.js';
@@ -91,6 +92,7 @@ const CategoryArticles = ({
 		toggleUserFollow,
 		setUserBookmarks,
 	}) => {
+
 	return (
 		<div className={"home-article-container"}>
 			{
@@ -223,15 +225,16 @@ const CategoryArticles = ({
 
 
 const HomeApp = () => {
+	const { isauthenticated, user } = useAuth();
 	const [groupedArticles, setGroupedArticles] = useState({});
 	const [loading, setLoading] = useState(true);
+	
 	const topSectionRef = useRef(null);
-	const { isauthenticated, user } = useAuth();
-
 	const navigate = useNavigate();
 
 	const { location, pathname, search } = useLocation();
 	const params = new URLSearchParams(search);
+
 
 	const {
 		userbookmarks,
@@ -267,12 +270,13 @@ const HomeApp = () => {
 			}
 		}, [pathname, search, navigate]);
 
+
 	return (
 		<>
 			<Layout className={"bg-dark"}>
 				<HomeBanner />
 				
-				<Row gutter={20} style={{ marginBottom: 35,}}>
+				<Row gutter={20} style={{ marginBottom: 35, }}>
 				
 				<Col span={6}>
 				
@@ -313,8 +317,6 @@ const HomeApp = () => {
 						userbookmarks={userbookmarks}
 						toggleUserFollow={toggleUserFollow} 
 						setUserBookmarks={setUserBookmarks}
-						DashboardBookmarkFeedPopover={DashboardBookmarkFeedPopover}
-						ArticleStatsPopOverContent={ArticleStatsPopOverContent}
 					/>
 				</Col>
 			</Row>
@@ -356,7 +358,9 @@ const HomeApp = () => {
 						>
 					
 					{loading ? (
-					<p>Loading articles...</p>
+						<div className="table-sync-container">
+						<SyncOutlined spin style={{color: "#5e5e5e", fontSize: 24,}}/>
+						</div>
 					) : (
 					<>
 						{["Worldwide", "USA", "Europe", "Middle East", "Asia", "Latin America", "Africa"].map((category) => (
@@ -447,7 +451,9 @@ const HomeApp = () => {
 						span={12}>
 
 					{loading ? (
-					<p>Loading articles...</p>
+						<div className="table-sync-container">
+							<SyncOutlined spin style={{color: "#5e5e5e", fontSize: 24,}}/>
+						</div>
 					) : (
 					<>
 						{["Money & Finance", "Companies", "Commodities", "Bitcoin"].map((category) => (
@@ -536,7 +542,9 @@ const HomeApp = () => {
 					
 
 					{loading ? (
-					<p>Loading articles...</p>
+						<div className="table-sync-container">
+							<SyncOutlined spin style={{color: "#5e5e5e", fontSize: 24,}}/>
+						</div>
 					) : (
 					<>
 						{["Tech", "Science", "Culture", "Panorama"].map((category) => (
@@ -546,7 +554,7 @@ const HomeApp = () => {
 								<h4 className="home-category-header">{category}</h4>
 								<Tooltip
 									title={"Back to categories"}
-									> 	
+								> 	
 								<button className="btn-home-back-to-top" 
 									onClick={() => {
 											const navbarOffset = 50;
@@ -584,7 +592,6 @@ const HomeApp = () => {
 									userbookmarks={userbookmarks} 
 									toggleUserFollow={toggleUserFollow}
 									setUserBookmarks={setUserBookmarks}
-									ArticleStatsPopOverContent={ArticleStatsPopOverContent}
 								/>
 
 								<Link to={`/dashboard/category/${category}?scrollToTop=true`}>

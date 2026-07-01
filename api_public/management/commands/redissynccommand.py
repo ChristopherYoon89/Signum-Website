@@ -2,7 +2,7 @@ from django.core.management.base import BaseCommand
 from django.utils import timezone
 
 from api_public.apirateredisclient import redis_client
-from api_public.models import APIUsage, APIClient
+from api_public.models import PublicAPIUsage, PublicAPIClient, PublicAPIKey
 
 
 class Command(BaseCommand):
@@ -11,11 +11,11 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         today = timezone.now().date()
 
-        keys = redis_client.keys("api_client:*:tokens")
+        keys = redis_client.keys("public_api_key:*:tokens")
 
         for key in keys:
             # key = api_client:5:tokens
-            client_id = key.split(":")[1]
+            api_key_id = key.split(":")[1]
 
             tokens = redis_client.get(key)
 
@@ -25,12 +25,12 @@ class Command(BaseCommand):
             tokens = int(tokens)
 
             try:
-                client = APIClient.objects.get(id=client_id)
-            except APIClient.DoesNotExist:
+                api_key = PublicAPIKey.objects.get(id=api_key_id)
+            except PublicAPIKey.DoesNotExist:
                 continue
 
-            usage, created = APIUsage.objects.get_or_create(
-                client=client,
+            usage, created = PublicAPIUsage.objects.get_or_create(
+                public_api_key=api_key,
                 date=today,
                 defaults={"tokens_used": tokens}
             )

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
 	Layout,
 	Tooltip,
@@ -7,14 +7,15 @@ import {
 	Rate,
  } from 'antd';
 import { 
-SyncOutlined,
-PlusOutlined,
+	SyncOutlined,
+	PlusOutlined,
 } from '@ant-design/icons';
-import Axios from "axios";
-import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "./AuthProvider.js";
 import { getCookie } from './ManagerUtility.js';
 import { useSourceFollow } from './ManagerHooks.js';
+import TableSources from './TableSources.js';
 
 
 var csrftoken = getCookie('csrftoken');
@@ -31,6 +32,8 @@ const SourcesApp = () => {
 
 	const navigate = useNavigate();
 
+	const tableContainerRef = useRef(null);
+
 	const {
 		userfollows,
 		toggleUserFollow
@@ -39,27 +42,29 @@ const SourcesApp = () => {
 
 	const getData = async (pageNumber = 1) => {
 		try {
-				if (pageNumber === 1) {
-					setloading(true);
-				} else {
-					setLoadingMore(true);
-				}
-			const response = await Axios.get(`/api/NewsSourcesAll?page=${pageNumber}`);
-			
-			const newData = response.data.results.map(row => ({
-					id: row.id,
-					name: row.name,
-					average_rating: row.average_rating,
-					average_algo_rating: row.average_algo_rating,
-					article_count: row.article_count,
-				}));
-				if (pageNumber === 1) {
-					setstate(newData);
-				} else {
-					setstate(prev => [...prev, ...newData]);
-				}
-				setHasMore(response.data.next !== null);
-				setPage(pageNumber);
+			if (pageNumber === 1) {
+				setloading(true);
+			} else {
+				setLoadingMore(true);
+			}
+		const response = await axios.get(`/api/NewsSourcesAll?page=${pageNumber}`);
+		
+		const newData = response.data.results.map(row => ({
+				id: row.id,
+				name: row.name,
+				average_rating: row.average_rating,
+				average_algo_rating: row.average_algo_rating,
+				article_count: row.article_count,
+			}));
+
+			if (pageNumber === 1) {
+				setstate(newData);
+			} else {
+				setstate(prev => [...prev, ...newData]);
+			}
+			setHasMore(response.data.next !== null);
+			setPage(pageNumber);
+
 		} catch (error) {
 			console.error("Failed to fetch data");
 		} finally {
@@ -79,150 +84,33 @@ const SourcesApp = () => {
 	}, []);
 
 
-	const columns = [
-		{
-      title: "Source",
-      dataIndex: "name",
-			key: 'name',
-			align: 'left',
-			width: 50,
-			defaultSortOrder: 'descend',
-      sorter: (a, b) => a.name - b.name,
-      render: (name, record) => (
-        <span
-					style={{ cursor: 'pointer', }}
-					className="table-source"
-					onClick={(e) => {
-						e.stopPropagation(); 
-						navigate(`/dashboard/source/${encodeURIComponent(name)}`);
-					}}
-				>
-				{name}
-				</span>
-      ),
-    },
-		{
-      title: "No. of Articles",
-      dataIndex: "article_count",
-      width: 30,
-			align: "center",
-			key: 'article_count', 
-      sorter: (a, b) => a.article_count - b.article_count,
-      render: (article_count) => {
-        const value = article_count ? Math.min(Math.ceil(article_count), 5) : 0;
-    		return <span className='allsources-table-value'>{value}</span>
-			},
-    },
-		{
-      title: "Avg. User Rating",
-      dataIndex: "average_rating",
-      width: 30,
-			align: "left",
-			key: 'average_rating', 
-      sorter: (a, b) => a.average_rating - b.average_rating,
-      render: (average_rating) => {
-        const value = average_rating ? Math.min(Math.ceil(average_rating), 5) : 0;
-    		return <Rate value={value} disabled style={{ fontSize: 11 }} />;
-			},
-    },
-		{
-      title: "Avg. Algo Rating",
-      dataIndex: "average_algo_rating",
-      width: 30,
-			align: "left",
-			key: 'average_algo_rating', 
-      sorter: (a, b) => a.average_algo_rating - b.average_algo_rating,
-      render: (average_algo_rating) => {
-        const value = average_algo_rating ? Math.min(Math.ceil(average_algo_rating), 5) : 0;
-    		return <Rate value={value} disabled style={{ fontSize: 11 }} />;
-			},
-    },
-		{
-			title: 'Actions',
-			key: 'operation',
-			align: 'center',
-			width: 15,
-			render: (record) => (
-				<div>
-				<span onClick={(e) => {
-					e.stopPropagation();
-					toggleUserFollow(record.id);
-				}}>
-				<Tooltip
-					placement="top"
-					title={ !isauthenticated 
-						? "Log in to follow source"
-						: userfollows.includes(record.id)
-						? "Unfollow"
-						: "Follow"
-					}
-				>
-				<PlusOutlined
-					style={{
-						fontSize: 15,
-						marginRight: 20,
-						cursor: 'pointer',
-						color: !isauthenticated
-							? "#868686"
-							: userfollows.includes(record.id) 
-							? "#ff0000" 
-							: "#868686",
-					}}
-				/>
-				</Tooltip>
-				</span>
-			</div>
-			),
-		},
-  ];
-
-
-	const onChangeSorter = (sorter) => {
-    console.log(sorter);
-  };
-
-
 	return (
 		<>
 			<Layout>
 				<div className="div-data-manager">
 				{loading ? (
-				<div style={{ 
-					display: 'flex', 
-					justifyContent: 'center', 
-					alignItems: 'center', 
-					height: '100%', 
-					width: '100%', 
-					textAlign: 'center'
-					}}
-				>
+				<div className="table-sync-container">
 				<SyncOutlined spin style={{color: "#5e5e5e", fontSize: 24,}}/>
 				</div>
 				) : (
 					<>
 					<div style={{ flex: 1, minHeight: 0, overflowY: "auto", }}>
-					<Table
-						className={"custom-scrollbar"}
-						columns={columns}
-						dataSource={tabledata}
-						pagination={false}
-						onChange={onChangeSorter}
-						onRow={() => ({
-							style: { cursor: "pointer", marginTop: 0, },
-							})} 
-						size="large"
-						rowKey="id"
-						sticky={true}
+					
+					<TableSources
+						tabledata={tabledata}
+						userfollows={userfollows}
+						toggleUserFollow={toggleUserFollow}
+						isauthenticated={isauthenticated}
 					/>
 
 					{!loading && hasMore && (
-						<div style={{ textAlign: "center", marginTop: 16, flexShrink: 0, height: 70, }}>
+						<div className='table-load-button-container'>
 							<Button
 								type="secondary"
 								loading={loadingMore}
 								onClick={() => getData(page + 1)}
 							>
-								{loadingMore ? "Loading..." : "Load more"}
+							{loadingMore ? "Loading..." : "Load more"}
 							</Button>
 						</div>
 					)}

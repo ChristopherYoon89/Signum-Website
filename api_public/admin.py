@@ -1,13 +1,13 @@
 from django.contrib import admin
 from .models import (
-	APIClient, 
-	APIKey, 
-	APIUsage,
-	APIKeyInternal,
+	PublicAPIClient, 
+	PublicAPIKey, 
+	PublicAPIUsage,
+	PublicAPIKeyInternal,
 )
 
 
-admin.site.register(APIClient)
-admin.site.register(APIKey)
-admin.site.register(APIUsage)
-admin.site.register(APIKeyInternal)
+admin.site.register(PublicAPIClient)
+admin.site.register(PublicAPIKey)
+admin.site.register(PublicAPIUsage)
+admin.site.register(PublicAPIKeyInternal)

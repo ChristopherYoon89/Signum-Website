@@ -2,9 +2,9 @@
 from rest_framework.authentication import BaseAuthentication
 from rest_framework.exceptions import AuthenticationFailed
 from .models import (
-	APIClient, 
-	APIKey,
-    APIKeyInternal,
+	PublicAPIClient, 
+	PublicAPIKey,
+    PublicAPIKeyInternal,
 )
 import secrets 
 import hashlib
@@ -33,14 +33,14 @@ class APIKeyAuthentication(BaseAuthentication):
         hashed = hashlib.sha256(raw_key.encode()).hexdigest()
 
         try:
-            api_key = APIKey.objects.select_related("client__user").get(
+            public_api_key = PublicAPIKey.objects.select_related("client__user").get(
                 key=hashed,
                 is_active=True
             )
-        except APIKey.DoesNotExist:
+        except PublicAPIKey.DoesNotExist:
             raise AuthenticationFailed("Invalid API key")
 
-        return (api_key.client.user, api_key)
+        return (public_api_key.client.user, public_api_key)
 
 
 
@@ -55,11 +55,11 @@ class APIKeyInternalAuthentication(BaseAuthentication):
         hashed = hashlib.sha256(raw_key.encode()).hexdigest()
 
         try: 
-            api_key = APIKeyInternal.objects.select_related("client__user").get(
+            public_api_key = PublicAPIKeyInternal.objects.select_related("client__user").get(
                 key_hashed= hashed,
                 is_active=True
             )
-        except APIKeyInternal.DoesNotExist:
+        except PublicAPIKeyInternal.DoesNotExist:
              raise AuthenticationFailed("Invalid API Key")
     
-        return (api_key.client.user, api_key)
+        return (public_api_key.client.user, public_api_key)
