@@ -42,7 +42,7 @@ const DashboardFeedDeleteApp = () => {
 
 
 	const onNavigateFeedEdit = () => {
-		navigate(`/dashboard/briefing/editfeed/${feed_id}`);
+		navigate('/dashboard/briefing');
 	};
 
 

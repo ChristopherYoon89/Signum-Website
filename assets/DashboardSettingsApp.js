@@ -317,7 +317,7 @@ const SettingsApp = () => {
 					<Col span={12}>
 
 							<div className="sig-form-header">
-								Show bookmark feeds 
+								Show bookmark lists 
 								<span>
 								<Tooltip
 									placement='right'
@@ -409,11 +409,11 @@ const SettingsApp = () => {
 
 					<Col span={12}>
 						<div className="sig-form-header">
-							Rank bookmark feeds
+							Rank bookmark lists
 							<span>
 							<Tooltip
 								placement='right'
-								title='Rank feeds to display them in a specific order'
+								title='Rank lists to display them in a specific order'
 							>
 							<QuestionCircleOutlined 
 								className="sig-form-info-icon"

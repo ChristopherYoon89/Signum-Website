@@ -57,7 +57,7 @@ const ButtonsMainMenu = ({ navigate }) => {
 				</Tooltip>
 				
 				<Tooltip
-					title={"Add bookmark feed"}
+					title={"Add bookmark list"}
 					placement="bottom"
 					>	
 				<span 
