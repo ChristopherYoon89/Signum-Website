@@ -317,6 +317,8 @@ const HomeApp = () => {
 						userbookmarks={userbookmarks}
 						toggleUserFollow={toggleUserFollow} 
 						setUserBookmarks={setUserBookmarks}
+						DashboardBookmarkFeedPopover={DashboardBookmarkFeedPopover}
+						ArticleStatsPopOverContent={ArticleStatsPopOverContent}
 					/>
 				</Col>
 			</Row>
