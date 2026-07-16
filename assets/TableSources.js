@@ -75,7 +75,7 @@ const TableSources = ({
 			},
 		},
 		{
-			title: 'Actions',
+			title: 'Follow',
 			key: 'operation',
 			align: 'center',
 			width: 15,
